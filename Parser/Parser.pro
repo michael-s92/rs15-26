@@ -7,7 +7,7 @@
 QT       += core
 QT       -= gui
 
-TARGET = rs15-26
+TARGET = Parser
 
 TEMPLATE = app
 
