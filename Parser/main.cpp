@@ -12,6 +12,7 @@ int main(int argc, char *argv[])
    {
     if (yyparse()==0)
       cout << "Bravo" << endl;
+    cout << "Moj prvi commit :)" << endl;
    }
     return 0;
 }
