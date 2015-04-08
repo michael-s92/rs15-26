@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/new/welcome_form_files">
+        <file>FormFiles/WelcomeForm_files/dino0.jpg</file>
+    </qresource>
+</RCC>
