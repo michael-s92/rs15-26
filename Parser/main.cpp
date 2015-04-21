@@ -5,7 +5,6 @@
 
 using namespace std;
 
-/*prvi commit - michael*/
 
 int main(int argc, char *argv[])
 {

@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <string>
+#include "TreeNodes.hpp"
 
 using namespace std;
 

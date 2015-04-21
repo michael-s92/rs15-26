@@ -11,7 +11,8 @@ TARGET = Parser
 
 TEMPLATE = app
 
-SOURCES += main.cpp
+SOURCES += main.cpp \
+    TreeNodes.cpp
 
 CONFIG += console
 CONFIG -= app_bundle
@@ -61,3 +62,6 @@ bisonheader.CONFIG += target_predeps no_link
 QMAKE_EXTRA_COMPILERS += bisonheader
 
 # kraj za lex i bison
+
+HEADERS += \
+    TreeNodes.hpp
