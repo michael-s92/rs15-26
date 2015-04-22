@@ -3,12 +3,13 @@
 %option nounput
 
 
+
 %{
 #include <iostream>
 #include "TreeNodes.hpp"
-
+#include <string>
 #include "parser.h"
-
+#include <cstdlib>
 
 
 using namespace std;
@@ -16,7 +17,10 @@ using namespace std;
 void ispisi(string s)
 {
   cout << "Lex:  "<< s << endl;
+
 }
+
+
 
 %}
 
@@ -27,13 +31,16 @@ digit    [0-9]+
 
 %%
 
-\{{digit}+,?\}           {
-                         // ispisi("{num,}");
-                          return rep1_token;
-                         }
-\{{digit}+,{digit}+\}    {
-                         //ispisi("{num,num}");
+
+
+\{{digit}+,\}           {
+                         return rep1_token;
+                        }
+\{{digit}+\}            {
                          return rep2_token;
+                        }
+\{{digit}+,{digit}+\}    {
+                         return rep3_token;
                          }
 
 
@@ -101,6 +108,7 @@ digit    [0-9]+
                 yylval.sym = *yytext;
                 return minus_token;
                 }
+
 \\d             {
                 //ispisi("\\ d");
                 yylval.sym = yytext[1];

@@ -79,6 +79,11 @@ symbol_reg_node::symbol_reg_node(char value)
 
 }
 
+char symbol_reg_node::getValue() const
+{
+    return _value;
+}
+
 normal_symbol_reg_node::normal_symbol_reg_node(char value)
  :symbol_reg_node(value)
 {
@@ -95,20 +100,34 @@ backslash_symbol_reg_node::backslash_symbol_reg_node(char value)
 
 void backslash_symbol_reg_node::print(ostream & ostr) const
 {
-    cout << "\\" << _value;
+    ostr << "\\" << _value;
 
 }
 
-char_class_reg_node::char_class_reg_node(vector<symbol_reg_node*> elements)
- :_elements(elements)
-{}
+ backslash_symbol_reg_node * backslash_symbol_reg_node::clone() const
+ {
+     return new backslash_symbol_reg_node(*this);
+ }
+
+char_class_reg_node::char_class_reg_node(vector<symbol_reg_node*> elements, bool ind)
+ :_ind(ind),_elements(elements)
+{
+}
 
 void char_class_reg_node::print(ostream & ostr) const
 {
-  //  string s;
-  //  vector<symbol_reg_node*>::const_iterator i = _elements.begin();
-    ostr << "";
+
+    ostr << "( [";
+    if (_ind==false)
+        ostr << "^ ";
+    vector<symbol_reg_node*>::const_iterator i = _elements.begin();
+    for (; i!=_elements.end(); i++)
+        ostr << **i << " ";
+    ostr << "] )";
 }
+
+
+
 
 repetition_reg_node::repetition_reg_node(reg_node * reg, int min, int max)
  :unary_op_reg_node(reg), _min(min),_max(max)
@@ -116,7 +135,8 @@ repetition_reg_node::repetition_reg_node(reg_node * reg, int min, int max)
 
 void repetition_reg_node::print(ostream & ostr) const
 {
-    ostr << "";
+    _reg->print(ostr);
+    ostr << "{" << _min << "," <<_max << "}";
 }
 
 ostream & operator << (ostream & ostr, const reg_node & reg)
@@ -124,3 +144,4 @@ ostream & operator << (ostream & ostr, const reg_node & reg)
     reg.print(ostr);
     return ostr;
 }
+
