@@ -5,7 +5,6 @@
 #include <vector>
 
 #include "TreeNodes.hpp"
-#include "lexer.h"
 
 
 using namespace std;
@@ -15,7 +14,7 @@ extern int yylex();
 void yyerror(const string s)
 {
   cerr << s << endl;
-  exit(1);
+  //exit(1);
 }
 
 void ispisi(string l, string d)
@@ -43,7 +42,7 @@ void add_vector(vector<symbol_reg_node*> & elem_l, const vector<symbol_reg_node*
 
 }
 
-%left <sym> caret_token dollar_token
+%left <sym> dollar_token caret_token
 %left <sym> vert_token
 %left <sym> concat d_token
       no_d_token s_token no_s_token w_token no_w_token
@@ -55,165 +54,185 @@ void add_vector(vector<symbol_reg_node*> & elem_l, const vector<symbol_reg_node*
 %left <num> rep1_token rep2_token rep3_token
 %left <sym> backslash_token
 
-%type <sym> Symbol
-%type <reg> RegExp Reg Repetition
+%type <num> Repetition
+
+%type <reg> RegExp RegSimple RegLasy
 %type <char_class> CharacterClass
 %type <vec> ArraySym CharPart
-%type <sym_reg> SymbolChar BackslashReg
+%type <sym_reg> SymbolChar BackslashReg Symbol SpecSymbol
 
 %%
 
-Reg : RegExp        {
-                    cout << *$1 << endl;
-                    }
+// pravilo potrebno samo za ispisivanje cvora
+RegPrint : RegExp           {
+                              cout << *$1 << endl;
+                            }
 ;
 
-RegExp :
-         //konkatenacija
-        RegExp RegExp %prec concat  {
-                                    $$ = new concat_reg_node($1,$2);
-                                    //ispisi("RegExp","Konkatenacija");
-                                    }
+// ovim pravilom obezbedjujemo da se kad imamo izraze ^^^^ reg_izraz $$$
+// uzimamo u obzir samo reg_izraz
 
-         // Reg | Reg
+
+RegExp :
+         // konkatenacija
+        RegExp RegExp %prec concat  	{
+                                        $$ = new concat_reg_node($1,$2);
+                                        ispisi("RegExp","Konkatenacija");
+                                        }
+
+         // unija
        | RegExp vert_token RegExp       {
                                         $$ = new union_reg_node($1,$3);
-                                     //   ispisi("RegExp","Ili");
+                                        ispisi("RegExp","Ili");
                                         }
 
          // Reg *
-       | RegExp star_token              {
+         // Ne koristimo neterminal RegExp, vec RegSimle
+         // da bi zabranili izraze reg++, reg+*, reg?{1} ...
+       | RegSimple star_token           {
                                         $$ = new star_reg_node($1);
-                                     //   ispisi("RegExp","Zvezdica");
+                                        ispisi("RegExp","RegSimple star_token");
                                         }
 
         // Reg +
-       | RegExp plus_token              {
+       | RegSimple plus_token           {
                                         $$ = new plus_reg_node($1);
-                                     //   ispisi("RegExp","Plus");
+                                        ispisi("RegExp","RegSimple plus_token");
                                         }
 
         //Reg ?
-       | RegExp ques_token              {
+       | RegSimple ques_token           {
                                         $$ = new ques_reg_node($1);
-                                     //   ispisi("RegExp","Upitnik");
+                                        ispisi("RegExp","RegSimple ques_token");
                                         }
 
-         // Reg{2,3}
-       | Repetition                      {
-                                          $$  = $1;
-                                     //    ispisi("RegExp","Repetition");
-                                         }
-
-        // ( Reg )
-       | oz_token RegExp zz_token       {
-                                        $$ = $2;
-                                     //   ispisi("RegExp","Zagrade");
+        // Reg{m,n}
+       | RegSimple Repetition           {
+                                         $$  = new repetition_reg_node($1,$2->a,$2->b);
+                                        ispisi("RegExp","RegSimple Repetition");
+                                        }
+        // Reg+? - za lenjo izracunavanje
+        // izdvajamo posebno, jer bi u rekurziji dozvolili izraze a+????
+       | RegLasy ques_token		{
+                                        $$ = new ques_reg_node($1);
+                                        ispisi("RegExp","RegLasy ques_token");
                                         }
 
-        // [a-z]
-       | CharacterClass                 {
+       | RegSimple			{
                                         $$ = $1;
-                                     //   ispisi("RegExp","Karakterska Klasa");
+                                        ispisi("RegExp","RegSimple");
                                         }
+;
 
-        // ^Reg
-      | caret_token RegExp               {
-                                      //   ispisi("RegExp","Pocetak Reda");
-                                         }
-
-         // Reg $
-       | RegExp dollar_token              {
-                                      //    ispisi("RegExp","Kraj Reda");
-                                          }
-
-        //  /+
-       | BackslashReg                      {
-                                             $$=$1;
-                                      //     ispisi("RegExp","Backslash");
+RegSimple
+            // ( Reg )
+          :oz_token RegExp zz_token       {
+                                           $$ = $2;
+                                           ispisi("RegSimple","( RegExp )");
                                            }
 
-        // svi nespecijalni simboli
-       | symbol_token                       {
-                                              $$ = new normal_symbol_reg_node($1);
-                                       //     ispisi("RegExp","Nespecijalni simbol");
+            // [a-z]
+          | CharacterClass                 {
+                                            $$ = $1;
+                                            ispisi("RegSimple","Karakterska Klasa");
+                                           }
+
+            //  / slovo - skidamo specijalnu funkciju odredjenim znakovima
+          | BackslashReg                   {
+                                            $$=$1;
+                                            ispisi("RegSimple","Backslash");
+                                           }
+
+            // svi nespecijalni simboli
+          | symbol_token                    {
+                                             $$ = new normal_symbol_reg_node($1);
+                                             ispisi("RegSimple","Nespecijalni simbol");
                                             }
-
-        // svi brojevi
-       | num_token                          {
-                                              $$ = new normal_symbol_reg_node($1);
-                                        //    ispisi("RegExp","Broj");
-                                            }
-
-        // minus (kao nespecijalni simbol)
-       | minus_token                          {
-                                              $$ = new normal_symbol_reg_node('-');
-                                         //     ispisi("RegExp","-");
-                                              }
-
-        //] kao nespecijalni simbol
-       | zu_token                           {
-                                             $$ = new normal_symbol_reg_node(']');
-                                         //   ispisi("RegExp","[");
+            // ovo je za one simbole koji nisu operatori, ai su opet negde specijalni
+          | SpecSymbol                      {
+                                             $$ = $1;
+                                             ispisi("RegSimple","Specijalni simbol negde");
                                             }
 ;
 
-    //Ovo je uradjeno preko leksera da prepoznaje
-    // da bi se izbegli s-r konflikti
-    // lakse ih je ovako eliminisati
-Repetition : RegExp rep1_token         {
-                                $$ = new repetition_reg_node($1,0,0);
-                                //ispisi("Repetition","{num,} ili {num}");
+RegLasy
+        // Reg *
+       : RegSimple star_token           {
+                                        $$ = new star_reg_node($1);
+                                        ispisi("RegLasy","RegSimple star_token");
+                                        }
+
+        // Reg +
+       | RegSimple plus_token           {
+                                        $$ = new plus_reg_node($1);
+                                        ispisi("RegLasy","RegSimple plus_token");
+                                        }
+
+        //Reg ?
+       | RegSimple ques_token           {
+                                        $$ = new ques_reg_node($1);
+                                        ispisi("RegLasy","RegSimple ques_token");
+                                        }
+
+        // Reg{2,3}
+       | RegSimple Repetition           {
+                                         $$  = new repetition_reg_node($1,$2->a,$2->b);
+                                         ispisi("RegLasy","RegSimple Repetition");
+                                        }
+;
+
+
+Repetition : rep1_token         {
+                                $$ = $1;
                                 }
-           | RegExp rep2_token         {
-                                 $$ = new repetition_reg_node($1,0,0);
-                                //ispisi("Repetition","{num,num}");
+           | rep2_token         {
+                                $$ = $1;
+                                ispisi("Repetition","{num}");
                                 }
-           | RegExp rep3_token         {
-                                $$ = new repetition_reg_node($1,0,0);
-                                //ispisi("Repetition","{num,num}");
+           | rep3_token         {
+                                $$ = $1;
+                                ispisi("Repetition","{num,num}");
                                 }
 ;
 
 
 CharacterClass : ou_token ArraySym zu_token
-                                {
-                                $$ = new char_class_reg_node(*$2,true);
-                                //ispisi("CharacterClass","[ ArraySym ]");
-                                }
+                                            {
+                                            $$ = new char_class_reg_node(*$2,true);
+                                            ispisi("CharacterClass","[ ArraySym ]");
+                                            }
                | ou_token caret_token ArraySym zu_token
-                 {
-                   $$ = new char_class_reg_node(*$3,false);
-                 }
+                                                          {
+                                                          $$ = new char_class_reg_node(*$3,false);
+                                                          ispisi("CharacterClass","^  [ ArraySym ]");
+                                                          }
 
 ;
 
 ArraySym : ArraySym CharPart           { $$ = $1; add_vector(*$1,*$2);
-                                        //ispisi("ArraySym","ArraySym CharPart");
+                                        ispisi("ArraySym","ArraySym CharPart");
                                        }
          | CharPart                    {
                                         $$ = $1;
-                                        //ispisi("ArraySym","CharPart");
+                                        ispisi("ArraySym","CharPart");
                                        }
 ;
 
 CharPart : SymbolChar minus_token SymbolChar    {
-                                              //  ispisi("CharPart","SymbolChar - SymbolChar");
-
                                                 char c1=$1->getValue();
                                                 char c2=$3->getValue();
                                                 if (c1 > c2)
-                                                  yyerror("Syntax error: Karakterska klasa");
-                                                 $$ = new vector<symbol_reg_node *>;
-                                                 for (char c=c1; c<=c2; c++)
-                                                 $$->push_back(new normal_symbol_reg_node(c));
+                                                  yyerror("Syntax error: Karakterska klasa - neodgovarajuci redoled");
+                                                $$ = new vector<symbol_reg_node *>;
+                                                for (char c=c1; c<=c2; c++)
+                                                $$->push_back(new normal_symbol_reg_node(c));
+                                                ispisi("CharPart","SymbolChar - SymbolChar");
 
                                                 }
          | SymbolChar                           {
                                                  $$ = new vector<symbol_reg_node *>;
                                                  $$->push_back($1->clone());
-
-                                                //  ispisi("CharPart","SymbolChar");
+                                                 ispisi("CharPart","SymbolChar");
                                                 }
 ;
 
@@ -222,49 +241,47 @@ CharPart : SymbolChar minus_token SymbolChar    {
 // od onih koji nemaju
 BackslashReg : d_token                  {
                                         $$ = new backslash_symbol_reg_node('d');
-                                        //ispisi("BackslashReg","\\ d");
-                                       //    cout << *$$ << endl;
+                                        ispisi("BackslashReg","\\ d");
                                         }
              | no_d_token               {
                                         $$ = new backslash_symbol_reg_node('D');
-                                        //ispisi("BackslashReg","\\ D");
+                                        ispisi("BackslashReg","\\ D");
                                         }
              | w_token                  {
                                         $$ = new backslash_symbol_reg_node('w');
-                                        //ispisi("BackslashReg","\\ w");
+                                        ispisi("BackslashReg","\\ w");
                                         }
              | no_w_token               {
                                         $$ = new backslash_symbol_reg_node('W');
-                                        //ispisi("BackslashReg","\\ W");
+                                        ispisi("BackslashReg","\\ W");
                                         }
              | s_token                  {
                                         $$ = new backslash_symbol_reg_node('s');
-                                        //ispisi("BackslashReg","\\ s");
+                                        ispisi("BackslashReg","\\ s");
                                         }
              | no_s_token               {
                                         $$ = new backslash_symbol_reg_node('S');
-                                        //ispisi("BackslashReg","\\ S");
+                                        ispisi("BackslashReg","\\ S");
                                         }
              | b_token                  {
                                         $$ = new backslash_symbol_reg_node('b');
-                                        //ispisi("BackslashReg","\\ b");
+                                        ispisi("BackslashReg","\\ b");
                                         }
              | backslash_token Symbol   {
-                                        $$ = new backslash_symbol_reg_node($2);
-                                        //ispisi("BackslashReg","\\ Symbol");
+                                        $$ = new backslash_symbol_reg_node($2->getValue());
+                                        ispisi("BackslashReg","\\ Symbol");
                                         }
              | n_token                  {
                                         $$ = new backslash_symbol_reg_node('n');
-                                        //ispisi("BackslashReg","\\ n");
+                                        ispisi("BackslashReg","\\ n");
                                         }
              | bs_token                 {
                                         $$ = new backslash_symbol_reg_node('\\');
-                                        //ispisi("BackslashReg","\\ \\");
+                                        ispisi("BackslashReg","\\ \\");
                                         }
              | t_token                  {
-                                         $$ = new backslash_symbol_reg_node('t');
-                                        //ispisi("BackslashReg","\\ t");
-                                        //cout << *$$ << endl;
+                                        $$ = new backslash_symbol_reg_node('t');
+                                        ispisi("BackslashReg","\\ t");
                                         }
 ;
 
@@ -273,54 +290,64 @@ BackslashReg : d_token                  {
 // Symbol je nesto sto grupise sve specijalne i nespecijalne simbole
 
 Symbol : symbol_token   {
-                       // ispisi("Symbol","nespecijalni simbol");
-                        $$ = $1;
+                        $$ = new normal_symbol_reg_node($1);
+                        ispisi("Symbol","nespecijalni simbol");
                         }
-       | num_token      {
-                       // ispisi("Symbol","broj");
+
+       | SpecSymbol     {
                         $$ = $1;
+                        ispisi("Symbol","\\ SpecSymbol");
                         }
        | plus_token     {
-                       // ispisi("Symbol","+");
-                        $$ = $1;
+                        $$ = new normal_symbol_reg_node($1);
+                        ispisi("Symbol","+");
                         }
        | star_token     {
-                      // ispisi("Symbol","*");
-                        $$ = $1;
+                        $$ = new normal_symbol_reg_node($1);
+                        ispisi("Symbol","*");
                         }
        | ques_token     {
-                      // ispisi("Symbol","?");
-                        $$ = $1;
+                        $$ = new normal_symbol_reg_node($1);
+                        ispisi("Symbol","?");
                         }
        | vert_token     {
-                      // ispisi("Symbol","|");
-                        $$ = $1;
-                        }
-       | caret_token    {
-                       // ispisi("Symbol","^");
-                        $$ = $1;
-                        }
-       | dollar_token   {
-                       // ispisi("Symbol","$");
-                        $$ = $1;
+                        $$ = new normal_symbol_reg_node($1);
+                        ispisi("Symbol","|");
                         }
        | oz_token       {
-                      //  ispisi("Symbol","(");
-                        $$ = $1;
+                        $$ = new normal_symbol_reg_node($1);
+                        ispisi("Symbol","(");
                         }
        | zz_token       {
-                      //  ispisi("Symbol",")");
-                        $$ = $1;
+                        $$ = new normal_symbol_reg_node($1);
+                        ispisi("Symbol",")");
                         }
        | ou_token       {
-                      //  ispisi("Symbol","[");
-                        $$ = $1;
-                        }
-       | zu_token       {
-                        //ispisi("Symbol","]");
-                        $$ = $1;
+                        $$ = new normal_symbol_reg_node($1);
+                        ispisi("Symbol","[");
                         }
 ;
+
+SpecSymbol : num_token 			{
+                                        $$ = new normal_symbol_reg_node($1);
+                                        ispisi("SpecSymbol","broj_simbol");
+                                        }
+           | minus_token		{
+                                        $$ = new normal_symbol_reg_node('-');
+                                        ispisi("SpecSymbol","-");
+                                        }
+           | zu_token			{
+                                        $$ = new normal_symbol_reg_node(']');
+                                        ispisi("SpecSymbol","]");
+                                        }
+           | caret_token		{
+                                        $$ = new normal_symbol_reg_node('^');
+                                        ispisi("SpecSymbol","^");
+                                        }
+           | dollar_token		{
+                                        $$ = new normal_symbol_reg_node('$');
+                                        ispisi("SpecSymbol","$");
+                                        }
 
 
 // SymbolChar predstavlja sve simbole koji se mogu naci unutar karakterske
@@ -328,49 +355,52 @@ Symbol : symbol_token   {
 
 SymbolChar : symbol_token   {
                             $$ = new normal_symbol_reg_node($1);
-                           // ispisi("SymbolChar","nespecijalni simbol");
+                            ispisi("SymbolChar","nespecijalni simbol");
                             }
            | num_token      {
                             $$ = new normal_symbol_reg_node($1);
-                           // ispisi("SymbolChar","broj");
+                            ispisi("SymbolChar","broj");
                             }
            | BackslashReg   {
                              $$ = $1;
-                         //   ispisi("SymbolChar","\\");
+                            ispisi("SymbolChar","\\");
                             }
            | plus_token     {
                             $$ = new normal_symbol_reg_node($1);
-                         //   ispisi("SymbolChar","+");
+                            ispisi("SymbolChar","+");
                             }
            | star_token     {
                             $$ = new normal_symbol_reg_node($1);
-                          //  ispisi("SymbolChar","*");
+                            ispisi("SymbolChar","*");
                             }
            | ques_token     {
                             $$ = new normal_symbol_reg_node($1);
-                         //   ispisi("SymbolChar","?");
+                            ispisi("SymbolChar","?");
                             }
            | vert_token     {
                              $$ = new normal_symbol_reg_node($1);
-                        //    ispisi("SymbolChar","|");
+                            ispisi("SymbolChar","|");
                             }
            | dollar_token   {
                             $$ = new normal_symbol_reg_node($1);
-                        //    ispisi("SymbolChar","$");
+                            ispisi("SymbolChar","$");
                             }
            | oz_token       {
                             $$ = new normal_symbol_reg_node($1);
-                        //    ispisi("SymbolChar","(");
+                            ispisi("SymbolChar","(");
                             }
            | zz_token       {
                             $$ = new normal_symbol_reg_node($1);
-                         //   ispisi("SymbolChar",")");
+                            ispisi("SymbolChar",")");
                             }
            | ou_token       {
                             $$ = new normal_symbol_reg_node($1);
-                        //    ispisi("SymbolChar","[");
+                            ispisi("SymbolChar","[");
                             }
 ;
 
 %%
+
+
+
 

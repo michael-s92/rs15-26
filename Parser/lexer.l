@@ -9,7 +9,8 @@
 #include "TreeNodes.hpp"
 #include <string>
 #include "parser.h"
-#include <cstdlib>
+#include <string>
+
 
 
 using namespace std;
@@ -34,13 +35,27 @@ digit    [0-9]+
 
 
 \{{digit}+,\}           {
+                         string s(yytext);
+                         size_t index = s.find(',');
+                         s = s.substr(1,index);
+                         yylval.num =new numbers(stoi(s,0,10),-1);
                          return rep1_token;
                         }
 \{{digit}+\}            {
-                         return rep2_token;
+                        string s(yytext);
+                        size_t index = s.find('}');
+                        s= s.substr(1,index);
+                        yylval.num = new numbers(stoi(s,0,10),stoi(s,0,10));
+                        return rep2_token;
                         }
 \{{digit}+,{digit}+\}    {
-                         return rep3_token;
+                        string s(yytext);
+                        size_t index1 = s.find(',');
+                        string s1 = s.substr(1,index1);
+                        size_t index2 = s.find('}');
+                        string s2 = s.substr(index1+1,index2);
+                        yylval.num =new numbers(stoi(s1,0,10),stoi(s2,0,10));
+                        return rep3_token;
                          }
 
 

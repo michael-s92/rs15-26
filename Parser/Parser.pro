@@ -17,6 +17,7 @@ SOURCES += main.cpp \
 CONFIG += console
 CONFIG -= app_bundle
 
+QMAKE_CXXFLAGS += -std=c++11
 
 #ovaj deo make-a odnosi se na lex i bison
 
