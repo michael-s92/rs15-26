@@ -13,6 +13,13 @@ AutomatForm::AutomatForm(QWidget *parent) :
 
     connect(ui->bttn_main, SIGNAL(clicked()), &back_to, SLOT(map()));
     back_to.setMapping(ui->bttn_main, "back_to_main");
+
+    //reagujem samo na ENTER, opstiji slucaj je editingFinished()
+    connect(ui->lineEdit, SIGNAL(returnPressed()),this, SLOT(draw_automata()));
+
+    //napraviti interfejs tako da kad se menja radio buttn da se iscrta i novi grafik
+    //connect(ui->AutomatGroup, SIGNAL(buttonToggled(int,bool), this, SLOT(draw_automata()));
+
 }
 
 AutomatForm::~AutomatForm()
@@ -30,4 +37,21 @@ void AutomatForm::goto_main(QString msn){
         MainWindow::getMainWindow()->show();
         this->hide();
     }
+}
+
+//samo za test iostream, iskljuciti je posle
+#include <iostream>
+#include <QString>
+void AutomatForm::draw_automata(){
+
+    //uzimamo regularni izraz
+    QString reg = ui->lineEdit->text();
+
+    //samo ispisuje sta je cekirano
+    //tu bi sad na zahtev trebalo da se poziva da se pravi automat
+    //i da se iscrtava
+    if(ui->radioTomson->isChecked())
+        std::cout << "Tomson: " << reg.toStdString() << std::endl;
+    else
+        std::cout << "drugo: " << reg.toStdString() << std::endl;
 }

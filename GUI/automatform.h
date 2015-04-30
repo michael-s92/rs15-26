@@ -20,8 +20,7 @@ public:
 
 private Q_SLOTS:
     void goto_main(QString msn);
-
-    void on_lineEdit_returnPressed();
+    void draw_automata();
 
 private:
     explicit AutomatForm(QWidget *parent = 0);

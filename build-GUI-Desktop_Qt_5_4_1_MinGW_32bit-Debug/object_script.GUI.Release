@@ -1,0 +1,16 @@
+INPUT(
+./release\main.o
+./release\mainwindow.o
+./release\welcomeform.o
+./release\uvodform.o
+./release\editorform.o
+./release\automatform.o
+./release\diagramform.o
+./release\qrc_my_files.o
+./release\moc_mainwindow.o
+./release\moc_welcomeform.o
+./release\moc_uvodform.o
+./release\moc_editorform.o
+./release\moc_automatform.o
+./release\moc_diagramform.o
+);
