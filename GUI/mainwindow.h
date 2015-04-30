@@ -24,7 +24,7 @@ public:
 
     static MainWindow* getMainWindow();
 
-private slots:
+private Q_SLOTS:
     void go_to_form(QString fname);
 
 private:

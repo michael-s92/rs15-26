@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>564</width>
+    <height>406</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,8 +16,8 @@
   <widget class="QPushButton" name="bttn_main">
    <property name="geometry">
     <rect>
-     <x>280</x>
-     <y>20</y>
+     <x>440</x>
+     <y>10</y>
      <width>99</width>
      <height>27</height>
     </rect>
@@ -26,7 +26,56 @@
     <string>Back to main</string>
    </property>
   </widget>
+  <widget class="QWidget" name="">
+   <property name="geometry">
+    <rect>
+     <x>31</x>
+     <y>52</y>
+     <width>501</width>
+     <height>341</height>
+    </rect>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayout_2">
+    <item>
+     <widget class="QLineEdit" name="lineEdit"/>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <item>
+         <widget class="QRadioButton" name="radioTomson">
+          <property name="text">
+           <string>Tomson</string>
+          </property>
+          <attribute name="buttonGroup">
+           <string notr="true">AutomatGroup</string>
+          </attribute>
+         </widget>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="radioButton_2">
+          <property name="text">
+           <string>RadioButton</string>
+          </property>
+          <attribute name="buttonGroup">
+           <string notr="true">AutomatGroup</string>
+          </attribute>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QGraphicsView" name="graphicsView"/>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
  </widget>
  <resources/>
  <connections/>
+ <buttongroups>
+  <buttongroup name="AutomatGroup"/>
+ </buttongroups>
 </ui>

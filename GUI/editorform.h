@@ -18,7 +18,7 @@ public:
 
     static EditorForm* getEditorForm();
 
-private slots:
+private Q_SLOTS:
     void goto_main(QString msn);
 
 private:

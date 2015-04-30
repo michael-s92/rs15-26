@@ -18,8 +18,10 @@ public:
 
     static AutomatForm* getAutomatForm();
 
-private slots:
+private Q_SLOTS:
     void goto_main(QString msn);
+
+    void on_lineEdit_returnPressed();
 
 private:
     explicit AutomatForm(QWidget *parent = 0);

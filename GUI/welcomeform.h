@@ -15,7 +15,7 @@ public:
     explicit WelcomeForm(QWidget *parent = 0);
     ~WelcomeForm();
 
-private slots:
+private Q_SLOTS:
     void onload();
 
 private:
