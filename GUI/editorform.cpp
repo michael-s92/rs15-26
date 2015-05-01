@@ -13,6 +13,9 @@ EditorForm::EditorForm(QWidget *parent) :
 
     connect(ui->bttn_main, SIGNAL(clicked()), &back_to, SLOT(map()));
     back_to.setMapping(ui->bttn_main, "back_to_main");
+
+    connect(ui->bttnLoad, SIGNAL(clicked(bool)), this, SLOT(LoadFile()));
+    connect(ui->lineEdit, SIGNAL(returnPressed()), this, SLOT(SearchText()));
 }
 
 EditorForm::~EditorForm()
@@ -30,4 +33,13 @@ void EditorForm::goto_main(QString msn){
         MainWindow::getMainWindow()->show();
         this->hide();
     }
+}
+
+
+void EditorForm::LoadFile(){
+    ui->plainTextEdit->setPlainText("load file");
+}
+
+void EditorForm::SearchText(){
+    ui->plainTextEdit->appendPlainText("search text: " + ui->lineEdit->text());
 }

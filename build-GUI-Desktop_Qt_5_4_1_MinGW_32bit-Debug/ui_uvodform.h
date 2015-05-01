@@ -28,7 +28,7 @@ public:
     {
         if (UvodForm->objectName().isEmpty())
             UvodForm->setObjectName(QStringLiteral("UvodForm"));
-        UvodForm->resize(400, 300);
+        UvodForm->resize(650, 450);
         bttn_main = new QPushButton(UvodForm);
         bttn_main->setObjectName(QStringLiteral("bttn_main"));
         bttn_main->setGeometry(QRect(290, 20, 99, 27));

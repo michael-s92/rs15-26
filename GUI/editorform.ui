@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>650</width>
+    <height>450</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,15 +16,46 @@
   <widget class="QPushButton" name="bttn_main">
    <property name="geometry">
     <rect>
-     <x>280</x>
-     <y>10</y>
-     <width>99</width>
-     <height>27</height>
+     <x>31</x>
+     <y>40</y>
+     <width>111</width>
+     <height>21</height>
     </rect>
    </property>
    <property name="text">
     <string>Back to main</string>
    </property>
+  </widget>
+  <widget class="QPushButton" name="bttnLoad">
+   <property name="geometry">
+    <rect>
+     <x>31</x>
+     <y>68</y>
+     <width>111</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Ucitaj text</string>
+   </property>
+  </widget>
+  <widget class="QWidget" name="layoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>170</x>
+     <y>60</y>
+     <width>461</width>
+     <height>371</height>
+    </rect>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QLineEdit" name="lineEdit"/>
+    </item>
+    <item>
+     <widget class="QPlainTextEdit" name="plainTextEdit"/>
+    </item>
+   </layout>
   </widget>
  </widget>
  <resources/>

@@ -28,7 +28,7 @@ class Ui_AutomatForm
 {
 public:
     QPushButton *bttn_main;
-    QWidget *widget;
+    QWidget *layoutWidget;
     QVBoxLayout *verticalLayout_2;
     QLineEdit *lineEdit;
     QHBoxLayout *horizontalLayout;
@@ -42,17 +42,17 @@ public:
     {
         if (AutomatForm->objectName().isEmpty())
             AutomatForm->setObjectName(QStringLiteral("AutomatForm"));
-        AutomatForm->resize(564, 406);
+        AutomatForm->resize(650, 450);
         bttn_main = new QPushButton(AutomatForm);
         bttn_main->setObjectName(QStringLiteral("bttn_main"));
         bttn_main->setGeometry(QRect(440, 10, 99, 27));
-        widget = new QWidget(AutomatForm);
-        widget->setObjectName(QStringLiteral("widget"));
-        widget->setGeometry(QRect(31, 52, 501, 341));
-        verticalLayout_2 = new QVBoxLayout(widget);
+        layoutWidget = new QWidget(AutomatForm);
+        layoutWidget->setObjectName(QStringLiteral("layoutWidget"));
+        layoutWidget->setGeometry(QRect(31, 52, 501, 341));
+        verticalLayout_2 = new QVBoxLayout(layoutWidget);
         verticalLayout_2->setObjectName(QStringLiteral("verticalLayout_2"));
         verticalLayout_2->setContentsMargins(0, 0, 0, 0);
-        lineEdit = new QLineEdit(widget);
+        lineEdit = new QLineEdit(layoutWidget);
         lineEdit->setObjectName(QStringLiteral("lineEdit"));
 
         verticalLayout_2->addWidget(lineEdit);
@@ -61,7 +61,7 @@ public:
         horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
         verticalLayout = new QVBoxLayout();
         verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
-        radioTomson = new QRadioButton(widget);
+        radioTomson = new QRadioButton(layoutWidget);
         AutomatGroup = new QButtonGroup(AutomatForm);
         AutomatGroup->setObjectName(QStringLiteral("AutomatGroup"));
         AutomatGroup->addButton(radioTomson);
@@ -69,7 +69,7 @@ public:
 
         verticalLayout->addWidget(radioTomson);
 
-        radioButton_2 = new QRadioButton(widget);
+        radioButton_2 = new QRadioButton(layoutWidget);
         AutomatGroup->addButton(radioButton_2);
         radioButton_2->setObjectName(QStringLiteral("radioButton_2"));
 
@@ -78,7 +78,7 @@ public:
 
         horizontalLayout->addLayout(verticalLayout);
 
-        graphicsView = new QGraphicsView(widget);
+        graphicsView = new QGraphicsView(layoutWidget);
         graphicsView->setObjectName(QStringLiteral("graphicsView"));
 
         horizontalLayout->addWidget(graphicsView);

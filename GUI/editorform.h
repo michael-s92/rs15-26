@@ -20,6 +20,8 @@ public:
 
 private Q_SLOTS:
     void goto_main(QString msn);
+    void LoadFile();
+    void SearchText();
 
 private:
     explicit EditorForm(QWidget *parent = 0);

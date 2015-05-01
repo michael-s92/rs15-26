@@ -16,9 +16,7 @@ AutomatForm::AutomatForm(QWidget *parent) :
 
     //reagujem samo na ENTER, opstiji slucaj je editingFinished()
     connect(ui->lineEdit, SIGNAL(returnPressed()),this, SLOT(draw_automata()));
-
-    //napraviti interfejs tako da kad se menja radio buttn da se iscrta i novi grafik
-    //connect(ui->AutomatGroup, SIGNAL(buttonToggled(int,bool), this, SLOT(draw_automata()));
+    connect(ui->AutomatGroup, SIGNAL(buttonToggled(int,bool)), this, SLOT(draw_automata()));
 
 }
 

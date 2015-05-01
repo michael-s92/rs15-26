@@ -28,7 +28,7 @@ public:
     {
         if (DiagramForm->objectName().isEmpty())
             DiagramForm->setObjectName(QStringLiteral("DiagramForm"));
-        DiagramForm->resize(400, 300);
+        DiagramForm->resize(650, 450);
         bttn_main = new QPushButton(DiagramForm);
         bttn_main->setObjectName(QStringLiteral("bttn_main"));
         bttn_main->setGeometry(QRect(280, 20, 99, 27));

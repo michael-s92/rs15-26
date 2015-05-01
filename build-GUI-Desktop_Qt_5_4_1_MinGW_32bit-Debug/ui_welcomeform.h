@@ -29,7 +29,7 @@ public:
         if (WelcomeForm->objectName().isEmpty())
             WelcomeForm->setObjectName(QStringLiteral("WelcomeForm"));
         WelcomeForm->setWindowModality(Qt::NonModal);
-        WelcomeForm->resize(400, 300);
+        WelcomeForm->resize(650, 450);
         _label = new QLabel(WelcomeForm);
         _label->setObjectName(QStringLiteral("_label"));
         _label->setGeometry(QRect(160, 30, 191, 211));
