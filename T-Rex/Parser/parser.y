@@ -3,9 +3,9 @@
 #include <iostream>
 #include <string>
 #include <vector>
-
-#include "TreeNodes.hpp"
-
+#include "Parser/TreeNodes.hpp"
+#include <QString>
+#include <QDebug>
 
 using namespace std;
 
@@ -28,6 +28,19 @@ void add_vector(vector<symbol_reg_node*> & elem_l, const vector<symbol_reg_node*
    for (; i!=elem_r.end(); i++)
      elem_l.push_back(*i);
 }
+
+
+reg_node * reg;
+
+reg_node * parse(char* s)
+{
+  reg = 0;
+  set_text("a+b");
+  yyparse();
+  return reg;
+}
+
+extern void set_text(char *s);
 
 
 %}
@@ -56,7 +69,7 @@ void add_vector(vector<symbol_reg_node*> & elem_l, const vector<symbol_reg_node*
 
 %type <num> Repetition
 
-%type <reg> RegExp RegSimple RegLasy
+%type <reg> RegExp RegSimple RegLasy Reg
 %type <char_class> CharacterClass
 %type <vec> ArraySym CharPart
 %type <sym_reg> SymbolChar BackslashReg Symbol SpecSymbol
@@ -64,7 +77,8 @@ void add_vector(vector<symbol_reg_node*> & elem_l, const vector<symbol_reg_node*
 %%
 
 // pravilo potrebno samo za ispisivanje cvora
-RegPrint : RegExp           {
+Reg : RegExp                {
+                              reg = $1;
                               cout << *$1 << endl;
                             }
 ;

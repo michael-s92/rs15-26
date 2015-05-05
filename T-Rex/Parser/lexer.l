@@ -6,21 +6,22 @@
 
 %{
 #include <iostream>
-#include "TreeNodes.hpp"
+#include "Parser/TreeNodes.hpp"
 #include <string>
 #include "parser.h"
 #include <string>
-
-
 
 using namespace std;
 
 void ispisi(string s)
 {
   cout << "Lex:  "<< s << endl;
-
 }
 
+void set_text(char *s)
+{
+   yy_scan_string(s);
+}
 
 
 %}

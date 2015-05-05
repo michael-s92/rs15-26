@@ -1,4 +1,4 @@
-#include "TreeNodes.hpp"
+#include "Parser/TreeNodes.hpp"
 
 binary_op_reg_node::binary_op_reg_node(reg_node* left, reg_node* right)
  :_left(left),_right(right)
