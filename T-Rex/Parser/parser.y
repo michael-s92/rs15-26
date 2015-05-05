@@ -32,13 +32,7 @@ void add_vector(vector<symbol_reg_node*> & elem_l, const vector<symbol_reg_node*
 
 reg_node * reg;
 
-reg_node * parse(char* s)
-{
-  reg = 0;
-  set_text("a+b");
-  yyparse();
-  return reg;
-}
+reg_node * parse(char* s);
 
 extern void set_text(char *s);
 
@@ -415,6 +409,12 @@ SymbolChar : symbol_token   {
 
 %%
 
-
+reg_node * parse(char *s)
+{
+  reg = 0;
+  set_text(s);
+  yyparse();
+  return reg;
+}
 
 

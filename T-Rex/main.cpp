@@ -13,8 +13,7 @@ int main(int argc, char *argv[])
    w.show();
 
     int b;
-    reg_node * reg = parse("a+b");
-
+    reg_node * reg = parse("a|b*");
 
     return a.exec();
 }
