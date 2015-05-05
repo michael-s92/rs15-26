@@ -1,4 +1,5 @@
 #include "Parser/TreeNodes.hpp"
+#include "Parser/thompson.h"
 
 binary_op_reg_node::binary_op_reg_node(reg_node* left, reg_node* right)
  :_left(left),_right(right)
@@ -24,6 +25,20 @@ void union_reg_node::print(ostream & ostr) const
     ostr << " )";
 }
 
+Thompson union_reg_node::execute_T() const
+{
+    Thompson t1 = _left->execute_T();
+    Thompson t2 = _right->execute_T();
+    Thompson t(Thompson::state_count_min--,Thompson::state_count_max++);
+    t.addEdges(t1.getEdges());
+    t.addEdges(t2.getEdges());
+    t.addEdge(t.getFirst(),t1.getFirst(),'\0');
+    t.addEdge(t.getFirst(),t2.getFirst(),'\0');
+    t.addEdge(t1.getLast(),t.getLast(),'\0');
+    t.addEdge(t2.getLast(),t.getLast(),'\0');
+    return t;
+}
+
 concat_reg_node::concat_reg_node(reg_node* left, reg_node* right)
  :binary_op_reg_node(left,right)
 {}
@@ -35,6 +50,17 @@ void concat_reg_node::print(ostream & ostr) const
     ostr << " ";
    _right->print(ostr);
     ostr << " )";
+}
+
+Thompson concat_reg_node::execute_T() const
+{
+    Thompson t1 = _left->execute_T();
+    Thompson t2 = _right->execute_T();
+    Thompson t(t1.getFirst(),t2.getLast());
+    t.addEdges(t1.getEdges());
+    t.addEdges(t2.getEdges());
+    t.addEdge(t1.getLast(),t2.getFirst(),'\0');
+    return t;
 }
 
 star_reg_node::star_reg_node(reg_node *reg)
@@ -49,6 +75,19 @@ void star_reg_node::print(ostream & ostr) const
     ostr << " )";
 }
 
+Thompson star_reg_node::execute_T() const
+{
+    Thompson t1 = _reg->execute_T();
+    Thompson t(Thompson::state_count_min--,Thompson::state_count_max++);
+    t.addEdges(t1.getEdges());
+    t.addEdge(t.getFirst(),t1.getFirst(),'\0');
+    t.addEdge(t.getFirst(),t.getLast(),'\0');
+    t.addEdge(t1.getLast(),t1.getFirst(),'\0');
+    t.addEdge(t1.getLast(),t.getLast(),'\0');
+
+    return t;
+}
+
 plus_reg_node::plus_reg_node(reg_node *reg)
  :unary_op_reg_node(reg)
 {}
@@ -61,6 +100,17 @@ void plus_reg_node::print(ostream & ostr) const
     ostr << " )";
 }
 
+Thompson plus_reg_node::execute_T() const
+{
+    Thompson t1 = _reg->execute_T();
+    Thompson t(Thompson::state_count_min--,Thompson::state_count_max++);
+    t.addEdges(t1.getEdges());
+    t.addEdge(t.getFirst(),t1.getFirst(),'\0');
+    t.addEdge(t1.getLast(),t1.getFirst(),'\0');
+    t.addEdge(t1.getLast(),t.getLast(),'\0');
+    return t;
+}
+
 ques_reg_node::ques_reg_node(reg_node *reg)
  :unary_op_reg_node(reg)
 {}
@@ -71,6 +121,17 @@ void ques_reg_node::print(ostream & ostr) const
     _reg->print(ostr);
     ostr << " ?";
     ostr << " )";
+}
+
+Thompson ques_reg_node::execute_T() const
+{
+    Thompson t1 = _reg->execute_T();
+    Thompson t(Thompson::state_count_min--,Thompson::state_count_max++);
+    t.addEdges(t1.getEdges());
+    t.addEdge(t.getFirst(),t1.getFirst(),'\0');
+    t.addEdge(t1.getFirst(),t1.getLast(),'\0');
+    t.addEdge(t1.getLast(),t.getLast(),'\0');
+    return t;
 }
 
 symbol_reg_node::symbol_reg_node(char value)
@@ -89,10 +150,23 @@ normal_symbol_reg_node::normal_symbol_reg_node(char value)
 {
 
 }
+
+
+Thompson symbol_reg_node::execute_T() const
+{
+    int state = Thompson::state_count_max;
+    Thompson t(state,state+1);
+    Thompson::state_count_max+=2;
+    t.addEdge(state,state+1,_value);
+    return t;
+}
+
+
 void normal_symbol_reg_node::print(ostream & ostr) const
 {
-     ostr << "" << _value;
+    ostr << "" << _value;
 }
+
 
 backslash_symbol_reg_node::backslash_symbol_reg_node(char value)
  :symbol_reg_node(value)
@@ -126,6 +200,12 @@ void char_class_reg_node::print(ostream & ostr) const
     ostr << "] )";
 }
 
+Thompson char_class_reg_node::execute_T() const
+{
+    Thompson t(0,0);
+    return t;
+}
+
 
 
 
@@ -139,9 +219,17 @@ void repetition_reg_node::print(ostream & ostr) const
     ostr << "{" << _min << "," <<_max << "}";
 }
 
+Thompson repetition_reg_node::execute_T() const
+{
+    Thompson t(0,0);
+    return t;
+}
+
 ostream & operator << (ostream & ostr, const reg_node & reg)
 {
     reg.print(ostr);
     return ostr;
 }
+
+
 

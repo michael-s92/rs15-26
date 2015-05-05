@@ -22,6 +22,7 @@ SOURCES += main.cpp\
     automatform.cpp \
     diagramform.cpp \
     Parser/TreeNodes.cpp \
+    Parser/thompson.cpp
 
 HEADERS  += mainwindow.h \
     welcomeform.h \
@@ -29,7 +30,8 @@ HEADERS  += mainwindow.h \
     editorform.h \
     automatform.h \
     diagramform.h \
-    Parser/TreeNodes.hpp
+    Parser/TreeNodes.hpp \
+    Parser/thompson.h
 
 FORMS    += mainwindow.ui \
     welcomeform.ui \
