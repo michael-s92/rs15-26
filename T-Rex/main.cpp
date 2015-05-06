@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
 
    f.close();
    system("dot -Tjpeg /home/igor/Desktop/min.dot > /home/igor/Desktop/min1.jpeg");
-
+*/
     return a.exec();
-  */
+
 }
