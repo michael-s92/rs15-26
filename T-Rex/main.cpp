@@ -15,17 +15,21 @@ int main(int argc, char *argv[])
    WelcomeForm w;
    w.show();
 
- /*
-  Za testiranje, morate instalirati dot na linuxu
+
    reg_node * reg = parse("(a|b)(c|d)");
    Thompson t = reg->execute_T();
+
+   /*
+    //Za testiranje, morate instalirati dot na linuxu
+
    fstream f;
    f.open("/home/igor/Desktop/min.dot",fstream::out);
    t.make_dot_file(f);
 
    f.close();
    system("dot -Tjpeg /home/igor/Desktop/min.dot > /home/igor/Desktop/min1.jpeg");
+
 */
-    return a.exec();
+   return a.exec();
 
 }
