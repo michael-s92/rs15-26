@@ -84,8 +84,7 @@ public:
 
     void set_edges_count_zero();
 
-static int state_count_min;
-static int state_count_max;
+static int state_count;
 
 private:
  int _first;

@@ -27,9 +27,10 @@ void union_reg_node::print(ostream & ostr) const
 
 Thompson union_reg_node::execute_T() const
 {
+    int state = Thompson::state_count++;
     Thompson t1 = _left->execute_T();
     Thompson t2 = _right->execute_T();
-    Thompson t(Thompson::state_count_min-1,Thompson::state_count_max+1);
+    Thompson t(state,Thompson::state_count++);
     t.addEdges(t1.getEdges());
     t.addEdges(t2.getEdges());
     t.addEdge(t.getFirst(),t1.getFirst(),'\0');
@@ -77,8 +78,9 @@ void star_reg_node::print(ostream & ostr) const
 
 Thompson star_reg_node::execute_T() const
 {
+    int state = Thompson::state_count++;
     Thompson t1 = _reg->execute_T();
-    Thompson t(Thompson::state_count_min--,Thompson::state_count_max++);
+    Thompson t(state,Thompson::state_count++);
     t.addEdges(t1.getEdges());
     t.addEdge(t.getFirst(),t1.getFirst(),'\0');
     t.addEdge(t.getFirst(),t.getLast(),'\0');
@@ -102,9 +104,9 @@ void plus_reg_node::print(ostream & ostr) const
 
 Thompson plus_reg_node::execute_T() const
 {
+    int state = Thompson::state_count++;
     Thompson t1 = _reg->execute_T();
-    Thompson t(Thompson::state_count_min--,Thompson::state_count_max++);
-    t.addEdges(t1.getEdges());
+    Thompson t(state,Thompson::state_count++);
     t.addEdge(t.getFirst(),t1.getFirst(),'\0');
     t.addEdge(t1.getLast(),t1.getFirst(),'\0');
     t.addEdge(t1.getLast(),t.getLast(),'\0');
@@ -125,9 +127,9 @@ void ques_reg_node::print(ostream & ostr) const
 
 Thompson ques_reg_node::execute_T() const
 {
+    int state = Thompson::state_count++;
     Thompson t1 = _reg->execute_T();
-    Thompson t(Thompson::state_count_min--,Thompson::state_count_max++);
-    t.addEdges(t1.getEdges());
+    Thompson t(state,Thompson::state_count++);
     t.addEdge(t.getFirst(),t1.getFirst(),'\0');
     t.addEdge(t1.getFirst(),t1.getLast(),'\0');
     t.addEdge(t1.getLast(),t.getLast(),'\0');
@@ -154,9 +156,9 @@ normal_symbol_reg_node::normal_symbol_reg_node(char value)
 
 Thompson symbol_reg_node::execute_T() const
 {
-    int state = Thompson::state_count_max;
+    int state = Thompson::state_count;
     Thompson t(state,state+1);
-    Thompson::state_count_max+=2;
+    Thompson::state_count+=2;
     t.addEdge(state,state+1,_value);
     return t;
 }

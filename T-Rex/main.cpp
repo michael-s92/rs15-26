@@ -12,17 +12,20 @@ extern reg_node * parse(char * s);
 int main(int argc, char *argv[])
 {
    QApplication a(argc, argv);
- //  WelcomeForm w;
- //  w.show();
+   WelcomeForm w;
+   w.show();
 
-   reg_node * reg = parse("a|b");
+ /*
+  Za testiranje, morate instalirati dot na linuxu
+   reg_node * reg = parse("(a|b)(c|d)");
    Thompson t = reg->execute_T();
    fstream f;
-   //f.open("/home/igor/Desktop/min.dot",fstream::out);
+   f.open("/home/igor/Desktop/min.dot",fstream::out);
    t.make_dot_file(f);
 
    f.close();
-  // system("dot -Tjpeg /home/igor/Desktop/min.dot > /home/igor/Desktop/min.jpeg");
+   system("dot -Tjpeg /home/igor/Desktop/min.dot > /home/igor/Desktop/min1.jpeg");
 
     return a.exec();
+  */
 }
