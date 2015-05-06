@@ -29,7 +29,7 @@ Thompson union_reg_node::execute_T() const
 {
     Thompson t1 = _left->execute_T();
     Thompson t2 = _right->execute_T();
-    Thompson t(Thompson::state_count_min--,Thompson::state_count_max++);
+    Thompson t(Thompson::state_count_min-1,Thompson::state_count_max+1);
     t.addEdges(t1.getEdges());
     t.addEdges(t2.getEdges());
     t.addEdge(t.getFirst(),t1.getFirst(),'\0');

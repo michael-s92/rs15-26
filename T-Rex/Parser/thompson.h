@@ -27,6 +27,17 @@ public:
         return _c;
     }
 
+    void setState1(int state1)
+    {
+        _state1 = state1;
+    }
+
+
+    void setState2(int state2)
+    {
+        _state2 = state2;
+    }
+
 private:
     int _state1;
     int _state2;
@@ -67,10 +78,11 @@ public:
     void addEdges(QLinkedList<Edge> edges)
     {
         _edges << edges;
-     //   QLinkedList<Edge>::iterator i = edges.begin();
-     //   for (; i!=edges.end(); i++)
-     //      _edges->append(*i);
     }
+
+    void make_dot_file(std::ostream & osr);
+
+    void set_edges_count_zero();
 
 static int state_count_min;
 static int state_count_max;

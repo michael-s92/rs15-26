@@ -150,7 +150,10 @@ RegSimple
                                             $$=$1;
                                             ispisi("RegSimple","Backslash");
                                            }
-
+          | backslash_token num_token      {
+                                            $$ = new backslash_symbol_reg_node($2);
+                                            ispisi("RegSimple","\\ num_token");
+                                           }
             // svi nespecijalni simboli
           | symbol_token                    {
                                              $$ = new normal_symbol_reg_node($1);
@@ -336,11 +339,7 @@ Symbol : symbol_token   {
                         }
 ;
 
-SpecSymbol : num_token 			{
-                                        $$ = new normal_symbol_reg_node($1);
-                                        ispisi("SpecSymbol","broj_simbol");
-                                        }
-           | minus_token		{
+SpecSymbol : minus_token		{
                                         $$ = new normal_symbol_reg_node('-');
                                         ispisi("SpecSymbol","-");
                                         }
@@ -373,6 +372,10 @@ SymbolChar : symbol_token   {
                              $$ = $1;
                             ispisi("SymbolChar","\\");
                             }
+           | backslash_token num_token   {
+                                         $$ = new backslash_symbol_reg_node($2);
+                                         ispisi("BackslashReg","\\ num_token");
+                                         }
            | plus_token     {
                             $$ = new normal_symbol_reg_node($1);
                             ispisi("SymbolChar","+");
