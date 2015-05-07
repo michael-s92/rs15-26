@@ -18,9 +18,6 @@ public:
 
     static DiagramForm* getDiagramForm();
 
-private Q_SLOTS:
-    void goto_main(QString msn);
-
 private:
     explicit DiagramForm(QWidget *parent = 0);
     Ui::DiagramForm *ui;

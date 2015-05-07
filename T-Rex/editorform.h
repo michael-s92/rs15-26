@@ -19,7 +19,6 @@ public:
     static EditorForm* getEditorForm();
 
 private Q_SLOTS:
-    void goto_main(QString msn);
     void LoadFile();
     void SearchText();
 
@@ -27,7 +26,6 @@ private:
     explicit EditorForm(QWidget *parent = 0);
     Ui::EditorForm *ui;
 
-    QSignalMapper back_to;
 };
 
 #endif // EDITORFORM_H

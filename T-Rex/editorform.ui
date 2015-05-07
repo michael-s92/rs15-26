@@ -6,31 +6,18 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>650</width>
-    <height>450</height>
+    <width>550</width>
+    <height>400</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>TRex - Editor</string>
   </property>
-  <widget class="QPushButton" name="bttn_main">
-   <property name="geometry">
-    <rect>
-     <x>31</x>
-     <y>40</y>
-     <width>111</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Back to main</string>
-   </property>
-  </widget>
   <widget class="QPushButton" name="bttnLoad">
    <property name="geometry">
     <rect>
-     <x>31</x>
-     <y>68</y>
+     <x>130</x>
+     <y>10</y>
      <width>111</width>
      <height>21</height>
     </rect>
@@ -42,10 +29,10 @@
   <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
-     <x>170</x>
-     <y>60</y>
-     <width>461</width>
-     <height>371</height>
+     <x>10</x>
+     <y>40</y>
+     <width>531</width>
+     <height>351</height>
     </rect>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout">

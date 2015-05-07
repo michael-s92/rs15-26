@@ -18,14 +18,10 @@ public:
 
     static UvodForm* getUvodForm();
 
-private Q_SLOTS:
-    void goto_main(QString msn);
-
 private:
     explicit UvodForm(QWidget *parent = 0);
     Ui::UvodForm *ui;
 
-    QSignalMapper back_to;
 };
 
 #endif // UVODFORM_H

@@ -12,11 +12,6 @@ EditorForm::EditorForm(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    connect(&back_to, SIGNAL(mapped(QString)), this, SLOT(goto_main(QString)));
-
-    connect(ui->bttn_main, SIGNAL(clicked()), &back_to, SLOT(map()));
-    back_to.setMapping(ui->bttn_main, "back_to_main");
-
     connect(ui->bttnLoad, SIGNAL(clicked(bool)), this, SLOT(LoadFile()));
     connect(ui->lineEdit, SIGNAL(returnPressed()), this, SLOT(SearchText()));
 }
@@ -30,14 +25,6 @@ EditorForm* EditorForm::getEditorForm(){
     static EditorForm* _form = new EditorForm();
     return _form;
 }
-
-void EditorForm::goto_main(QString msn){
-    if(msn.toStdString().compare("back_to_main") == 0){
-        MainWindow::getMainWindow()->show();
-        this->hide();
-    }
-}
-
 
 void EditorForm::LoadFile(){
     ui->plainTextEdit->setPlainText("");
@@ -75,6 +62,7 @@ void EditorForm::SearchText(){
      * QRegExp::cap(int n = 0)
      * QRegExp::capturedTexts()
      * Ubaciti i flagove sa strane da korisnik bira: IgnoreCase, Multiline, Global
+     * markira se pomocu html taga. ceo kod nece imati smisla ako se ucitava html tekst, tagovi ce izgubiti vrednost
      */
 
     QRegExp mark(ui->lineEdit->text());

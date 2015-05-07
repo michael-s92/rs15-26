@@ -19,7 +19,6 @@ public:
     static AutomatForm* getAutomatForm();
 
 private Q_SLOTS:
-    void goto_main(QString msn);
     void draw_automata();
 
 private:

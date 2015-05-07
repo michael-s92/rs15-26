@@ -16,7 +16,6 @@ QMAKE_CXXFLAGS += -std=c++11
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    welcomeform.cpp \
     uvodform.cpp \
     editorform.cpp \
     automatform.cpp \
@@ -25,7 +24,6 @@ SOURCES += main.cpp\
     Parser/thompson.cpp
 
 HEADERS  += mainwindow.h \
-    welcomeform.h \
     uvodform.h \
     editorform.h \
     automatform.h \
@@ -34,7 +32,6 @@ HEADERS  += mainwindow.h \
     Parser/thompson.h
 
 FORMS    += mainwindow.ui \
-    welcomeform.ui \
     uvodform.ui \
     editorform.ui \
     automatform.ui \
@@ -42,8 +39,7 @@ FORMS    += mainwindow.ui \
 
 DISTFILES +=
 
-RESOURCES += \
-    my_files.qrc
+RESOURCES +=
 
 
 #ovaj deo make-a odnosi se na lex i bison
