@@ -3,7 +3,7 @@
 #include <QSplashScreen>
 
 #include "Parser/TreeNodes.hpp"
-
+#include <fstream>
 
 extern reg_node * parse(char * s);
 
@@ -35,20 +35,20 @@ int main(int argc, char *argv[])
    delete splash;
 
 
-   reg_node * reg = parse("(a|b)(c|d)");
+   reg_node * reg = parse("(a|b)a");
    Thompson t = reg->execute_T();
+   Gluskov g = t.make_gluskov();
 
-   /*
-    //Za testiranje, morate instalirati dot na linuxu
 
-   fstream f;
-   f.open("/home/igor/Desktop/min.dot",fstream::out);
-   t.make_dot_file(f);
+  //   fstream f;
+  // f.open("/home/igor/Desktop/min.dot",fstream::out);
+  // t.make_dot_file(f);
 
-   f.close();
-   system("dot -Tjpeg /home/igor/Desktop/min.dot > /home/igor/Desktop/min1.jpeg");
+  // f.close();
+  // system("dot -Tjpeg /home/igor/Desktop/min.dot > /home/igor/Desktop/minx.jpeg");
 
-*/
+
+
    return a.exec();
 
 }

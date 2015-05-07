@@ -234,4 +234,3 @@ ostream & operator << (ostream & ostr, const reg_node & reg)
 }
 
 
-
