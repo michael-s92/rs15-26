@@ -15,6 +15,9 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    this->setWindowIcon(QIcon(":/images/icon/prog.jpg"));
+    this->setWindowTitle("T-Rex");
+
     createButtonGroup();
 
 }
