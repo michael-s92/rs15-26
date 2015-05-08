@@ -18,7 +18,12 @@ MainWindow::MainWindow(QWidget *parent) :
     this->setWindowIcon(QIcon(":/images/icon/prog.jpg"));
     this->setWindowTitle("T-Rex");
 
+    createMainView();
     createButtonGroup();
+
+}
+
+void MainWindow::createMainView(){
 
 }
 
@@ -26,14 +31,12 @@ QPushButton* MainWindow::createButton(const char *name, const char *info){
 
     QPushButton *tmp = new QPushButton();
 
-    std::string ikonica(":/images/icon/"+std::string(name)+".png");
-    const char* b = &ikonica[0];
-
     tmp->setCheckable(true);
     tmp->setFocusPolicy(Qt::NoFocus); //sta ce mi?!
     tmp->setToolTip(info);
 
-    tmp->setIcon(QIcon(b));
+    std::string ikonica(":/images/icon/"+std::string(name)+".png");
+    tmp->setIcon(QIcon(&ikonica[0]));
     tmp->setIconSize(QSize(50,50));
 
     return tmp;
@@ -69,6 +72,7 @@ void MainWindow::createButtonGroup(){
 
 
     //Ubacivanje u okvir sta sve prikazujemo
+    //popunjavanje okvira -> ideja prebaciti ovo u create main view
     ui->stackedWidget->addWidget(UvodForm::getUvodForm());
     ui->stackedWidget->addWidget(EditorForm::getEditorForm());
     ui->stackedWidget->addWidget(AutomatForm::getAutomatForm());

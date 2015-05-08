@@ -38,6 +38,8 @@ private:
 
     QPushButton* createButton(const char *name, const char *info);
     void createButtonGroup();
+    void createMainView();
+
 };
 
 #endif // MAINWINDOW_H

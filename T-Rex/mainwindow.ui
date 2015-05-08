@@ -34,6 +34,70 @@
      <height>25</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuProgram">
+    <property name="title">
+     <string>Program</string>
+    </property>
+    <widget class="QMenu" name="menuIstorija">
+     <property name="title">
+      <string>Istorija</string>
+     </property>
+     <addaction name="actionIzlistaj"/>
+     <addaction name="actionOcisti"/>
+    </widget>
+    <addaction name="actionPozovi"/>
+    <addaction name="menuIstorija"/>
+    <addaction name="separator"/>
+    <addaction name="actionNapusti_program"/>
+   </widget>
+   <widget class="QMenu" name="menuPogledi">
+    <property name="title">
+     <string>Pogledi</string>
+    </property>
+    <addaction name="actionCeline"/>
+   </widget>
+   <widget class="QMenu" name="menuSkoci_na">
+    <property name="title">
+     <string>Skoci</string>
+    </property>
+    <addaction name="actionUvod"/>
+    <addaction name="actionAutomat"/>
+    <addaction name="actionEditor"/>
+    <addaction name="actionDiagram"/>
+   </widget>
+   <widget class="QMenu" name="menuPodesavanja">
+    <property name="title">
+     <string>Alati</string>
+    </property>
+    <widget class="QMenu" name="menuJezik">
+     <property name="title">
+      <string>Jezik</string>
+     </property>
+     <addaction name="actionSrpski"/>
+     <addaction name="actionEnglish"/>
+    </widget>
+    <addaction name="menuJezik"/>
+    <addaction name="actionPodesavanja"/>
+   </widget>
+   <widget class="QMenu" name="menuPomoc">
+    <property name="title">
+     <string>Pomoc</string>
+    </property>
+    <addaction name="actionPodrska"/>
+    <addaction name="separator"/>
+    <addaction name="actionAutorska_prava"/>
+    <addaction name="actionPravila_koriscenja"/>
+    <addaction name="separator"/>
+    <addaction name="actionT_Rex_Fb"/>
+    <addaction name="actionT_Rex_Twitter"/>
+    <addaction name="separator"/>
+    <addaction name="actionAbout_T_Rex"/>
+   </widget>
+   <addaction name="menuProgram"/>
+   <addaction name="menuPogledi"/>
+   <addaction name="menuSkoci_na"/>
+   <addaction name="menuPodesavanja"/>
+   <addaction name="menuPomoc"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -44,6 +108,96 @@
    </attribute>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
+  <action name="actionPozovi">
+   <property name="text">
+    <string>Pozovi</string>
+   </property>
+  </action>
+  <action name="actionIzlistaj">
+   <property name="text">
+    <string>Izlistaj</string>
+   </property>
+  </action>
+  <action name="actionOcisti">
+   <property name="text">
+    <string>Ocisti</string>
+   </property>
+  </action>
+  <action name="actionNapusti_program">
+   <property name="text">
+    <string>Napusti program</string>
+   </property>
+  </action>
+  <action name="actionCeline">
+   <property name="text">
+    <string>Celine</string>
+   </property>
+  </action>
+  <action name="actionUvod">
+   <property name="text">
+    <string>Uvod</string>
+   </property>
+  </action>
+  <action name="actionAutomat">
+   <property name="text">
+    <string>Automat</string>
+   </property>
+  </action>
+  <action name="actionEditor">
+   <property name="text">
+    <string>Editor</string>
+   </property>
+  </action>
+  <action name="actionDiagram">
+   <property name="text">
+    <string>Diagram</string>
+   </property>
+  </action>
+  <action name="actionSrpski">
+   <property name="text">
+    <string>Srpski</string>
+   </property>
+  </action>
+  <action name="actionEnglish">
+   <property name="text">
+    <string>English</string>
+   </property>
+  </action>
+  <action name="actionPodesavanja">
+   <property name="text">
+    <string>Podesavanja</string>
+   </property>
+  </action>
+  <action name="actionPodrska">
+   <property name="text">
+    <string>Podrska</string>
+   </property>
+  </action>
+  <action name="actionPravila_koriscenja">
+   <property name="text">
+    <string>Pravila koriscenja</string>
+   </property>
+  </action>
+  <action name="actionAutorska_prava">
+   <property name="text">
+    <string>Autorska prava</string>
+   </property>
+  </action>
+  <action name="actionT_Rex_Fb">
+   <property name="text">
+    <string>T-Rex: Facebook</string>
+   </property>
+  </action>
+  <action name="actionT_Rex_Twitter">
+   <property name="text">
+    <string>T-Rex: Twitter</string>
+   </property>
+  </action>
+  <action name="actionAbout_T_Rex">
+   <property name="text">
+    <string>About T-Rex</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
