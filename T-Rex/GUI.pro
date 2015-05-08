@@ -39,7 +39,8 @@ FORMS    += mainwindow.ui \
 
 DISTFILES +=
 
-RESOURCES +=
+RESOURCES += \
+    images.qrc
 
 
 #ovaj deo make-a odnosi se na lex i bison

@@ -14,57 +14,11 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QWidget" name="layoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>11</x>
-      <y>21</y>
-      <width>87</width>
-      <height>128</height>
-     </rect>
-    </property>
-    <layout class="QVBoxLayout" name="verticalLayout">
-     <property name="spacing">
-      <number>6</number>
-     </property>
-     <property name="sizeConstraint">
-      <enum>QLayout::SetMaximumSize</enum>
-     </property>
-     <item>
-      <widget class="QPushButton" name="bttn_uvod">
-       <property name="text">
-        <string>Uvod</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="bttn_editor">
-       <property name="text">
-        <string>Editor</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="bttn_automat">
-       <property name="text">
-        <string>Automat</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="bttn_diagram">
-       <property name="text">
-        <string>Diagram</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
    <widget class="QStackedWidget" name="stackedWidget">
     <property name="geometry">
      <rect>
-      <x>180</x>
-      <y>50</y>
+      <x>40</x>
+      <y>40</y>
       <width>550</width>
       <height>400</height>
      </rect>

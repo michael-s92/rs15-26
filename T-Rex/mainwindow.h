@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 #include <QSignalMapper>
+#include <QPushButton>
+#include <QButtonGroup>
 
 namespace Ui {
 class MainWindow;
@@ -28,7 +30,14 @@ private:
 
     Ui::MainWindow *ui;
 
+    QButtonGroup *bttnGroup;
+    QToolBar *bttnBar;
+    QPushButton *bUvod, *bEditor, *bAutomat, *bDiagram;
+
     QSignalMapper switchForm;
+
+    QPushButton* createButton(const char *name, const char *info);
+    void createButtonGroup();
 };
 
 #endif // MAINWINDOW_H
