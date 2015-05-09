@@ -5,20 +5,71 @@
 
 #include <QFileDialog>
 #include <QTextStream>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 
 EditorForm::EditorForm(QWidget *parent) :
-    QWidget(parent),
+    QFrame(parent),
     ui(new Ui::EditorForm)
 {
     ui->setupUi(this);
 
-    connect(ui->bttnLoad, SIGNAL(clicked(bool)), this, SLOT(LoadFile()));
-    connect(ui->lineEdit, SIGNAL(returnPressed()), this, SLOT(SearchText()));
+    setElements();
+
+    //konekcije za pretrazivanje teksta
+    connect(loadFile, SIGNAL(clicked(bool)), this, SLOT(LoadFile()));
+    connect(inputReg, SIGNAL(returnPressed()), this, SLOT(SearchText()));
+}
+
+void EditorForm::setElements(){
+
+    textArea = new QPlainTextEdit("Unesite text koji pretrazujete ili ga ucitajte iz proizvoljnog fajla...");
+    inputReg = new QLineEdit("Unesite regulatni izlaz...");
+    inputReg->setToolTip("Mesto za unos regularnog izraza koji se rpetrazuje");
+
+
+    QVBoxLayout* layoutB = new QVBoxLayout();
+
+    layoutB->addWidget(makeEditCover());
+    layoutB->addSpacing(1);
+    layoutB->addWidget(inputReg); //da li u produzetku ovoga da stoji labela koja ce da ispisuje koliko je pronadjeno?
+    layoutB->addSpacing(1);
+    layoutB->addWidget(textArea, 1); //drugi argument je strech factor
+
+    this->setLayout(layoutB);
+
+}
+
+QFrame* EditorForm::makeEditCover(){
+
+    /*
+     * Ovde treba dodati dugme za aktivaciju kontejnera sa flagovima
+     * povezati sa glavnim menu bar da i tu moze da se ukljucuje iskljucuje taj box
+     * imamo dugme i tek kad ga pritisnemo ispod njega se pojavi box sa flagovima
+     * i dok ga opet ne pritisnemo on stoji tu
+     */
+
+    loadFile = new QPushButton("Ucitajte fajl");
+
+    QFrame *cover = new QFrame();
+
+    QHBoxLayout *lay = new QHBoxLayout();
+
+    QLabel *coverLabel= new QLabel("Editor");
+
+    //stilizovati coverLabel
+
+    lay->addWidget(coverLabel, 1);
+    lay->addWidget(loadFile);
+
+    cover->setLayout(lay);
+    return cover;
 }
 
 EditorForm::~EditorForm()
 {
     delete ui;
+    delete loadFile; delete inputReg; delete textArea;
 }
 
 EditorForm* EditorForm::getEditorForm(){
@@ -27,7 +78,7 @@ EditorForm* EditorForm::getEditorForm(){
 }
 
 void EditorForm::LoadFile(){
-    ui->plainTextEdit->setPlainText("");
+    textArea->setPlainText("");
 
     QString file = QFileDialog::getOpenFileName(this, "Izaberite fajl");
 
@@ -41,7 +92,7 @@ void EditorForm::LoadFile(){
             for(;;) {
                 value = in.readLine();
                 if (!value.isNull()) {
-                    ui->plainTextEdit->appendPlainText(value);
+                    textArea->appendPlainText(value);
                 } else
                     break;
 
@@ -65,10 +116,16 @@ void EditorForm::SearchText(){
      * markira se pomocu html taga. ceo kod nece imati smisla ako se ucitava html tekst, tagovi ce izgubiti vrednost
      */
 
-    QRegExp mark(ui->lineEdit->text());
-    QString content = ui->plainTextEdit->toPlainText();
+    QRegExp mark(inputReg->text());
+    QString content = textArea->toPlainText();
     content.replace(mark, "<span style=\"color:#660033; font: italic bold\">MATCHED</span>");
-    ui->plainTextEdit->setPlainText("");
-    ui->plainTextEdit->appendHtml("<pre>" + content + "</pre>");
+    textArea->setPlainText("");
+    textArea->appendHtml("<pre>" + content + "</pre>");
+
+    /*
+     * resenje za HTML:
+     * praviti Engine i tu posebnu klasu za citanje fajlova
+     * razdvojiti metode readFile i readHtmlFile
+     */
 
 }

@@ -12,7 +12,7 @@ int main(int argc, char *argv[])
    QApplication a(argc, argv);
 
    QSplashScreen *splash = new QSplashScreen;
-   splash->setPixmap(QPixmap(":/my_files.qrc"));
+   splash->setPixmap(QPixmap(":/my_files.qrc")); //staciti neku sliku koju cu ubaciti u Resources
    splash->show();
    /*
     * napraviti welcome screen i tu ga prikazivati

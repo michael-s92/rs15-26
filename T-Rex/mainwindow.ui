@@ -79,6 +79,7 @@
     <addaction name="separator"/>
     <addaction name="actionT_Rex_Fb"/>
     <addaction name="actionT_Rex_Twitter"/>
+    <addaction name="actionT_Rex_GitHub"/>
     <addaction name="separator"/>
     <addaction name="actionAbout_T_Rex"/>
    </widget>
@@ -136,21 +137,37 @@
    </property>
   </action>
   <action name="actionUvod">
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/images/icon/uvod.png</normaloff>:/images/icon/uvod.png</iconset>
+   </property>
    <property name="text">
     <string>Uvod</string>
    </property>
   </action>
   <action name="actionAutomat">
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/images/icon/automat.png</normaloff>:/images/icon/automat.png</iconset>
+   </property>
    <property name="text">
     <string>Automat</string>
    </property>
   </action>
   <action name="actionEditor">
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/images/icon/editor.png</normaloff>:/images/icon/editor.png</iconset>
+   </property>
    <property name="text">
     <string>Editor</string>
    </property>
   </action>
   <action name="actionDiagram">
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/images/icon/diagram.png</normaloff>:/images/icon/diagram.png</iconset>
+   </property>
    <property name="text">
     <string>Diagram</string>
    </property>
@@ -198,6 +215,11 @@
   <action name="actionAbout_T_Rex">
    <property name="text">
     <string>About T-Rex</string>
+   </property>
+  </action>
+  <action name="actionT_Rex_GitHub">
+   <property name="text">
+    <string>T-Rex: GitHub</string>
    </property>
   </action>
  </widget>

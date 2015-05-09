@@ -13,37 +13,6 @@
   <property name="windowTitle">
    <string>TRex - Editor</string>
   </property>
-  <widget class="QPushButton" name="bttnLoad">
-   <property name="geometry">
-    <rect>
-     <x>130</x>
-     <y>10</y>
-     <width>111</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Ucitaj text</string>
-   </property>
-  </widget>
-  <widget class="QWidget" name="layoutWidget">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>40</y>
-     <width>531</width>
-     <height>351</height>
-    </rect>
-   </property>
-   <layout class="QVBoxLayout" name="verticalLayout">
-    <item>
-     <widget class="QLineEdit" name="lineEdit"/>
-    </item>
-    <item>
-     <widget class="QPlainTextEdit" name="plainTextEdit"/>
-    </item>
-   </layout>
-  </widget>
  </widget>
  <resources/>
  <connections/>

@@ -29,6 +29,8 @@ private Q_SLOTS:
     void updateStatusBar(QString& s);
     void about_app();
     void prikazCeline(bool chk);
+    void azurirajMeniContent(bool tmp);
+
 
 private:
 

@@ -21,10 +21,11 @@ MainWindow::MainWindow(QWidget *parent) :
     this->setMinimumSize(QSize(450, 350));
 
     createStatusBar();
-    setUpMenuActions();
     createMainView();
     createButtonGroup();
 
+    //samo konekcije
+    setUpMenuActions();
 }
 
 void MainWindow::updateStatusBar(QString& s){
@@ -41,10 +42,43 @@ void MainWindow::updateStatusBar(QString& s){
 
 void MainWindow::setUpMenuActions(){
 
+    //postavljanje dogadjaja za celine
+    connect(&switchForm, SIGNAL(mapped(int)), this, SLOT(go_to_form(int)));
+
+    connect(bUvod, SIGNAL(clicked()), &switchForm, SLOT(map()));
+    switchForm.setMapping(bUvod, 0);
+
+    connect(bEditor, SIGNAL(clicked()), &switchForm, SLOT(map()));
+    switchForm.setMapping(bEditor, 1);
+
+    connect(bAutomat, SIGNAL(clicked()), &switchForm, SLOT(map()));
+    switchForm.setMapping(bAutomat, 2);
+
+    connect(bDiagram, SIGNAL(clicked()), &switchForm, SLOT(map()));
+    switchForm.setMapping(bDiagram, 3);
+
+    //postavljanje dogadjaja za menu bar
     connect(ui->actionNapusti_program, SIGNAL(triggered()), this, SLOT(napustiProgram()));
     connect(ui->actionAbout_T_Rex, SIGNAL(triggered()), this, SLOT(about_app()));
     connect(ui->actionCeline, SIGNAL(triggered(bool)), this, SLOT(prikazCeline(bool)));
+    connect(content,SIGNAL(visibilityChanged(bool)), this, SLOT(azurirajMeniContent(bool)));
 
+    connect(ui->actionUvod, SIGNAL(triggered()), &switchForm, SLOT(map()));
+    switchForm.setMapping(ui->actionUvod, 0);
+
+    connect(ui->actionEditor, SIGNAL(triggered()), &switchForm, SLOT(map()));
+    switchForm.setMapping(ui->actionEditor, 1);
+
+    connect(ui->actionAutomat, SIGNAL(triggered()), &switchForm, SLOT(map()));
+    switchForm.setMapping(ui->actionAutomat, 2);
+
+    connect(ui->actionDiagram, SIGNAL(triggered()), &switchForm, SLOT(map()));
+    switchForm.setMapping(ui->actionDiagram, 3);
+
+}
+
+void MainWindow::azurirajMeniContent(bool tmp){
+    ui->actionCeline->setChecked(tmp);
 }
 
 void MainWindow::prikazCeline(bool chk){
@@ -134,21 +168,6 @@ void MainWindow::createButtonGroup(){
     content->setAllowedAreas(Qt::RightDockWidgetArea | Qt::LeftDockWidgetArea);
     content->setMinimumWidth(90);
     addDockWidget(Qt::LeftDockWidgetArea, content);
-
-    //postavljanje dogadjaja
-    connect(&switchForm, SIGNAL(mapped(int)), this, SLOT(go_to_form(int)));
-
-    connect(bUvod, SIGNAL(clicked()), &switchForm, SLOT(map()));
-    switchForm.setMapping(bUvod, 0);
-
-    connect(bEditor, SIGNAL(clicked()), &switchForm, SLOT(map()));
-    switchForm.setMapping(bEditor, 1);
-
-    connect(bAutomat, SIGNAL(clicked()), &switchForm, SLOT(map()));
-    switchForm.setMapping(bAutomat, 2);
-
-    connect(bDiagram, SIGNAL(clicked()), &switchForm, SLOT(map()));
-    switchForm.setMapping(bDiagram, 3);
 
     /*
      * napraviti neku novu formu, da inicijalno nju prikazije
