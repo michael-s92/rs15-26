@@ -9,6 +9,11 @@
 #include <QDockWidget>
 #include <QStackedWidget>
 
+#include "uvodframe.h"
+#include "editorframe.h"
+#include "automatframe.h"
+#include "diagramframe.h"
+
 namespace Ui {
 class MainWindow;
 }
@@ -44,6 +49,12 @@ private:
     QStackedWidget *mainw;
 
     QSignalMapper switchForm;
+
+    //ako zatreba, a ako ne bude trebalo izbrisati
+    UvodFrame *_uvod;
+    EditorFrame *_editor;
+    AutomatFrame *_automat;
+    DiagramFrame *_diagram;
 
     QPushButton* createButton(const char *name, const char *info);
     void createButtonGroup();

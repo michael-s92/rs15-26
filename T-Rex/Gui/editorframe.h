@@ -1,5 +1,5 @@
-#ifndef EDITORFORM_H
-#define EDITORFORM_H
+#ifndef EDITORFRAME_H
+#define EDITORFRAME_H
 
 #include <QFrame>
 #include <QPlainTextEdit>
@@ -7,28 +7,25 @@
 #include <QPushButton>
 
 namespace Ui {
-class EditorForm;
+class EditorFrame;
 }
 
 //moze da se nasledjuje i iz QWidget
 //stavio namerno QFrame da vidim kakve mogucnosti mi pruza
-class EditorForm : public QFrame
+class EditorFrame : public QFrame
 {
     Q_OBJECT
 
 public:
-    //explicit EditorForm(QWidget *parent = 0);
-    ~EditorForm();
-
-    static EditorForm* getEditorForm();
+    explicit EditorFrame(QWidget *parent = 0);
+    ~EditorFrame();
 
 private Q_SLOTS:
     void LoadFile();
     void SearchText();
 
 private:
-    explicit EditorForm(QWidget *parent = 0);
-    Ui::EditorForm *ui;
+    Ui::EditorFrame *ui;
 
     QPlainTextEdit *textArea;
     QLineEdit *inputReg;
@@ -36,7 +33,6 @@ private:
 
     void setElements();
     QFrame* makeEditCover();
-
 };
 
-#endif // EDITORFORM_H
+#endif // EDITORFRAME_H

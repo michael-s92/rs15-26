@@ -1,10 +1,10 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-#include "uvodform.h"
-#include "editorform.h"
-#include "automatform.h"
-#include "diagramform.h"
+#include "uvodframe.h"
+#include "editorframe.h"
+#include "automatframe.h"
+#include "diagramframe.h"
 
 #include <QPushButton>
 #include <QDockWidget>
@@ -115,10 +115,15 @@ void MainWindow::createMainView(){
     mainw = new QStackedWidget();
     mainw->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-    mainw->addWidget(UvodForm::getUvodForm());
-    mainw->addWidget(EditorForm::getEditorForm());
-    mainw->addWidget(AutomatForm::getAutomatForm());
-    mainw->addWidget(DiagramForm::getDiagramForm());
+    _uvod = new UvodFrame();
+    _editor = new EditorFrame();
+    _automat = new AutomatFrame();
+    _diagram = new DiagramFrame();
+
+    mainw->addWidget(_uvod);
+    mainw->addWidget(_editor);
+    mainw->addWidget(_automat);
+    mainw->addWidget(_diagram);
 
     this->setCentralWidget(mainw);
 }

@@ -1,16 +1,15 @@
-#include "editorform.h"
-#include "ui_editorform.h"
-
-#include "mainwindow.h"
+#include "editorframe.h"
+#include "ui_editorframe.h"
 
 #include <QFileDialog>
 #include <QTextStream>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
+#include <QLabel>
 
-EditorForm::EditorForm(QWidget *parent) :
+EditorFrame::EditorFrame(QWidget *parent) :
     QFrame(parent),
-    ui(new Ui::EditorForm)
+    ui(new Ui::EditorFrame)
 {
     ui->setupUi(this);
 
@@ -21,7 +20,7 @@ EditorForm::EditorForm(QWidget *parent) :
     connect(inputReg, SIGNAL(returnPressed()), this, SLOT(SearchText()));
 }
 
-void EditorForm::setElements(){
+void EditorFrame::setElements(){
 
     textArea = new QPlainTextEdit("Unesite text koji pretrazujete ili ga ucitajte iz proizvoljnog fajla...");
     inputReg = new QLineEdit("Unesite regulatni izlaz...");
@@ -40,7 +39,7 @@ void EditorForm::setElements(){
 
 }
 
-QFrame* EditorForm::makeEditCover(){
+QFrame* EditorFrame::makeEditCover(){
 
     /*
      * Ovde treba dodati dugme za aktivaciju kontejnera sa flagovima
@@ -66,18 +65,13 @@ QFrame* EditorForm::makeEditCover(){
     return cover;
 }
 
-EditorForm::~EditorForm()
+EditorFrame::~EditorFrame()
 {
     delete ui;
     delete loadFile; delete inputReg; delete textArea;
 }
 
-EditorForm* EditorForm::getEditorForm(){
-    static EditorForm* _form = new EditorForm();
-    return _form;
-}
-
-void EditorForm::LoadFile(){
+void EditorFrame::LoadFile(){
     textArea->setPlainText("");
 
     QString file = QFileDialog::getOpenFileName(this, "Izaberite fajl");
@@ -103,7 +97,7 @@ void EditorForm::LoadFile(){
 }
 
 #include <QRegExp>
-void EditorForm::SearchText(){
+void EditorFrame::SearchText(){
 
     /*
      * ima greska! kad radi replace, on gubi deo onoga sto je ucitano, skracuje sadrzaj

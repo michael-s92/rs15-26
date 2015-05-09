@@ -15,27 +15,29 @@ QMAKE_CXXFLAGS += -std=c++11
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp \
-    uvodform.cpp \
-    editorform.cpp \
-    automatform.cpp \
-    diagramform.cpp \
     Parser/TreeNodes.cpp \
-    Parser/thompson.cpp
+    Parser/thompson.cpp \
+    Gui/uvodframe.cpp \
+    Gui/editorframe.cpp \
+    Gui/diagramframe.cpp \
+    Gui/mainwindow.cpp \
+    Gui/automatframe.cpp
 
-HEADERS  += mainwindow.h \
-    uvodform.h \
-    editorform.h \
-    automatform.h \
-    diagramform.h \
+HEADERS  += \
     Parser/TreeNodes.hpp \
-    Parser/thompson.h
+    Parser/thompson.h \
+    Gui/uvodframe.h \
+    Gui/editorframe.h \
+    Gui/diagramframe.h \
+    Gui/mainwindow.h \
+    Gui/automatframe.h
 
-FORMS    += mainwindow.ui \
-    uvodform.ui \
-    editorform.ui \
-    automatform.ui \
-    diagramform.ui
+FORMS    += \
+    Gui/uvodframe.ui \
+    Gui/editorframe.ui \
+    Gui/diagramframe.ui \
+    Gui/mainwindow.ui \
+    Gui/automatframe.ui
 
 DISTFILES +=
 
