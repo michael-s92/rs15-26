@@ -18,9 +18,38 @@ MainWindow::MainWindow(QWidget *parent) :
     this->setWindowIcon(QIcon(":/images/icon/prog.jpg"));
     this->setWindowTitle("T-Rex");
 
+    createStatusBar();
+    setUpMenuActions();
     createMainView();
     createButtonGroup();
 
+}
+
+void MainWindow::updateStatusBar(QString& s){
+    lStatus->setText(s);
+}
+
+ void MainWindow::createStatusBar(){
+
+     lStatus = new QLabel("... status bar ...");
+     lStatus->setMinimumSize(lStatus->sizeHint());
+     ui->statusBar->addWidget(lStatus, 1);
+
+ }
+
+void MainWindow::setUpMenuActions(){
+
+    connect(ui->actionNapusti_program, SIGNAL(triggered()), this, SLOT(napustiProgram()));
+
+}
+
+void MainWindow::napustiProgram(){
+    /*
+     * Mozda pre napustanja programa izbaciti korisniku "dovidjenja" poruku
+     * ili ga pitati da li zaista zeli da napusti program
+     */
+
+    QApplication::exit();
 }
 
 void MainWindow::createMainView(){

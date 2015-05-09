@@ -5,6 +5,7 @@
 #include <QSignalMapper>
 #include <QPushButton>
 #include <QButtonGroup>
+#include <QLabel>
 
 namespace Ui {
 class MainWindow;
@@ -25,6 +26,8 @@ public:
 
 private Q_SLOTS:
     void go_to_form(int i);
+    void napustiProgram();
+    void updateStatusBar(QString& s);
 
 private:
 
@@ -33,12 +36,15 @@ private:
     QButtonGroup *bttnGroup;
     QToolBar *bttnBar;
     QPushButton *bUvod, *bEditor, *bAutomat, *bDiagram;
+    QLabel *lStatus;
 
     QSignalMapper switchForm;
 
     QPushButton* createButton(const char *name, const char *info);
     void createButtonGroup();
     void createMainView();
+    void createStatusBar();
+    void setUpMenuActions();
 
 };
 

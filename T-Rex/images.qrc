@@ -1,9 +1,12 @@
 <RCC>
     <qresource prefix="/images/icon">
-        <file>automat.png</file>
-        <file>editor.png</file>
+        <file>prog.jpg</file>
         <file>uvod.png</file>
         <file>diagram.png</file>
-        <file>prog.jpg</file>
+        <file>automat.png</file>
+        <file>editor.png</file>
+    </qresource>
+    <qresource prefix="/images/menus">
+        <file>images/menus/exit.png</file>
     </qresource>
 </RCC>
