@@ -1,13 +1,12 @@
 <RCC>
-    <qresource prefix="/images/icon">
-        <file>prog.jpg</file>
-        <file>uvod.png</file>
-        <file>diagram.png</file>
-        <file>automat.png</file>
-        <file>editor.png</file>
-    </qresource>
     <qresource prefix="/">
         <file>images/menus/exit.png</file>
+        <file>images/icon/automat.png</file>
+        <file>images/icon/diagram.png</file>
+        <file>images/icon/editor.png</file>
+        <file>images/icon/exit.png</file>
+        <file>images/icon/prog.jpg</file>
+        <file>images/icon/uvod.png</file>
     </qresource>
     <qresource prefix="/msn">
         <file>images/exitdino.jpg</file>
