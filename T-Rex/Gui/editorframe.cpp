@@ -76,24 +76,9 @@ void EditorFrame::LoadFile(){
 
     QString file = QFileDialog::getOpenFileName(this, "Izaberite fajl");
 
-    if (!file.isEmpty()) {
-        QFile data(file);
-        if (data.open(QFile::ReadOnly)) {
-            QTextStream in(&data);
+    if (!file.isEmpty())
+        textArea->setPlainText(_eproc.readFile(file));
 
-            QString value;
-
-            for(;;) {
-                value = in.readLine();
-                if (!value.isNull()) {
-                    textArea->appendPlainText(value);
-                } else
-                    break;
-
-            }
-        }
-        data.close();
-    }
 }
 
 #include <QRegExp>

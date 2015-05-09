@@ -6,6 +6,8 @@
 #include <QLineEdit>
 #include <QPushButton>
 
+#include "Engine/editorprocess.h"
+
 namespace Ui {
 class EditorFrame;
 }
@@ -30,6 +32,8 @@ private:
     QPlainTextEdit *textArea;
     QLineEdit *inputReg;
     QPushButton *loadFile;
+
+    EditorProcess _eproc;
 
     void setElements();
     QFrame* makeEditCover();

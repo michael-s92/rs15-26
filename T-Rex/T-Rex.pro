@@ -21,7 +21,8 @@ SOURCES += main.cpp\
     Gui/editorframe.cpp \
     Gui/diagramframe.cpp \
     Gui/mainwindow.cpp \
-    Gui/automatframe.cpp
+    Gui/automatframe.cpp \
+    Engine/editorprocess.cpp
 
 HEADERS  += \
     Parser/TreeNodes.hpp \
@@ -30,7 +31,8 @@ HEADERS  += \
     Gui/editorframe.h \
     Gui/diagramframe.h \
     Gui/mainwindow.h \
-    Gui/automatframe.h
+    Gui/automatframe.h \
+    Engine/editorprocess.h
 
 FORMS    += \
     Gui/uvodframe.ui \
