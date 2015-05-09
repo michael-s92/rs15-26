@@ -50,8 +50,8 @@
      <string>Skoci</string>
     </property>
     <addaction name="actionUvod"/>
-    <addaction name="actionAutomat"/>
     <addaction name="actionEditor"/>
+    <addaction name="actionAutomat"/>
     <addaction name="actionDiagram"/>
    </widget>
    <widget class="QMenu" name="menuPodesavanja">
@@ -115,7 +115,7 @@
   </action>
   <action name="actionNapusti_program">
    <property name="icon">
-    <iconset resource="images.qrc">
+    <iconset resource="../images.qrc">
      <normaloff>:/images/menus/exit.png</normaloff>:/images/menus/exit.png</iconset>
    </property>
    <property name="text">
@@ -138,7 +138,7 @@
   </action>
   <action name="actionUvod">
    <property name="icon">
-    <iconset resource="images.qrc">
+    <iconset resource="../images.qrc">
      <normaloff>:/images/icon/uvod.png</normaloff>:/images/icon/uvod.png</iconset>
    </property>
    <property name="text">
@@ -147,7 +147,7 @@
   </action>
   <action name="actionAutomat">
    <property name="icon">
-    <iconset resource="images.qrc">
+    <iconset resource="../images.qrc">
      <normaloff>:/images/icon/automat.png</normaloff>:/images/icon/automat.png</iconset>
    </property>
    <property name="text">
@@ -156,7 +156,7 @@
   </action>
   <action name="actionEditor">
    <property name="icon">
-    <iconset resource="images.qrc">
+    <iconset resource="../images.qrc">
      <normaloff>:/images/icon/editor.png</normaloff>:/images/icon/editor.png</iconset>
    </property>
    <property name="text">
@@ -165,7 +165,7 @@
   </action>
   <action name="actionDiagram">
    <property name="icon">
-    <iconset resource="images.qrc">
+    <iconset resource="../images.qrc">
      <normaloff>:/images/icon/diagram.png</normaloff>:/images/icon/diagram.png</iconset>
    </property>
    <property name="text">
@@ -225,7 +225,7 @@
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>
-  <include location="images.qrc"/>
+  <include location="../images.qrc"/>
  </resources>
  <connections/>
 </ui>
