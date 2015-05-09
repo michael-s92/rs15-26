@@ -72,7 +72,6 @@ EditorFrame::~EditorFrame()
 }
 
 void EditorFrame::LoadFile(){
-    textArea->setPlainText("");
 
     QString file = QFileDialog::getOpenFileName(this, "Izaberite fajl");
 
@@ -81,30 +80,8 @@ void EditorFrame::LoadFile(){
 
 }
 
-#include <QRegExp>
 void EditorFrame::SearchText(){
 
-    /*
-     * ima greska! kad radi replace, on gubi deo onoga sto je ucitano, skracuje sadrzaj
-     * druga stvar je sto ne treba da izbacuje matched kad nesto pronadje, nego da izbaci bas to sto je pronasao
-     * ne radi pravilno cak ni prepoznavanje, mozda bolje ici liniju po liniju, ali to treba videti kako citati iz plain texta
-     * i gde cuvati. Pogledati:
-     * QRegExp::cap(int n = 0)
-     * QRegExp::capturedTexts()
-     * Ubaciti i flagove sa strane da korisnik bira: IgnoreCase, Multiline, Global
-     * markira se pomocu html taga. ceo kod nece imati smisla ako se ucitava html tekst, tagovi ce izgubiti vrednost
-     */
-
-    QRegExp mark(inputReg->text());
-    QString content = textArea->toPlainText();
-    content.replace(mark, "<span style=\"color:#660033; font: italic bold\">MATCHED</span>");
-    textArea->setPlainText("");
-    textArea->appendHtml("<pre>" + content + "</pre>");
-
-    /*
-     * resenje za HTML:
-     * praviti Engine i tu posebnu klasu za citanje fajlova
-     * razdvojiti metode readFile i readHtmlFile
-     */
+    int num = _eproc.doMatch(inputReg->text(), textArea);
 
 }

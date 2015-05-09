@@ -2,6 +2,7 @@
 #define EDITORPROCESS_H
 
 #include <QString>
+#include <QPlainTextEdit>
 
 class EditorProcess
 {
@@ -10,6 +11,7 @@ public:
     ~EditorProcess();
 
     QString& readFile(const QString &file);
+    int doMatch(QString what, QPlainTextEdit* area);
 
 private:
     QString buffer;
