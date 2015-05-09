@@ -6,6 +6,8 @@
 #include <QPushButton>
 #include <QButtonGroup>
 #include <QLabel>
+#include <QDockWidget>
+#include <QStackedWidget>
 
 namespace Ui {
 class MainWindow;
@@ -21,14 +23,12 @@ public:
 
     ~MainWindow();
 
-    //Da li mi je potreban singlton?!?!
-    static MainWindow* getMainWindow();
-
 private Q_SLOTS:
     void go_to_form(int i);
     void napustiProgram();
     void updateStatusBar(QString& s);
     void about_app();
+    void prikazCeline(bool chk);
 
 private:
 
@@ -38,6 +38,8 @@ private:
     QToolBar *bttnBar;
     QPushButton *bUvod, *bEditor, *bAutomat, *bDiagram;
     QLabel *lStatus;
+    QDockWidget *content;
+    QStackedWidget *mainw;
 
     QSignalMapper switchForm;
 

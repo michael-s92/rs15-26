@@ -18,6 +18,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     this->setWindowIcon(QIcon(":/images/icon/prog.jpg"));
     this->setWindowTitle("T-Rex");
+    this->setMinimumSize(QSize(450, 350));
 
     createStatusBar();
     setUpMenuActions();
@@ -42,7 +43,15 @@ void MainWindow::setUpMenuActions(){
 
     connect(ui->actionNapusti_program, SIGNAL(triggered()), this, SLOT(napustiProgram()));
     connect(ui->actionAbout_T_Rex, SIGNAL(triggered()), this, SLOT(about_app()));
+    connect(ui->actionCeline, SIGNAL(triggered(bool)), this, SLOT(prikazCeline(bool)));
 
+}
+
+void MainWindow::prikazCeline(bool chk){
+    if(chk)
+        content->show();
+    else
+        content->hide();
 }
 
 void MainWindow::about_app(){
@@ -55,16 +64,29 @@ void MainWindow::about_app(){
 }
 
 void MainWindow::napustiProgram(){
-    /*
-     * Mozda pre napustanja programa izbaciti korisniku "dovidjenja" poruku
-     * ili ga pitati da li zaista zeli da napusti program
-     */
 
-    QApplication::exit();
+    QMessageBox exitBox;
+    exitBox.setWindowTitle("T-Rex");
+    exitBox.setText(tr("Da li sigurno zelite da napustite program?"));
+    QPixmap pic(QPixmap(":/msn/images/exitdino.jpg"));
+    exitBox.setIconPixmap(pic.scaledToHeight(150, Qt::SmoothTransformation));
+    exitBox.setStandardButtons(QMessageBox::Cancel | QMessageBox::Yes);
+    exitBox.setDefaultButton(QMessageBox::Yes);
+    if(exitBox.exec() == QMessageBox::Yes)
+        QApplication::exit();
 }
 
 void MainWindow::createMainView(){
 
+    mainw = new QStackedWidget();
+    mainw->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
+    mainw->addWidget(UvodForm::getUvodForm());
+    mainw->addWidget(EditorForm::getEditorForm());
+    mainw->addWidget(AutomatForm::getAutomatForm());
+    mainw->addWidget(DiagramForm::getDiagramForm());
+
+    this->setCentralWidget(mainw);
 }
 
 QPushButton* MainWindow::createButton(const char *name, const char *info){
@@ -105,18 +127,13 @@ void MainWindow::createButtonGroup(){
     bttnBar->addWidget(bAutomat);
     bttnBar->addWidget(bDiagram);
 
-    QDockWidget *content = new QDockWidget();// argument konstruktora: tr("Celine")
+    //centritati button-e na sredinu kolone?!
+
+    content = new QDockWidget(tr("Celine"));
     content->setWidget(bttnBar);
     content->setAllowedAreas(Qt::RightDockWidgetArea | Qt::LeftDockWidgetArea);
+    content->setMinimumWidth(90);
     addDockWidget(Qt::LeftDockWidgetArea, content);
-
-
-    //Ubacivanje u okvir sta sve prikazujemo
-    //popunjavanje okvira -> ideja prebaciti ovo u create main view
-    ui->stackedWidget->addWidget(UvodForm::getUvodForm());
-    ui->stackedWidget->addWidget(EditorForm::getEditorForm());
-    ui->stackedWidget->addWidget(AutomatForm::getAutomatForm());
-    ui->stackedWidget->addWidget(DiagramForm::getDiagramForm());
 
     //postavljanje dogadjaja
     connect(&switchForm, SIGNAL(mapped(int)), this, SLOT(go_to_form(int)));
@@ -142,17 +159,14 @@ void MainWindow::createButtonGroup(){
 }
 
 void MainWindow::go_to_form(int i){
-    ui->stackedWidget->setCurrentIndex(i);
+    mainw->setCurrentIndex(i);
 }
 
 
 MainWindow::~MainWindow()
 {
     delete ui;
-}
-
-
-MainWindow* MainWindow::getMainWindow(){
-    static MainWindow* _main = new MainWindow();
-    return _main;
+    delete bUvod; delete bEditor; delete bAutomat; delete bDiagram; delete lStatus;
+    delete bttnGroup; delete bttnBar; delete content;
+    delete mainw;
 }

@@ -6,7 +6,10 @@
         <file>automat.png</file>
         <file>editor.png</file>
     </qresource>
-    <qresource prefix="/images/menus">
+    <qresource prefix="/">
         <file>images/menus/exit.png</file>
+    </qresource>
+    <qresource prefix="/msn">
+        <file>images/exitdino.jpg</file>
     </qresource>
 </RCC>
