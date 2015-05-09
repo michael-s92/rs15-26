@@ -35,7 +35,7 @@ private Q_SLOTS:
     void about_app();
     void prikazCeline(bool chk);
     void azurirajMeniContent(bool tmp);
-
+    void loadWebPage(QString id);
 
 private:
 
@@ -48,7 +48,7 @@ private:
     QDockWidget *content;
     QStackedWidget *mainw;
 
-    QSignalMapper switchForm;
+    QSignalMapper switchForm, goToWeb;
 
     //ako zatreba, a ako ne bude trebalo izbrisati
     UvodFrame *_uvod;

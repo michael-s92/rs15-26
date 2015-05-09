@@ -56,5 +56,6 @@ int EditorProcess::doMatch(QString what, QPlainTextEdit* area){
     area->setPlainText("");
     area->appendHtml("<pre>" + buffer + "</pre>");
 
+    //povratna vrednost je broj prepoznatih
     return 0;
 }

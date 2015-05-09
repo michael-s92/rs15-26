@@ -33,6 +33,7 @@
      </property>
      <addaction name="actionIzlistaj"/>
      <addaction name="actionOcisti"/>
+     <addaction name="actionUcitaj_novu"/>
     </widget>
     <addaction name="actionPozovi"/>
     <addaction name="menuIstorija"/>
@@ -43,7 +44,14 @@
     <property name="title">
      <string>Pogledi</string>
     </property>
+    <widget class="QMenu" name="menuEditor">
+     <property name="title">
+      <string>Editor</string>
+     </property>
+     <addaction name="actionBroj_prepoznatih"/>
+    </widget>
     <addaction name="actionCeline"/>
+    <addaction name="menuEditor"/>
    </widget>
    <widget class="QMenu" name="menuSkoci_na">
     <property name="title">
@@ -173,11 +181,17 @@
    </property>
   </action>
   <action name="actionSrpski">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>Srpski</string>
    </property>
   </action>
   <action name="actionEnglish">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>English</string>
    </property>
@@ -203,6 +217,10 @@
    </property>
   </action>
   <action name="actionT_Rex_Fb">
+   <property name="icon">
+    <iconset resource="../images.qrc">
+     <normaloff>:/images/menus/fb_icon.png</normaloff>:/images/menus/fb_icon.png</iconset>
+   </property>
    <property name="text">
     <string>T-Rex: Facebook</string>
    </property>
@@ -218,8 +236,28 @@
    </property>
   </action>
   <action name="actionT_Rex_GitHub">
+   <property name="icon">
+    <iconset resource="../images.qrc">
+     <normaloff>:/images/menus/code_i2.png</normaloff>:/images/menus/code_i2.png</iconset>
+   </property>
    <property name="text">
     <string>T-Rex: GitHub</string>
+   </property>
+  </action>
+  <action name="actionBroj_prepoznatih">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Broj prepoznatih</string>
+   </property>
+  </action>
+  <action name="actionUcitaj_novu">
+   <property name="text">
+    <string>Ucitaj novu</string>
    </property>
   </action>
  </widget>

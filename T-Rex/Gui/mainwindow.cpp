@@ -9,6 +9,7 @@
 #include <QPushButton>
 #include <QDockWidget>
 #include <QMessageBox>
+#include <QDesktopServices>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -26,6 +27,14 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //samo konekcije
     setUpMenuActions();
+
+    /*
+     * istorija moze da se cuva npr u XML formatu
+     * ovde bi mogla da se ucitava
+     * da se npr trazi od korisnika da cekira workspace
+     * i tako to
+     * mozda u engine imati posebnu klasu za istoriju
+     */
 }
 
 void MainWindow::updateStatusBar(QString& s){
@@ -75,6 +84,46 @@ void MainWindow::setUpMenuActions(){
     connect(ui->actionDiagram, SIGNAL(triggered()), &switchForm, SLOT(map()));
     switchForm.setMapping(ui->actionDiagram, 3);
 
+    connect(ui->actionBroj_prepoznatih, SIGNAL(triggered(bool)), _editor, SLOT(showNumMatched(bool)));
+
+    //slotovi za net
+    connect(&goToWeb, SIGNAL(mapped(QString)), this, SLOT(loadWebPage(QString)));
+
+    connect(ui->actionT_Rex_GitHub, SIGNAL(triggered()), &goToWeb, SLOT(map()));
+    goToWeb.setMapping(ui->actionT_Rex_GitHub, "GitHub");
+
+    connect(ui->actionT_Rex_Fb, SIGNAL(triggered()), &goToWeb, SLOT(map()));
+    goToWeb.setMapping(ui->actionT_Rex_Fb, "FB");
+}
+
+void MainWindow::loadWebPage(QString id){
+    bool anw = false;
+
+    if(id.compare("GitHub") == 0){
+        anw = QDesktopServices::openUrl(QUrl("https://github.com/MATF-RS15/rs15-26", QUrl::TolerantMode));
+    }
+    else if(id.compare("FB") == 0){
+        anw = QDesktopServices::openUrl(QUrl("https://www.facebook.com", QUrl::TolerantMode));
+    }
+
+    /*
+     * Slanje mail sa:
+     * Test - naslov
+     * Just a test - poruka
+     * user@foo.com = mail
+     * mailto:user@foo.com?subject=Test&body=Just a test
+     */
+
+    if(!anw){
+        QMessageBox mBox;
+        mBox.setWindowTitle("T-Rex");
+        mBox.setText(tr("Greska!"
+                        "<p>Proverite internet konekciju ili ispravnost podrazumevanog web pretrazivaca..."));
+        QPixmap pic(QPixmap(":/images/saddino.jpg"));
+        mBox.setIconPixmap(pic.scaledToHeight(150, Qt::SmoothTransformation));
+        mBox.setStandardButtons(QMessageBox::Ok);
+        mBox.exec();
+    }
 }
 
 void MainWindow::azurirajMeniContent(bool tmp){

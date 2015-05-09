@@ -5,6 +5,7 @@
 #include <QPlainTextEdit>
 #include <QLineEdit>
 #include <QPushButton>
+#include <QLabel>
 
 #include "Engine/editorprocess.h"
 
@@ -22,6 +23,9 @@ public:
     explicit EditorFrame(QWidget *parent = 0);
     ~EditorFrame();
 
+public Q_SLOTS:
+    void showNumMatched(bool ind);
+
 private Q_SLOTS:
     void LoadFile();
     void SearchText();
@@ -32,11 +36,13 @@ private:
     QPlainTextEdit *textArea;
     QLineEdit *inputReg;
     QPushButton *loadFile;
+    QLabel *matched_num;
 
     EditorProcess _eproc;
 
     void setElements();
-    QFrame* makeEditCover();
+    QWidget* makeEditCover();
+    QWidget* makeInputCover();
 };
 
 #endif // EDITORFRAME_H

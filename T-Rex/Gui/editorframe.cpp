@@ -23,15 +23,12 @@ EditorFrame::EditorFrame(QWidget *parent) :
 void EditorFrame::setElements(){
 
     textArea = new QPlainTextEdit("Unesite text koji pretrazujete ili ga ucitajte iz proizvoljnog fajla...");
-    inputReg = new QLineEdit("Unesite regulatni izlaz...");
-    inputReg->setToolTip("Mesto za unos regularnog izraza koji se rpetrazuje");
-
 
     QVBoxLayout* layoutB = new QVBoxLayout();
 
     layoutB->addWidget(makeEditCover());
     layoutB->addSpacing(1);
-    layoutB->addWidget(inputReg); //da li u produzetku ovoga da stoji labela koja ce da ispisuje koliko je pronadjeno?
+    layoutB->addWidget(makeInputCover());
     layoutB->addSpacing(1);
     layoutB->addWidget(textArea, 1); //drugi argument je strech factor
 
@@ -39,7 +36,24 @@ void EditorFrame::setElements(){
 
 }
 
-QFrame* EditorFrame::makeEditCover(){
+QWidget* EditorFrame::makeInputCover(){
+    inputReg = new QLineEdit("Unesite regulatni izlaz...");
+    inputReg->setToolTip("Mesto za unos regularnog izraza koji se rpetrazuje");
+    matched_num = new QLabel();
+
+    QWidget *_cover = new QWidget();
+
+    QHBoxLayout *_lay = new QHBoxLayout();
+
+    _lay->addWidget(inputReg, 1);
+    _lay->addWidget(matched_num);
+
+    _cover->setLayout(_lay);
+
+    return _cover;
+}
+
+QWidget *EditorFrame::makeEditCover(){
 
     /*
      * Ovde treba dodati dugme za aktivaciju kontejnera sa flagovima
@@ -50,7 +64,7 @@ QFrame* EditorFrame::makeEditCover(){
 
     loadFile = new QPushButton("Ucitajte fajl");
 
-    QFrame *cover = new QFrame();
+    QWidget *cover = new QWidget();
 
     QHBoxLayout *lay = new QHBoxLayout();
 
@@ -63,6 +77,13 @@ QFrame* EditorFrame::makeEditCover(){
 
     cover->setLayout(lay);
     return cover;
+}
+
+void EditorFrame::showNumMatched(bool ind){
+    if(ind)
+        matched_num->show();
+    else
+        matched_num->hide();
 }
 
 EditorFrame::~EditorFrame()
@@ -81,7 +102,7 @@ void EditorFrame::LoadFile(){
 }
 
 void EditorFrame::SearchText(){
-
-    int num = _eproc.doMatch(inputReg->text(), textArea);
-
+    QString rez("Pronadjeno: ");
+    rez += QString::number(_eproc.doMatch(inputReg->text(), textArea));
+    matched_num->setText(rez);
 }

@@ -7,6 +7,10 @@
         <file>images/icon/exit.png</file>
         <file>images/icon/prog.jpg</file>
         <file>images/icon/uvod.png</file>
+        <file>images/saddino.jpg</file>
+        <file>images/menus/code_i1.png</file>
+        <file>images/menus/code_i2.png</file>
+        <file>images/menus/fb_icon.png</file>
     </qresource>
     <qresource prefix="/msn">
         <file>images/exitdino.jpg</file>
