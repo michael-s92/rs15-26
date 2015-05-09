@@ -8,6 +8,7 @@
 
 #include <QPushButton>
 #include <QDockWidget>
+#include <QMessageBox>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -31,7 +32,7 @@ void MainWindow::updateStatusBar(QString& s){
 
  void MainWindow::createStatusBar(){
 
-     lStatus = new QLabel("... status bar ...");
+     lStatus = new QLabel("");
      lStatus->setMinimumSize(lStatus->sizeHint());
      ui->statusBar->addWidget(lStatus, 1);
 
@@ -40,7 +41,17 @@ void MainWindow::updateStatusBar(QString& s){
 void MainWindow::setUpMenuActions(){
 
     connect(ui->actionNapusti_program, SIGNAL(triggered()), this, SLOT(napustiProgram()));
+    connect(ui->actionAbout_T_Rex, SIGNAL(triggered()), this, SLOT(about_app()));
 
+}
+
+void MainWindow::about_app(){
+    QMessageBox::about(this, tr("About T-Rex"),
+    tr("<h2>T-Rex 0.1</h2>"
+    "<p>Copyright &copy; 2015 Software Inc."
+    "<p>T-Rex is a small application that "
+    "help us understand and learn regular expressions."
+    "<p>Implement in Qt."));
 }
 
 void MainWindow::napustiProgram(){

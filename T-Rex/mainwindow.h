@@ -28,6 +28,7 @@ private Q_SLOTS:
     void go_to_form(int i);
     void napustiProgram();
     void updateStatusBar(QString& s);
+    void about_app();
 
 private:
 
