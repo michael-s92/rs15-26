@@ -94,6 +94,9 @@ void MainWindow::setUpMenuActions(){
 
     connect(ui->actionT_Rex_Fb, SIGNAL(triggered()), &goToWeb, SLOT(map()));
     goToWeb.setMapping(ui->actionT_Rex_Fb, "FB");
+
+    connect(ui->actionT_Rex_Twitter, SIGNAL(triggered()), &goToWeb, SLOT(map()));
+    goToWeb.setMapping(ui->actionT_Rex_Twitter, "Twitter");
 }
 
 void MainWindow::loadWebPage(QString id){
@@ -105,6 +108,9 @@ void MainWindow::loadWebPage(QString id){
     else if(id.compare("FB") == 0){
         anw = QDesktopServices::openUrl(QUrl("https://www.facebook.com", QUrl::TolerantMode));
     }
+    /*else if(id.compare("Twitter") == 0){
+        anw = QDesktopServices::openUrl(QUrl("https://www.twitter.com", QUrl::TolerantMode));
+    }*/
 
     /*
      * Slanje mail sa:

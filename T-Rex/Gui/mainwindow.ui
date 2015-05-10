@@ -238,7 +238,7 @@
   <action name="actionT_Rex_GitHub">
    <property name="icon">
     <iconset resource="../images.qrc">
-     <normaloff>:/images/menus/code_i2.png</normaloff>:/images/menus/code_i2.png</iconset>
+     <normaloff>:/images/menus/code_i1.png</normaloff>:/images/menus/code_i1.png</iconset>
    </property>
    <property name="text">
     <string>T-Rex: GitHub</string>
