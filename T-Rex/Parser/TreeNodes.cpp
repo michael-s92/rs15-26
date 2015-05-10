@@ -96,8 +96,6 @@ void Ques_reg_node::accept(Visitor_nodes &v) const
 }
 
 
-
-
 Symbol_reg_node::Symbol_reg_node(char value)
  :_value(value)
 {
@@ -155,14 +153,6 @@ Char_class_reg_node::Char_class_reg_node(vector<Symbol_reg_node*> elements, bool
 {
 }
 
-/*
-Thompson Char_class_reg_node::execute_T() const
-{
-    Thompson t(0,0);
-    return t;
-}
-*/
-
 void Char_class_reg_node::accept(Visitor_nodes &v) const
 {
     v.visit_char_class(*this);
@@ -184,13 +174,7 @@ Repetition_reg_node::Repetition_reg_node(Reg_node * reg, int min, int max)
  :Unary_op_reg_node(reg), _min(min),_max(max)
 {}
 
-/*
-Thompson Repetition_reg_node::execute_T() const
-{
-    Thompson t(0,0);
-    return t;
-}
-*/
+
 
 void Repetition_reg_node::accept(Visitor_nodes &v) const
 {

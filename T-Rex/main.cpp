@@ -37,7 +37,7 @@ int main(int argc, char *argv[])
    splash->finish(&w);
    delete splash;
 
-
+/*
    Reg_node * reg = parse("(a|b)?");
    //Gluskov g = t.make_gluskov();
 
@@ -57,7 +57,7 @@ int main(int argc, char *argv[])
 
    f.close();
    system("dot -Tjpeg /home/igor/Desktop/min.dot > /home/igor/Desktop/minnn.jpeg");
-
+  */
 
    return a.exec();
 
