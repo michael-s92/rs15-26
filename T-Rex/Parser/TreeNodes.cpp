@@ -1,236 +1,212 @@
-#include "Parser/TreeNodes.hpp"
-#include "Parser/thompson.h"
+#include "TreeNodes.hpp"
+#include "automata.h"
+#include "Parser/visitor_nodes.h"
+#include <iostream>
 
-binary_op_reg_node::binary_op_reg_node(reg_node* left, reg_node* right)
+Binary_op_reg_node::Binary_op_reg_node(Reg_node* left, Reg_node* right)
  :_left(left),_right(right)
 {
 }
 
-unary_op_reg_node::unary_op_reg_node(reg_node *reg)
- :_reg(reg)
+Reg_node *Binary_op_reg_node::getLeft() const
+{
+    return _left;
+}
+
+Reg_node *Binary_op_reg_node::getRight() const
+{
+    return _right;
+}
+
+
+
+Unary_op_reg_node::Unary_op_reg_node(Reg_node *reg)
+    :_reg(reg)
 {}
 
-union_reg_node::union_reg_node(reg_node* left, reg_node* right)
- : binary_op_reg_node(left,right)
+Reg_node *Unary_op_reg_node::getReg() const
+{
+   return _reg;
+}
+
+
+
+
+Union_reg_node::Union_reg_node(Reg_node* left, Reg_node* right)
+ : Binary_op_reg_node(left,right)
 {
 
 }
 
-void union_reg_node::print(ostream & ostr) const
+void Union_reg_node::accept(Visitor_nodes &v) const
 {
-    ostr << "( ";
-    _left->print(ostr);
-    ostr << " | ";
-    _right->print(ostr);
-    ostr << " )";
+  v.visit_union(*this);
 }
 
-Thompson union_reg_node::execute_T() const
-{
-    int state = Thompson::state_count++;
-    Thompson t1 = _left->execute_T();
-    Thompson t2 = _right->execute_T();
-    Thompson t(state,Thompson::state_count++);
-    t.addEdges(t1.getEdges());
-    t.addEdges(t2.getEdges());
-    t.addEdge(t.getFirst(),t1.getFirst(),'\0');
-    t.addEdge(t.getFirst(),t2.getFirst(),'\0');
-    t.addEdge(t1.getLast(),t.getLast(),'\0');
-    t.addEdge(t2.getLast(),t.getLast(),'\0');
-    return t;
-}
 
-concat_reg_node::concat_reg_node(reg_node* left, reg_node* right)
- :binary_op_reg_node(left,right)
+
+
+Concat_reg_node::Concat_reg_node(Reg_node* left, Reg_node* right)
+ :Binary_op_reg_node(left,right)
 {}
 
-void concat_reg_node::print(ostream & ostr) const
+
+void Concat_reg_node::accept(Visitor_nodes &v) const
 {
-    ostr << "( ";
-    _left->print(ostr);
-    ostr << " ";
-   _right->print(ostr);
-    ostr << " )";
+   v.visit_concat(*this);
 }
 
-Thompson concat_reg_node::execute_T() const
-{
-    Thompson t1 = _left->execute_T();
-    Thompson t2 = _right->execute_T();
-    Thompson t(t1.getFirst(),t2.getLast());
-    t.addEdges(t1.getEdges());
-    t.addEdges(t2.getEdges());
-    t.addEdge(t1.getLast(),t2.getFirst(),'\0');
-    return t;
-}
-
-star_reg_node::star_reg_node(reg_node *reg)
- :unary_op_reg_node(reg)
+Star_reg_node::Star_reg_node(Reg_node *reg)
+ :Unary_op_reg_node(reg)
 {}
 
-void star_reg_node::print(ostream & ostr) const
+
+
+void Star_reg_node::accept(Visitor_nodes &v) const
 {
-    ostr << "( ";
-    _reg->print(ostr);
-    ostr << " *";
-    ostr << " )";
+   v.visit_star(*this);
 }
 
-Thompson star_reg_node::execute_T() const
-{
-    int state = Thompson::state_count++;
-    Thompson t1 = _reg->execute_T();
-    Thompson t(state,Thompson::state_count++);
-    t.addEdges(t1.getEdges());
-    t.addEdge(t.getFirst(),t1.getFirst(),'\0');
-    t.addEdge(t.getFirst(),t.getLast(),'\0');
-    t.addEdge(t1.getLast(),t1.getFirst(),'\0');
-    t.addEdge(t1.getLast(),t.getLast(),'\0');
 
-    return t;
-}
 
-plus_reg_node::plus_reg_node(reg_node *reg)
- :unary_op_reg_node(reg)
+
+Plus_reg_node::Plus_reg_node(Reg_node *reg)
+ :Unary_op_reg_node(reg)
 {}
 
-void plus_reg_node::print(ostream & ostr) const
+
+void Plus_reg_node::accept(Visitor_nodes &v) const
 {
-    ostr << "( ";
-    _reg->print(ostr);
-    ostr << " +";
-    ostr << " )";
+    v.visit_plus(*this);
 }
 
-Thompson plus_reg_node::execute_T() const
+
+
+
+Ques_reg_node::Ques_reg_node(Reg_node *reg)
+ :Unary_op_reg_node(reg)
 {
-    int state = Thompson::state_count++;
-    Thompson t1 = _reg->execute_T();
-    Thompson t(state,Thompson::state_count++);
-    t.addEdge(t.getFirst(),t1.getFirst(),'\0');
-    t.addEdge(t1.getLast(),t1.getFirst(),'\0');
-    t.addEdge(t1.getLast(),t.getLast(),'\0');
-    return t;
+
 }
 
-ques_reg_node::ques_reg_node(reg_node *reg)
- :unary_op_reg_node(reg)
-{}
 
-void ques_reg_node::print(ostream & ostr) const
+void Ques_reg_node::accept(Visitor_nodes &v) const
 {
-    ostr << "( ";
-    _reg->print(ostr);
-    ostr << " ?";
-    ostr << " )";
+    v.visit_ques(*this);
 }
 
-Thompson ques_reg_node::execute_T() const
-{
-    int state = Thompson::state_count++;
-    Thompson t1 = _reg->execute_T();
-    Thompson t(state,Thompson::state_count++);
-    t.addEdge(t.getFirst(),t1.getFirst(),'\0');
-    t.addEdge(t1.getFirst(),t1.getLast(),'\0');
-    t.addEdge(t1.getLast(),t.getLast(),'\0');
-    return t;
-}
 
-symbol_reg_node::symbol_reg_node(char value)
+
+
+Symbol_reg_node::Symbol_reg_node(char value)
  :_value(value)
 {
 
 }
 
-char symbol_reg_node::getValue() const
+char Symbol_reg_node::getValue() const
 {
     return _value;
 }
 
-normal_symbol_reg_node::normal_symbol_reg_node(char value)
- :symbol_reg_node(value)
+
+
+
+Normal_symbol_reg_node::Normal_symbol_reg_node(char value)
+ :Symbol_reg_node(value)
 {
 
 }
 
-
-Thompson symbol_reg_node::execute_T() const
+Normal_symbol_reg_node *Normal_symbol_reg_node::clone() const
 {
-    int state = Thompson::state_count;
-    Thompson t(state,state+1);
-    Thompson::state_count+=2;
-    t.addEdge(state,state+1,_value);
-    return t;
+         return new Normal_symbol_reg_node(*this);
 }
 
 
-void normal_symbol_reg_node::print(ostream & ostr) const
+void Normal_symbol_reg_node::accept(Visitor_nodes &v) const
 {
-    ostr << "" << _value;
+   v.visit_normal_symbol(*this);
 }
 
 
-backslash_symbol_reg_node::backslash_symbol_reg_node(char value)
- :symbol_reg_node(value)
+
+
+Backslash_symbol_reg_node::Backslash_symbol_reg_node(char value)
+ :Symbol_reg_node(value)
 {}
 
-void backslash_symbol_reg_node::print(ostream & ostr) const
-{
-    ostr << "\\" << _value;
 
-}
-
- backslash_symbol_reg_node * backslash_symbol_reg_node::clone() const
+ Backslash_symbol_reg_node * Backslash_symbol_reg_node::clone() const
  {
-     return new backslash_symbol_reg_node(*this);
+     return new Backslash_symbol_reg_node(*this);
  }
 
-char_class_reg_node::char_class_reg_node(vector<symbol_reg_node*> elements, bool ind)
+ void Backslash_symbol_reg_node::accept(Visitor_nodes &v) const
+ {
+    v.visit_backslash_symbol(*this);
+ }
+
+
+
+
+Char_class_reg_node::Char_class_reg_node(vector<Symbol_reg_node*> elements, bool ind)
  :_ind(ind),_elements(elements)
 {
 }
 
-void char_class_reg_node::print(ostream & ostr) const
-{
-
-    ostr << "( [";
-    if (_ind==false)
-        ostr << "^ ";
-    vector<symbol_reg_node*>::const_iterator i = _elements.begin();
-    for (; i!=_elements.end(); i++)
-        ostr << **i << " ";
-    ostr << "] )";
-}
-
-Thompson char_class_reg_node::execute_T() const
+/*
+Thompson Char_class_reg_node::execute_T() const
 {
     Thompson t(0,0);
     return t;
 }
+*/
+
+void Char_class_reg_node::accept(Visitor_nodes &v) const
+{
+    v.visit_char_class(*this);
+}
+
+bool Char_class_reg_node::getInd() const
+{
+    return _ind;
+}
+
+vector<Symbol_reg_node*> Char_class_reg_node::getElements() const
+{
+    return _elements;
+}
 
 
 
-
-repetition_reg_node::repetition_reg_node(reg_node * reg, int min, int max)
- :unary_op_reg_node(reg), _min(min),_max(max)
+Repetition_reg_node::Repetition_reg_node(Reg_node * reg, int min, int max)
+ :Unary_op_reg_node(reg), _min(min),_max(max)
 {}
 
-void repetition_reg_node::print(ostream & ostr) const
-{
-    _reg->print(ostr);
-    ostr << "{" << _min << "," <<_max << "}";
-}
-
-Thompson repetition_reg_node::execute_T() const
+/*
+Thompson Repetition_reg_node::execute_T() const
 {
     Thompson t(0,0);
     return t;
 }
+*/
 
-ostream & operator << (ostream & ostr, const reg_node & reg)
+void Repetition_reg_node::accept(Visitor_nodes &v) const
 {
-    reg.print(ostr);
-    return ostr;
+    v.visit_repetition(*this);
 }
+
+int Repetition_reg_node::getMin() const
+{
+    return _min;
+}
+
+
+int Repetition_reg_node::getMax() const
+{
+    return _max;
+}
+
 
 

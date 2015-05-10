@@ -6,7 +6,9 @@
 #include "Parser/TreeNodes.hpp"
 #include <fstream>
 
-extern reg_node * parse(char * s);
+#include "Parser/visitor_nodes.h"
+
+extern Reg_node * parse(char * s);
 
 int main(int argc, char *argv[])
 {
@@ -36,18 +38,25 @@ int main(int argc, char *argv[])
    delete splash;
 
 
-   reg_node * reg = parse("(a|b)a");
-   Thompson t = reg->execute_T();
-   Gluskov g = t.make_gluskov();
+   Reg_node * reg = parse("(a|b)?");
+   //Gluskov g = t.make_gluskov();
 
 
-  //   fstream f;
-  // f.open("/home/igor/Desktop/min.dot",fstream::out);
-  // t.make_dot_file(f);
+   fstream f;
+   f.open("/home/igor/Desktop/min.dot",fstream::out);
 
-  // f.close();
-  // system("dot -Tjpeg /home/igor/Desktop/min.dot > /home/igor/Desktop/minx.jpeg");
+   // f.open("/home/igor/Desktop/igor.txt",fstream::out);
+   PrintNodes print_nodes(cout);
+   reg->accept(print_nodes);
+   cout << endl;
+   ThompsonNodes thompson_nodes;
+   reg->accept(thompson_nodes);
+   Thompson t = thompson_nodes.getTh();
 
+   t.make_dot_file(f);
+
+   f.close();
+   system("dot -Tjpeg /home/igor/Desktop/min.dot > /home/igor/Desktop/minnn.jpeg");
 
 
    return a.exec();

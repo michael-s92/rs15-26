@@ -1,173 +1,144 @@
 #ifndef TREENODES_H
 #define TREENODES_H
 
-#include <iostream>
-#include <stdlib.h>
-#include <string>
 #include <map>
 #include <vector>
-#include "thompson.h"
+#include "automata.h"
+
+class Visitor_nodes;
 
 using namespace std;
 
-class reg_node {
+class Reg_node {
 public:
-    virtual void print(ostream & ostr) const=0;
-    virtual Thompson execute_T() const=0;
+    virtual void accept(Visitor_nodes & v) const=0;
 };
 
 
-class binary_op_reg_node : public reg_node {
+class Binary_op_reg_node : public Reg_node {
 
 protected:
-    reg_node* _left;
-    reg_node* _right;
+    Reg_node* _left;
+    Reg_node* _right;
 
 public:
-    binary_op_reg_node(reg_node* left, reg_node* right);
+    Binary_op_reg_node(Reg_node* left, Reg_node* right);
+    Reg_node *getLeft() const;
+    Reg_node *getRight() const;
 };
 
 
 
-
-class unary_op_reg_node : public reg_node {
+class Unary_op_reg_node : public Reg_node {
 
 protected:
-    reg_node* _reg;
+    Reg_node* _reg;
 
 public:
-    unary_op_reg_node(reg_node *reg);
+    Unary_op_reg_node(Reg_node *reg);
+    Reg_node * getReg() const;
 };
 
 
 
-class union_reg_node : public binary_op_reg_node {
+class Union_reg_node : public Binary_op_reg_node {
 
 public:
-    union_reg_node(reg_node* left, reg_node* right);
-    void print(ostream & ostr) const;
-    Thompson execute_T() const;
+    Union_reg_node(Reg_node* left, Reg_node* right);
+    void accept(Visitor_nodes &v) const;
 
 };
 
 
-
-
-class concat_reg_node : public binary_op_reg_node {
+class Concat_reg_node : public Binary_op_reg_node {
 
 public:
-    concat_reg_node(reg_node* left, reg_node* right);
-    void print(ostream & ostr) const;
-    Thompson execute_T() const;
+    Concat_reg_node(Reg_node* left, Reg_node* right);
+    void accept(Visitor_nodes & v) const;
 
 };
 
 
-
-
-class star_reg_node : public unary_op_reg_node {
+class Star_reg_node : public Unary_op_reg_node {
 
 public:
-    star_reg_node(reg_node *reg);
-    void print(ostream & ostr) const;
-    Thompson execute_T() const;
-
-
+    Star_reg_node(Reg_node *reg);
+    void accept(Visitor_nodes & v) const;
 };
 
 
 
-class plus_reg_node : public unary_op_reg_node {
+class Plus_reg_node : public Unary_op_reg_node {
 
 public:
-    plus_reg_node(reg_node *reg);
-    void print(ostream & ostr) const;
-    Thompson execute_T() const;
-
-
-
-
+    Plus_reg_node(Reg_node *reg);
+    void accept(Visitor_nodes & v) const;
 };
 
 
 
-class ques_reg_node : public unary_op_reg_node {
+class Ques_reg_node : public Unary_op_reg_node {
 
 public:
-    ques_reg_node(reg_node *reg);
-    void print(ostream & ostr) const;
-    Thompson execute_T() const;
-
-
-
+    Ques_reg_node(Reg_node *reg);
+    void accept(Visitor_nodes & v) const;
 };
 
 
 
 
-class symbol_reg_node : public reg_node {
+class Symbol_reg_node : public Reg_node {
 
 public:
-    symbol_reg_node(char value);
-    virtual symbol_reg_node* clone() const=0;
+    Symbol_reg_node(char value);
+    virtual Symbol_reg_node* clone() const=0;
     char getValue() const;
-    Thompson execute_T() const;
 
 protected:
     char _value;
 };
 
 
-class normal_symbol_reg_node : public symbol_reg_node {
+class Normal_symbol_reg_node : public Symbol_reg_node {
 
 public:
-    normal_symbol_reg_node(char value);
-    void print(ostream & ostr) const;
-    normal_symbol_reg_node * clone() const
-        {
-             return new normal_symbol_reg_node(*this);
-    }
-
+    Normal_symbol_reg_node(char value);
+    Normal_symbol_reg_node * clone() const;
+    void accept(Visitor_nodes & v) const;
 
 };
 
-class backslash_symbol_reg_node : public symbol_reg_node {
+class Backslash_symbol_reg_node : public Symbol_reg_node {
 
 public:
-    backslash_symbol_reg_node(char value);
-    void print(ostream & ostr) const;
-    backslash_symbol_reg_node * clone() const;
-
+    Backslash_symbol_reg_node(char value);
+    Backslash_symbol_reg_node * clone() const;
+    void accept(Visitor_nodes & v) const;
 };
 
 
-
-// nije uredjen konstruktor za karaktersku klasu
-// ni print funkcija
-
-class char_class_reg_node : public reg_node {
+class Char_class_reg_node : public Reg_node {
 
 public:
-    char_class_reg_node(vector<symbol_reg_node *> elements,bool ind);
-    void print(ostream & ostr) const;
-    Thompson execute_T() const;
+    Char_class_reg_node(vector<Symbol_reg_node *> elements,bool ind);
+    void accept(Visitor_nodes & v) const;
+    bool getInd() const;
+    vector<Symbol_reg_node*> getElements() const;
 
 
 private:
     bool _ind;
-    vector<symbol_reg_node *> _elements;
+    vector<Symbol_reg_node *> _elements;
 };
 
-// nije uradjen konstruktor za repetition
-// ni funkcija print
 
-class repetition_reg_node : public unary_op_reg_node {
+class Repetition_reg_node : public Unary_op_reg_node {
 
 public:
-    repetition_reg_node(reg_node * reg, int min, int max);
-    void print(ostream & ostr) const;
-    Thompson execute_T() const;
-
+    Repetition_reg_node(Reg_node * reg, int min, int max);
+    void accept(Visitor_nodes & v) const;
+    int getMin() const;
+    int getMax() const;
 
 
 private:
@@ -175,7 +146,6 @@ private:
     unsigned int _max;
 };
 
-ostream & operator <<(ostream & ostr, const reg_node & reg);
 
 struct numbers
 {

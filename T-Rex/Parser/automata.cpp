@@ -1,7 +1,12 @@
-#include "thompson.h"
+#include "automata.h"
 #include <QMap>
 
 using namespace std;
+
+Edge::Edge(int state1, int state2, char c)
+    :_state1(state1),_state2(state2),_c(c)
+{
+}
 
 int Thompson::state_count=0;
 
@@ -13,10 +18,13 @@ void Automata::make_dot_file(ostream &osr)
     osr << "-1;" << endl;
     osr <<" node [shape = circle];" << endl;
     int j;
-    for (j=0; j<Thompson::state_count-1; j++)
-        osr << j << "[label=\"" << j << "\"];" << endl;
-    osr << j << "[label=\"" << j << "\" shape=\"doublecircle\"];" << endl;
-
+    for (j=0; j<_stanja.length(); j++)
+    {
+        if(!_zavrsna.contains(_stanja[j]))
+          osr << _stanja[j] << "[label=\"" << _stanja[j] << "\"];" << endl;
+        else
+          osr << _stanja[j] << "[label=\"" << _stanja[j] << "\" shape=\"doublecircle\"];" << endl;
+    }
     QVector<Edge>::iterator i = _edges.begin();
     for (;i!=_edges.end(); i++)
     {
@@ -56,17 +64,24 @@ Gluskov Thompson::make_gluskov()
             g.epsilon_zatvorenja[j]=g.odredi_zatvorenje(j);
     }
 
-
-    QMap<int, QVector<int>>::iterator j1=g.epsilon_zatvorenja.begin();
-    for (; j1!=g.epsilon_zatvorenja.end(); j1++)
+    QVector<Edge>::iterator iter = g.prelazi.begin();
+    for (; iter!=g.prelazi.end(); iter++)
     {
-        std::cout << j1.key() << ": ";
-        QVector<int>::iterator k = j1.value().begin();
-        for(; k!=(*j1).end(); k++)
-        {
-            std::cout << *k << " ";
-        }
-        std::cout << std::endl;
+        QMap<int, QVector<int>>::iterator i = g.epsilon_zatvorenja.begin();
+        QMap<int, QVector<int>>::iterator j;
+        for (; i!=g.epsilon_zatvorenja.end(); i++)
+            for (j=i; j!=g.epsilon_zatvorenja.end(); j++)
+                if (i.value().contains(iter->getState1()) &&
+                    j.value().contains(iter->getState2()))
+                   g.addEdge(i.key(),j.key(),iter->getC());
+    }
+
+    QMap<int, QVector<int>>::iterator it = g.epsilon_zatvorenja.begin();
+    for (; it!= g.epsilon_zatvorenja.end(); it++)
+    {
+        g._stanja.append(it.key());
+        if (it.value().contains(getLast()))
+            g._zavrsna.append(it.key());
     }
 
     return g;

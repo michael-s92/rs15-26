@@ -15,10 +15,7 @@ public:
     Edge()
     {}
 
-    Edge(int state1, int state2, char c)
-        :_state1(state1),_state2(state2),_c(c)
-    {
-    }
+    Edge(int state1, int state2, char c);
 
     int getState1() const
     {
@@ -55,12 +52,15 @@ private:
 
 class Automata
 {
-protected:
+public:
+    QVector<int> _stanja;
     int _first;
     QVector<int> _zavrsna;
     QVector<Edge> _edges;
 
 public:
+    Automata()
+    {}
     Automata(int first)
      :_first(first)
     {}
@@ -78,6 +78,16 @@ public:
     QVector<Edge> getEdges() const
     {
         return _edges;
+    }
+
+    void setFirst(int first)
+    {
+        _first=first;
+    }
+
+    void addZavrsno(int state)
+    {
+        _zavrsna.append(state);
     }
 
     void addEdge(int state1, int state2, char c)
@@ -99,6 +109,8 @@ public:
 class Thompson : public Automata
 {
 public:
+    Thompson()
+    {}
     Thompson(int first, int last)
      : Automata(first)
     {
@@ -116,6 +128,8 @@ public:
 static int state_count;
 
 };
+
+
 
 class Gluskov : public Automata
 {

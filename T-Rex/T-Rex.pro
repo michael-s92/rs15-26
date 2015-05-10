@@ -16,23 +16,25 @@ QMAKE_CXXFLAGS += -std=c++11
 
 SOURCES += main.cpp\
     Parser/TreeNodes.cpp \
-    Parser/thompson.cpp \
     Gui/uvodframe.cpp \
     Gui/editorframe.cpp \
     Gui/diagramframe.cpp \
     Gui/mainwindow.cpp \
     Gui/automatframe.cpp \
-    Engine/editorprocess.cpp
+    Engine/editorprocess.cpp \
+    Parser/automata.cpp \
+    Parser/visitor_nodes.cpp
 
 HEADERS  += \
     Parser/TreeNodes.hpp \
-    Parser/thompson.h \
     Gui/uvodframe.h \
     Gui/editorframe.h \
     Gui/diagramframe.h \
     Gui/mainwindow.h \
     Gui/automatframe.h \
-    Engine/editorprocess.h
+    Engine/editorprocess.h \
+    Parser/automata.h \
+    Parser/visitor_nodes.h
 
 FORMS    += \
     Gui/uvodframe.ui \
