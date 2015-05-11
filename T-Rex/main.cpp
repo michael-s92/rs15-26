@@ -3,12 +3,6 @@
 #include <QApplication>
 #include <QSplashScreen>
 
-#include "Parser/TreeNodes.hpp"
-#include <fstream>
-
-#include "Parser/visitor_nodes.h"
-
-extern Reg_node * parse(char * s);
 
 int main(int argc, char *argv[])
 {
@@ -36,28 +30,6 @@ int main(int argc, char *argv[])
    w.show();
    splash->finish(&w);
    delete splash;
-
-/*
-   Reg_node * reg = parse("(a|b)?");
-   //Gluskov g = t.make_gluskov();
-
-
-   fstream f;
-   f.open("/home/igor/Desktop/min.dot",fstream::out);
-
-   // f.open("/home/igor/Desktop/igor.txt",fstream::out);
-   PrintNodes print_nodes(cout);
-   reg->accept(print_nodes);
-   cout << endl;
-   ThompsonNodes thompson_nodes;
-   reg->accept(thompson_nodes);
-   Thompson t = thompson_nodes.getTh();
-
-   t.make_dot_file(f);
-
-   f.close();
-   system("dot -Tjpeg /home/igor/Desktop/min.dot > /home/igor/Desktop/minnn.jpeg");
-  */
 
    return a.exec();
 

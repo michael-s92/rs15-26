@@ -3,6 +3,7 @@
 
 #include <QString>
 #include <QGraphicsView>
+#include "parserengine.h"
 
 class AutomatProcess
 {
@@ -12,6 +13,9 @@ public:
 
     void tomson_draw(QString regular, QGraphicsView* panel);
     void glusko_draw(QString regular, QGraphicsView* panel);
+
+private:
+    ParserEngine parser;
 
 };
 

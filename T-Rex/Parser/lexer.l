@@ -18,7 +18,7 @@ void ispisi(string s)
   cout << "Lex:  "<< s << endl;
 }
 
-void set_text(char *s)
+void set_text(const char *s)
 {
    yy_scan_string(s);
 }

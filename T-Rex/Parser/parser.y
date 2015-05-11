@@ -13,8 +13,7 @@ extern int yylex();
 
 void yyerror(const string s)
 {
-  cerr << s << endl;
-  //exit(1);
+
 }
 
 void ispisi(string l, string d)
@@ -32,9 +31,9 @@ void add_vector(vector<Symbol_reg_node*> & elem_l, const vector<Symbol_reg_node*
 
 Reg_node * reg;
 
-Reg_node * parse(char* s);
+Reg_node * parse(const char* s);
 
-extern void set_text(char *s);
+extern void set_text(const char *s);
 
 
 %}
@@ -412,12 +411,14 @@ SymbolChar : symbol_token   {
 
 %%
 
-Reg_node * parse(char *s)
+Reg_node * parse(const char *s)
 {
   reg = 0;
   set_text(s);
-  yyparse();
-  return reg;
+  if (yyparse()==0)
+    return reg;
+  else
+    return 0;
 }
 
 
