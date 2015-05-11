@@ -5,6 +5,7 @@
 #include "editorframe.h"
 #include "automatframe.h"
 #include "diagramframe.h"
+#include "guibuilder.h"
 
 #include <QPushButton>
 #include <QDockWidget>
@@ -177,19 +178,11 @@ void MainWindow::createMainView(){
     this->setCentralWidget(mainw);
 }
 
+
 QPushButton* MainWindow::createButton(const char *name, const char *info){
 
-    QPushButton *tmp = new QPushButton();
-
-    tmp->setCheckable(true);
-    tmp->setFocusPolicy(Qt::NoFocus); //sta ce mi?!
-    tmp->setToolTip(info);
-
-    std::string ikonica(":/images/icon/"+std::string(name)+".png");
-    tmp->setIcon(QIcon(&ikonica[0]));
-    tmp->setIconSize(QSize(50,50));
-
-    return tmp;
+    QString path = QString(":/images/icon/") + QString(name) + QString(".png");
+    return GuiBuilder::createIconButton(path, QString(info), 50);
 
 }
 

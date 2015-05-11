@@ -1,6 +1,8 @@
 #include "automatframe.h"
 #include "ui_automatframe.h"
 
+#include "guibuilder.h"
+
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QLabel>
@@ -86,17 +88,8 @@ void AutomatFrame::setElements(){
 
 QPushButton* AutomatFrame::createSimButton(const char *name, const char *info){
 
-    QPushButton *tmp = new QPushButton();
-
-    tmp->setCheckable(true);
-    tmp->setFocusPolicy(Qt::NoFocus); //sta ce mi?!
-    tmp->setToolTip(info);
-
-    std::string ikonica(":/images/simulator/"+std::string(name)+".jpg");
-    tmp->setIcon(QIcon(&ikonica[0]));
-    tmp->setIconSize(QSize(30,30));
-
-    return tmp;
+    QString path = QString(":/images/simulator/") + QString(name) + QString(".jpg");
+    return GuiBuilder::createIconButton(path, QString(info), 30);
 }
 
 QWidget* AutomatFrame::simulatorWidget(){
