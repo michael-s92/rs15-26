@@ -6,6 +6,7 @@
 #include <QLabel>
 #include <QToolBar>
 #include <QRadioButton>
+#include <QMessageBox>
 
 AutomatFrame::AutomatFrame(QWidget *parent) :
     QFrame(parent),
@@ -20,6 +21,32 @@ AutomatFrame::AutomatFrame(QWidget *parent) :
 void AutomatFrame::setSlotAndSignal(){
 
     connect(simulator, SIGNAL(clicked(bool)), this, SLOT(displaySimulator(bool)));
+
+    //SIGNAL(QLineEdit::editingFinished())
+    connect(inputReg, SIGNAL(returnPressed()), this, SLOT(drawAutomata()));
+    connect(automatGroup, SIGNAL(buttonToggled(int,bool)), this, SLOT(drawAutomata(int, bool)));
+
+    //konekcije za simulator
+
+    //-------------------------------
+}
+
+void AutomatFrame::drawAutomata(int ind, bool chk){
+
+    if(ind == 0){
+        int c = automatGroup->checkedId();
+        if(c == -1){
+            QMessageBox::about(this, "Automat?", "Niste izabrali koji automat zelite da iscrtate.");
+        }
+        else
+            drawAutomata(c, chk);
+    }
+    else if(chk){
+        if(ind == 1) //tomson je u pitanju
+            _aproc.tomson_draw(inputReg->text(), platno);
+        if(ind == 2) //glusko je u pitanju
+            _aproc.glusko_draw(inputReg->text(), platno);
+    }
 
 }
 
@@ -47,8 +74,6 @@ void AutomatFrame::setElements(){
     simulator->setChecked(true);
     inputReg = new QLineEdit("Unesite regularni izraz...");
     sim = simulatorWidget();
-
-    lay->setSpacing(6);
 
     lay->addWidget(cover);
     lay->addWidget(inputReg);
@@ -117,8 +142,8 @@ QWidget* AutomatFrame::makeAutomatWidget(){
     option_automat->addWidget(tomsonBox);
     option_automat->addWidget(gluskoBox);
 
-    automatGroup->addButton(tomsonBox);
-    automatGroup->addButton(gluskoBox);
+    automatGroup->addButton(tomsonBox, 1);
+    automatGroup->addButton(gluskoBox, 2);
     //-------------------------------------
 
     platno = new QGraphicsView();

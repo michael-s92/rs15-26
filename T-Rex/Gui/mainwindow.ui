@@ -35,7 +35,7 @@
      <addaction name="actionOcisti"/>
      <addaction name="actionUcitaj_novu"/>
     </widget>
-    <addaction name="actionPozovi"/>
+    <addaction name="actionPodesavanja_2"/>
     <addaction name="menuIstorija"/>
     <addaction name="separator"/>
     <addaction name="actionNapusti_program"/>
@@ -44,21 +44,7 @@
     <property name="title">
      <string>Pogledi</string>
     </property>
-    <widget class="QMenu" name="menuEditor">
-     <property name="title">
-      <string>Editor</string>
-     </property>
-     <addaction name="actionBroj_prepoznatih"/>
-    </widget>
-    <widget class="QMenu" name="menuAutomat">
-     <property name="title">
-      <string>Automat</string>
-     </property>
-     <addaction name="actionSimulator"/>
-    </widget>
     <addaction name="actionCeline"/>
-    <addaction name="menuEditor"/>
-    <addaction name="menuAutomat"/>
    </widget>
    <widget class="QMenu" name="menuSkoci_na">
     <property name="title">
@@ -68,20 +54,6 @@
     <addaction name="actionEditor"/>
     <addaction name="actionAutomat"/>
     <addaction name="actionDiagram"/>
-   </widget>
-   <widget class="QMenu" name="menuPodesavanja">
-    <property name="title">
-     <string>Alati</string>
-    </property>
-    <widget class="QMenu" name="menuJezik">
-     <property name="title">
-      <string>Jezik</string>
-     </property>
-     <addaction name="actionSrpski"/>
-     <addaction name="actionEnglish"/>
-    </widget>
-    <addaction name="menuJezik"/>
-    <addaction name="actionPodesavanja"/>
    </widget>
    <widget class="QMenu" name="menuPomoc">
     <property name="title">
@@ -101,7 +73,6 @@
    <addaction name="menuProgram"/>
    <addaction name="menuPogledi"/>
    <addaction name="menuSkoci_na"/>
-   <addaction name="menuPodesavanja"/>
    <addaction name="menuPomoc"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
@@ -276,6 +247,11 @@
    </property>
    <property name="text">
     <string>Simulator</string>
+   </property>
+  </action>
+  <action name="actionPodesavanja_2">
+   <property name="text">
+    <string>Podesavanja</string>
    </property>
   </action>
  </widget>

@@ -18,6 +18,7 @@ EditorFrame::EditorFrame(QWidget *parent) :
     //konekcije za pretrazivanje teksta
     connect(loadFile, SIGNAL(clicked(bool)), this, SLOT(LoadFile()));
     connect(inputReg, SIGNAL(returnPressed()), this, SLOT(SearchText()));
+    connect(chkNum, SIGNAL(toggled(bool)), this, SLOT(showNumMatched(bool)));
 }
 
 void EditorFrame::setElements(){
@@ -29,26 +30,24 @@ void EditorFrame::setElements(){
 
     layoutB->addWidget(name);
     layoutB->addWidget(makeEditCover());
-    layoutB->addSpacing(1);
-    layoutB->addWidget(makeInputCover());
-    layoutB->addSpacing(1);
+    layoutB->addWidget(makeMatchingFrame());
     layoutB->addWidget(textArea, 1); //drugi argument je strech factor
 
     this->setLayout(layoutB);
 
 }
 
-QWidget* EditorFrame::makeInputCover(){
+QWidget* EditorFrame::makeMatchingFrame(){
     inputReg = new QLineEdit("Unesite regulatni izlaz...");
-    inputReg->setToolTip("Mesto za unos regularnog izraza koji se rpetrazuje");
-    matched_num = new QLabel();
+    inputReg->setToolTip("Mesto za unos regularnog izraza koji se pretrazuje");
+    chkNum = new QCheckBox("Prikazi broj pronadjenih");
 
     QWidget *_cover = new QWidget();
 
     QHBoxLayout *_lay = new QHBoxLayout();
 
     _lay->addWidget(inputReg, 1);
-    _lay->addWidget(matched_num);
+    _lay->addWidget(chkNum);
 
     _cover->setLayout(_lay);
 
@@ -79,16 +78,19 @@ QWidget *EditorFrame::makeEditCover(){
 }
 
 void EditorFrame::showNumMatched(bool ind){
-    if(ind)
-        matched_num->show();
-    else
-        matched_num->hide();
+    if(ind){
+        SearchText();
+    }
+    else {
+        chkNum->setText("Prikazi broj pronadjenih");
+    }
 }
 
 EditorFrame::~EditorFrame()
 {
     delete ui;
     delete loadFile; delete inputReg; delete textArea;
+    delete chkNum;
 }
 
 void EditorFrame::LoadFile(){
@@ -103,5 +105,6 @@ void EditorFrame::LoadFile(){
 void EditorFrame::SearchText(){
     QString rez("Pronadjeno: ");
     rez += QString::number(_eproc.doMatch(inputReg->text(), textArea));
-    matched_num->setText(rez);
+    if(chkNum->isChecked())
+        chkNum->setText(rez);
 }

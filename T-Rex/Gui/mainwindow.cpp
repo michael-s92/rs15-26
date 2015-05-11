@@ -72,6 +72,7 @@ void MainWindow::setUpMenuActions(){
     connect(ui->actionCeline, SIGNAL(triggered(bool)), this, SLOT(prikazCeline(bool)));
     connect(content,SIGNAL(visibilityChanged(bool)), this, SLOT(azurirajMeniContent(bool)));
 
+    //konekcije za prikazi menu bar
     connect(ui->actionUvod, SIGNAL(triggered()), &switchForm, SLOT(map()));
     switchForm.setMapping(ui->actionUvod, 0);
 
@@ -84,12 +85,8 @@ void MainWindow::setUpMenuActions(){
     connect(ui->actionDiagram, SIGNAL(triggered()), &switchForm, SLOT(map()));
     switchForm.setMapping(ui->actionDiagram, 3);
 
-    //slotovi za celine
+    //konekcije za prikazi menu bar
     connect(ui->actionBroj_prepoznatih, SIGNAL(triggered(bool)), _editor, SLOT(showNumMatched(bool)));
-    /*
-    connect(ui->actionSimulator, SIGNAL(triggered(bool)), _automat, SLOT(displaySimulator(bool)));
-    treba sihtonizovati checkBox za simulator, akciju menuBar i to sta automat prikazuje
-    */
 
     //slotovi za net
     connect(&goToWeb, SIGNAL(mapped(QString)), this, SLOT(loadWebPage(QString)));

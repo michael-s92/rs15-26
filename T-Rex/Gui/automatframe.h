@@ -24,6 +24,7 @@ public:
 
 private Q_SLOTS:
     void displaySimulator(bool display);
+    void drawAutomata(int ind = 0, bool chk = false);
 
 private:
     Ui::AutomatFrame *ui;

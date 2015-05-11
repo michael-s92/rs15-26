@@ -5,8 +5,8 @@
 #include <QPlainTextEdit>
 #include <QLineEdit>
 #include <QPushButton>
-#include <QLabel>
-
+#include <QCheckBox>
+\
 #include "Engine/editorprocess.h"
 
 namespace Ui {
@@ -23,12 +23,10 @@ public:
     explicit EditorFrame(QWidget *parent = 0);
     ~EditorFrame();
 
-public Q_SLOTS:
-    void showNumMatched(bool ind);
-
 private Q_SLOTS:
     void LoadFile();
     void SearchText();
+    void showNumMatched(bool ind);
 
 private:
     Ui::EditorFrame *ui;
@@ -36,13 +34,13 @@ private:
     QPlainTextEdit *textArea;
     QLineEdit *inputReg;
     QPushButton *loadFile;
-    QLabel *matched_num;
+    QCheckBox *chkNum;
 
     EditorProcess _eproc;
 
     void setElements();
     QWidget* makeEditCover();
-    QWidget* makeInputCover();
+    QWidget* makeMatchingFrame();
 };
 
 #endif // EDITORFRAME_H
