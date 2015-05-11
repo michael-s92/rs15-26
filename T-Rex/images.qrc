@@ -10,6 +10,10 @@
         <file>images/saddino.jpg</file>
         <file>images/menus/code_i1.png</file>
         <file>images/menus/fb_icon.png</file>
+        <file>images/simulator/reset.jpg</file>
+        <file>images/simulator/play.jpg</file>
+        <file>images/simulator/back.jpg</file>
+        <file>images/simulator/next.jpg</file>
     </qresource>
     <qresource prefix="/msn">
         <file>images/exitdino.jpg</file>

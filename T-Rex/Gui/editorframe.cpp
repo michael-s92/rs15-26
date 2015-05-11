@@ -25,7 +25,9 @@ void EditorFrame::setElements(){
     textArea = new QPlainTextEdit("Unesite text koji pretrazujete ili ga ucitajte iz proizvoljnog fajla...");
 
     QVBoxLayout* layoutB = new QVBoxLayout();
+    QLabel *name = new QLabel("Editor");
 
+    layoutB->addWidget(name);
     layoutB->addWidget(makeEditCover());
     layoutB->addSpacing(1);
     layoutB->addWidget(makeInputCover());
@@ -68,12 +70,9 @@ QWidget *EditorFrame::makeEditCover(){
 
     QHBoxLayout *lay = new QHBoxLayout();
 
-    QLabel *coverLabel= new QLabel("Editor");
-
     //stilizovati coverLabel
 
-    lay->addWidget(coverLabel, 1);
-    lay->addWidget(loadFile);
+    lay->addWidget(loadFile, 0 , Qt::AlignRight);
 
     cover->setLayout(lay);
     return cover;

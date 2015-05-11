@@ -23,7 +23,8 @@ SOURCES += main.cpp\
     Gui/automatframe.cpp \
     Engine/editorprocess.cpp \
     Parser/automata.cpp \
-    Parser/visitor_nodes.cpp
+    Parser/visitor_nodes.cpp \
+    Engine/automatprocess.cpp
 
 HEADERS  += \
     Parser/TreeNodes.hpp \
@@ -34,7 +35,8 @@ HEADERS  += \
     Gui/automatframe.h \
     Engine/editorprocess.h \
     Parser/automata.h \
-    Parser/visitor_nodes.h
+    Parser/visitor_nodes.h \
+    Engine/automatprocess.h
 
 FORMS    += \
     Gui/uvodframe.ui \

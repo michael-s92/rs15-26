@@ -84,33 +84,30 @@ void MainWindow::setUpMenuActions(){
     connect(ui->actionDiagram, SIGNAL(triggered()), &switchForm, SLOT(map()));
     switchForm.setMapping(ui->actionDiagram, 3);
 
+    //slotovi za celine
     connect(ui->actionBroj_prepoznatih, SIGNAL(triggered(bool)), _editor, SLOT(showNumMatched(bool)));
+    /*
+    connect(ui->actionSimulator, SIGNAL(triggered(bool)), _automat, SLOT(displaySimulator(bool)));
+    treba sihtonizovati checkBox za simulator, akciju menuBar i to sta automat prikazuje
+    */
 
     //slotovi za net
     connect(&goToWeb, SIGNAL(mapped(QString)), this, SLOT(loadWebPage(QString)));
 
     connect(ui->actionT_Rex_GitHub, SIGNAL(triggered()), &goToWeb, SLOT(map()));
-    goToWeb.setMapping(ui->actionT_Rex_GitHub, "GitHub");
+    goToWeb.setMapping(ui->actionT_Rex_GitHub, "https://github.com/MATF-RS15/rs15-26");
 
     connect(ui->actionT_Rex_Fb, SIGNAL(triggered()), &goToWeb, SLOT(map()));
-    goToWeb.setMapping(ui->actionT_Rex_Fb, "FB");
+    goToWeb.setMapping(ui->actionT_Rex_Fb, "https://www.facebook.com");
 
     connect(ui->actionT_Rex_Twitter, SIGNAL(triggered()), &goToWeb, SLOT(map()));
-    goToWeb.setMapping(ui->actionT_Rex_Twitter, "Twitter");
+    goToWeb.setMapping(ui->actionT_Rex_Twitter, "https://www.twitter.com");
+    //----------------
 }
 
 void MainWindow::loadWebPage(QString id){
-    bool anw = false;
 
-    if(id.compare("GitHub") == 0){
-        anw = QDesktopServices::openUrl(QUrl("https://github.com/MATF-RS15/rs15-26", QUrl::TolerantMode));
-    }
-    else if(id.compare("FB") == 0){
-        anw = QDesktopServices::openUrl(QUrl("https://www.facebook.com", QUrl::TolerantMode));
-    }
-    /*else if(id.compare("Twitter") == 0){
-        anw = QDesktopServices::openUrl(QUrl("https://www.twitter.com", QUrl::TolerantMode));
-    }*/
+    bool anw = QDesktopServices::openUrl(QUrl(id, QUrl::StrictMode));
 
     /*
      * Slanje mail sa:
