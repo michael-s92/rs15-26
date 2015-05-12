@@ -11,8 +11,8 @@ public:
     AutomatProcess();
     ~AutomatProcess();
 
-    void tomson_draw(QString regular, QGraphicsView* panel);
-    void glusko_draw(QString regular, QGraphicsView* panel);
+    bool tomson_draw(QString regular, QGraphicsView* panel);
+    bool glusko_draw(QString regular, QGraphicsView* panel);
 
 private:
     ParserEngine parser;

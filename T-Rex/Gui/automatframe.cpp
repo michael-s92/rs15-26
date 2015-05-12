@@ -34,22 +34,28 @@ void AutomatFrame::setSlotAndSignal(){
 }
 
 void AutomatFrame::drawAutomata(int ind, bool chk){
-
-    if(ind == 0){
-        int c = automatGroup->checkedId();
-        if(c == -1){
-            QMessageBox::about(this, "Automat?", "Niste izabrali koji automat zelite da iscrtate.");
+    if(inputReg->text().compare("") != 0){
+        if(ind == 0){
+            int c = automatGroup->checkedId();
+            if(c == -1){
+                QMessageBox::about(this, "Automat?", "Niste izabrali koji automat zelite da iscrtate.");
+            }
+            else
+                drawAutomata(c, chk);
         }
-        else
-            drawAutomata(c, chk);
-    }
-    else if(chk){
-        if(ind == 1) //tomson je u pitanju
-            _aproc.tomson_draw(inputReg->text(), platno);
-        if(ind == 2) //glusko je u pitanju
-            _aproc.glusko_draw(inputReg->text(), platno);
-    }
+        else if(chk){
+            bool draw;
+            if(ind == 1) //tomson je u pitanju
+                draw = _aproc.tomson_draw(inputReg->text(), platno);
+            if(ind == 2) //glusko je u pitanju
+                draw = _aproc.glusko_draw(inputReg->text(), platno);
 
+            if(!draw)
+                GuiBuilder::throwErrorMessage("Neispravan rularni izraz.");
+        }
+    }
+    else
+        GuiBuilder::throwErrorMessage("Unesite regularni izraz u polje predvidjeno za njega.");
 }
 
 void AutomatFrame::displaySimulator(bool display){
@@ -74,7 +80,7 @@ void AutomatFrame::setElements(){
     QLabel *cover = new QLabel("Automat");
     simulator = new QCheckBox("Kretanje reci kroz automat");
     simulator->setChecked(true);
-    inputReg = new QLineEdit("Unesite regularni izraz...");
+    inputReg = GuiBuilder::createLineEdit("Polje za unos regularnog izraza.");
     sim = simulatorWidget();
 
     lay->addWidget(cover);
@@ -95,7 +101,7 @@ QPushButton* AutomatFrame::createSimButton(const char *name, const char *info){
 QWidget* AutomatFrame::simulatorWidget(){
     QWidget* sim = new QWidget();
 
-    word = new QLineEdit("Unesite rec koju provlacimo kroz automat...");
+    word = GuiBuilder::createLineEdit("Polje za unos reci koju pustamo kroz automat.");
 
     QHBoxLayout *lay = new QHBoxLayout();
 

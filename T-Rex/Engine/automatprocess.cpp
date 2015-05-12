@@ -10,18 +10,23 @@ AutomatProcess::~AutomatProcess()
 
 }
 
-void AutomatProcess::tomson_draw(QString regular, QGraphicsView* panel){
+bool AutomatProcess::tomson_draw(QString regular, QGraphicsView* panel){
 
    try {
     parser = ParserEngine(regular);
     }
   catch (ParserException p)
     {
-      QMessageBox::about(0,"information","Nekorekta regularni izraz");
+      return false;
     }
+
+    return true;
 
 }
 
-void AutomatProcess::glusko_draw(QString regular, QGraphicsView* panel){
+bool AutomatProcess::glusko_draw(QString regular, QGraphicsView* panel){
 
+
+    //test verzija
+    return false;
 }

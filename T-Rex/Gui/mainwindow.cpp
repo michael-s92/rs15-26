@@ -115,16 +115,8 @@ void MainWindow::loadWebPage(QString id){
      * mailto:user@foo.com?subject=Test&body=Just a test
      */
 
-    if(!anw){
-        QMessageBox mBox;
-        mBox.setWindowTitle("T-Rex");
-        mBox.setText(tr("Greska!"
-                        "<p>Proverite internet konekciju ili ispravnost podrazumevanog web pretrazivaca..."));
-        QPixmap pic(QPixmap(":/images/saddino.jpg"));
-        mBox.setIconPixmap(pic.scaledToHeight(150, Qt::SmoothTransformation));
-        mBox.setStandardButtons(QMessageBox::Ok);
-        mBox.exec();
-    }
+    if(!anw)
+        GuiBuilder::throwErrorMessage("Proverite internet konekciju ili ispravnost podrazumevanog web pretrazivaca.");
 }
 
 void MainWindow::azurirajMeniContent(bool tmp){

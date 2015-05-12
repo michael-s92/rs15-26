@@ -1,6 +1,8 @@
 #include "editorframe.h"
 #include "ui_editorframe.h"
 
+#include "guibuilder.h"
+
 #include <QFileDialog>
 #include <QTextStream>
 #include <QHBoxLayout>
@@ -23,7 +25,8 @@ EditorFrame::EditorFrame(QWidget *parent) :
 
 void EditorFrame::setElements(){
 
-    textArea = new QPlainTextEdit("Unesite text koji pretrazujete ili ga ucitajte iz proizvoljnog fajla...");
+    textArea = new QPlainTextEdit();
+    textArea->setPlaceholderText("Unesite text koji pretrazujete ili ga ucitajte iz proizvoljnog fajla...");
 
     QVBoxLayout* layoutB = new QVBoxLayout();
     QLabel *name = new QLabel("Editor");
@@ -38,8 +41,9 @@ void EditorFrame::setElements(){
 }
 
 QWidget* EditorFrame::makeMatchingFrame(){
-    inputReg = new QLineEdit("Unesite regulatni izlaz...");
-    inputReg->setToolTip("Mesto za unos regularnog izraza koji se pretrazuje");
+
+    inputReg = GuiBuilder::createLineEdit("Mesto za unos regularnog izraza koji se trazi.");
+
     chkNum = new QCheckBox("Prikazi broj pronadjenih");
 
     QWidget *_cover = new QWidget();
@@ -103,8 +107,12 @@ void EditorFrame::LoadFile(){
 }
 
 void EditorFrame::SearchText(){
-    QString rez("Pronadjeno: ");
-    rez += QString::number(_eproc.doMatch(inputReg->text(), textArea));
-    if(chkNum->isChecked())
-        chkNum->setText(rez);
+    if(inputReg->text().compare("") != 0){
+        QString rez("Pronadjeno: ");
+        rez += QString::number(_eproc.doMatch(inputReg->text(), textArea));
+        if(chkNum->isChecked())
+            chkNum->setText(rez);
+    }
+    else
+        GuiBuilder::throwErrorMessage("Uneti prvo regularni izraz.", "Polje za unos regularnog izraza je prazno.");
 }
