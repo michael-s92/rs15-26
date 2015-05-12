@@ -4,6 +4,8 @@
 #include <QString>
 #include <QGraphicsView>
 #include "parserengine.h"
+#include "Parser/TreeNodes.hpp"
+#include "Parser/visitor_nodes.h"
 
 class AutomatProcess
 {

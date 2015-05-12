@@ -11,6 +11,10 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = GUI
 TEMPLATE = app
 
+INCLUDEPATH += /usr/include/graphviz
+
+LIBS += -lgvc -lcdt -lcgraph
+
 QMAKE_CXXFLAGS += -std=c++11
 
 
@@ -26,7 +30,8 @@ SOURCES += main.cpp\
     Parser/visitor_nodes.cpp \
     Engine/automatprocess.cpp \
     Gui/guibuilder.cpp \
-    Engine/parserengine.cpp
+    Engine/parserengine.cpp \
+    Engine/graphview.cpp
 
 HEADERS  += \
     Parser/TreeNodes.hpp \
@@ -40,7 +45,8 @@ HEADERS  += \
     Parser/visitor_nodes.h \
     Engine/automatprocess.h \
     Gui/guibuilder.h \
-    Engine/parserengine.h
+    Engine/parserengine.h \
+    Engine/graphview.h
 
 FORMS    += \
     Gui/uvodframe.ui \
