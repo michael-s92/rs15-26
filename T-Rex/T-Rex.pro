@@ -11,9 +11,9 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = GUI
 TEMPLATE = app
 
-INCLUDEPATH += /usr/include/graphviz
+#INCLUDEPATH += /usr/include/graphviz
 
-LIBS += -lgvc -lcdt -lcgraph
+#LIBS += -lgvc -lcdt -lcgraph
 
 QMAKE_CXXFLAGS += -std=c++11
 

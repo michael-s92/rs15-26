@@ -1,3 +1,4 @@
+/*
 #include <math.h>
 #include "graphview.h"
 #include <iostream>
@@ -381,3 +382,4 @@ GraphLabel::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWi
     picture.play(painter);
 }
 
+*/

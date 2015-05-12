@@ -1,3 +1,4 @@
+/*
 #ifndef QGRAPH_H
 #define QGRAPH_H
 
@@ -95,3 +96,4 @@ private:
 
 
 #endif
+*/
