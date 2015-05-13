@@ -144,10 +144,12 @@ QWidget* AutomatFrame::makeAutomatWidget(){
     QRadioButton *deterBox = new QRadioButton("deterministicki");
     QRadioButton *minimalBox = new QRadioButton("minimalni");
 
+    //option_automat->addSeparator();
     option_automat->addWidget(tomsonBox);
     option_automat->addWidget(gluskoBox);
     option_automat->addWidget(deterBox);
     option_automat->addWidget(minimalBox);
+    //option_automat->addSeparator();
 
     automatGroup->addButton(tomsonBox, 1);
     automatGroup->addButton(gluskoBox, 2);
@@ -157,7 +159,7 @@ QWidget* AutomatFrame::makeAutomatWidget(){
 
     platno = new QGraphicsView();
 
-    lay->addWidget(option_automat);
+    lay->addWidget(option_automat, 0, Qt::AlignCenter);
     lay->addWidget(platno);
 
     form->setLayout(lay);
