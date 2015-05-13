@@ -15,6 +15,9 @@ public:
 
     bool tomson_draw(QString regular, QGraphicsView* panel);
     bool glusko_draw(QString regular, QGraphicsView* panel);
+    bool determi_draw(QString regular, QGraphicsView* panel);
+    bool minimal_draw(QString regular, QGraphicsView* panel);
+
 
 private:
     ParserEngine parser;

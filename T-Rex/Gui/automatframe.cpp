@@ -44,11 +44,15 @@ void AutomatFrame::drawAutomata(int ind, bool chk){
                 drawAutomata(c, chk);
         }
         else if(chk){
-            bool draw;
+            bool draw = false;
             if(ind == 1) //tomson je u pitanju
                 draw = _aproc.tomson_draw(inputReg->text(), platno);
             if(ind == 2) //glusko je u pitanju
                 draw = _aproc.glusko_draw(inputReg->text(), platno);
+            if(ind == 3) //deterministicki je u pitanju
+                draw = _aproc.determi_draw(inputReg->text(), platno);
+            if(ind == 4) //minimalni je u pitanju
+                draw = _aproc.minimal_draw(inputReg->text(), platno);
 
             if(!draw)
                 GuiBuilder::throwErrorMessage("Neispravan rularni izraz.");
@@ -137,12 +141,18 @@ QWidget* AutomatFrame::makeAutomatWidget(){
     //ovde se dodaju nove kontrole za iscrtavanje automata
     QRadioButton *tomsonBox = new QRadioButton("Tomson");
     QRadioButton *gluskoBox = new QRadioButton("Glusko");
+    QRadioButton *deterBox = new QRadioButton("deterministicki");
+    QRadioButton *minimalBox = new QRadioButton("minimalni");
 
     option_automat->addWidget(tomsonBox);
     option_automat->addWidget(gluskoBox);
+    option_automat->addWidget(deterBox);
+    option_automat->addWidget(minimalBox);
 
     automatGroup->addButton(tomsonBox, 1);
     automatGroup->addButton(gluskoBox, 2);
+    automatGroup->addButton(deterBox, 3);
+    automatGroup->addButton(minimalBox, 4);
     //-------------------------------------
 
     platno = new QGraphicsView();

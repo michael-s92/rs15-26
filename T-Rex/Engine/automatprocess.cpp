@@ -89,4 +89,15 @@ bool AutomatProcess::glusko_draw(QString regular, QGraphicsView* panel){
 
  }
 
+bool AutomatProcess::determi_draw(QString regular, QGraphicsView *panel){
 
+
+    return false;
+}
+
+bool AutomatProcess::minimal_draw(QString regular, QGraphicsView *panel){
+
+
+
+    return false;
+}
