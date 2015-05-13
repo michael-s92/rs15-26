@@ -2,7 +2,7 @@
 #include <QMessageBox>
 #include <fstream>
 #include <QGraphicsPixmapItem>
-//#include "graphview.h"
+#include "graphview.h"
 
 using namespace std;
 
@@ -17,7 +17,7 @@ AutomatProcess::~AutomatProcess()
 
 bool AutomatProcess::tomson_draw(QString regular, QGraphicsView* panel){
 
-    /*
+
    try {
     parser = ParserEngine(regular);
     Thompson::state_count=0;
@@ -40,21 +40,20 @@ bool AutomatProcess::tomson_draw(QString regular, QGraphicsView* panel){
 
     panel->setScene(scene);
 
-
-
     }
   catch (ParserException p)
     {
       return false;
     }
-*/
-    return false;
+
+     return true;
+
 
 }
 
 bool AutomatProcess::glusko_draw(QString regular, QGraphicsView* panel){
 
-    /*
+
     try {
      parser = ParserEngine(regular);
      Thompson::state_count=0;
@@ -87,8 +86,6 @@ bool AutomatProcess::glusko_draw(QString regular, QGraphicsView* panel){
      }
 
      return true;
-     */
-    return false;
 
  }
 
