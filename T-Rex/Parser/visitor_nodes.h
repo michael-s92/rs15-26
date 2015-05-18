@@ -75,6 +75,7 @@ public:
     Thompson getTh() const;
     int getLast() const;
     int getFirst() const;
+    QVector<char> getSlova() const;
     QVector<Edge> getEdges() const;
 
 private:

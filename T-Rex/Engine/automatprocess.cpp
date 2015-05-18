@@ -89,15 +89,45 @@ bool AutomatProcess::glusko_draw(QString regular, QGraphicsView* panel){
 
  }
 
-bool AutomatProcess::determi_draw(QString regular, QGraphicsView *panel){
+bool AutomatProcess::determi_draw(QString regular, QGraphicsView *panel)
+{
+    try {
+     parser = ParserEngine(regular);
+     Thompson::state_count=0;
+     Reg_node * reg_node = parser.getRegNode();
+     ThompsonNodes thompsonNodes;
+     reg_node->accept(thompsonNodes);
+     Thompson t = thompsonNodes.getTh();
+     Gluskov g = t.make_gluskov();
+     Deterministicki::state_count = 0;
+     Deterministicki d = g.makeDeterministicki();
+     fstream f;
+     f.open("deterministicki.dot",fstream::out);
+     d.make_dot_file(f);
+     f.close();
+
+     QGraphicsScene *scene = new GraphView("deterministicki.dot");
+
+     panel->setRenderHint(QPainter::Antialiasing);
+     panel->setRenderHint(QPainter::TextAntialiasing);
+     panel->setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
+     panel->setResizeAnchor(QGraphicsView::AnchorUnderMouse);
+
+     panel->setScene(scene);
 
 
-    return false;
-}
+     }
+   catch (ParserException p)
+     {
+       return false;
+     }
+
+     return true;
+
+ }
+
 
 bool AutomatProcess::minimal_draw(QString regular, QGraphicsView *panel){
-
-
 
     return false;
 }

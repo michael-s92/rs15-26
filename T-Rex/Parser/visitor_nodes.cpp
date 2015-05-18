@@ -116,6 +116,8 @@ void ThompsonNodes::visit_union(const Union_reg_node & reg)
     t = Thompson (state,Thompson::state_count++);
     t.addEdges(t1.getEdges());
     t.addEdges(t2.getEdges());
+    t.addSlova(t1.getSlova());
+    t.addSlova(t2.getSlova());
     t.addEdge(t.getFirst(),t1.getFirst(),'\0');
     t.addEdge(t.getFirst(),t2.getFirst(),'\0');
     t.addEdge(t1.getLast(),t.getLast(),'\0');
@@ -132,6 +134,8 @@ void ThompsonNodes::visit_concat(const Concat_reg_node &reg)
     t = Thompson(t1.getFirst(),t2.getLast());
     t.addEdges(t1.getEdges());
     t.addEdges(t2.getEdges());
+    t.addSlova(t1.getSlova());
+    t.addSlova(t2.getSlova());
     t.addEdge(t1.getLast(),t2.getFirst(),'\0');
 }
 
@@ -142,6 +146,7 @@ void ThompsonNodes::visit_star(const Star_reg_node &reg)
     reg.getReg()->accept(t1);
     t = Thompson(state,Thompson::state_count++);
     t.addEdges(t1.getEdges());
+    t.addSlova(t1.getSlova());
     t.addEdge(t.getFirst(),t1.getFirst(),'\0');
     t.addEdge(t.getFirst(),t.getLast(),'\0');
     t.addEdge(t1.getLast(),t1.getFirst(),'\0');
@@ -155,6 +160,7 @@ void ThompsonNodes::visit_plus(const Plus_reg_node &reg)
     reg.getReg()->accept(t1);
     t = Thompson(state,Thompson::state_count++);
     t.addEdges(t1.getEdges());
+    t.addSlova(t1.getSlova());
     t.addEdge(t.getFirst(),t1.getFirst(),'\0');
     t.addEdge(t1.getLast(),t1.getFirst(),'\0');
     t.addEdge(t1.getLast(),t.getLast(),'\0');
@@ -168,6 +174,7 @@ void ThompsonNodes::visit_ques(const Ques_reg_node &reg)
     reg.getReg()->accept(t1);
     t = Thompson (state,Thompson::state_count++);
     t.addEdges(t1.getEdges());
+    t.addSlova(t1.getSlova());
     t.addEdge(t.getFirst(),t1.getFirst(),'\0');
     t.addEdge(t1.getFirst(),t1.getLast(),'\0');
     t.addEdge(t1.getLast(),t.getLast(),'\0');
@@ -183,6 +190,7 @@ void ThompsonNodes::visit_normal_symbol(const Normal_symbol_reg_node &reg)
     t= Thompson(state,state+1);
     Thompson::state_count+=2;
     t.addEdge(state,state+1,reg.getValue());
+    t.addSlovo(reg.getValue());
 }
 
 void ThompsonNodes::visit_backslash_symbol(const Backslash_symbol_reg_node &reg)
@@ -191,6 +199,7 @@ void ThompsonNodes::visit_backslash_symbol(const Backslash_symbol_reg_node &reg)
     t= Thompson(state,state+1);
     Thompson::state_count+=2;
     t.addEdge(state,state+1,reg.getValue());
+    t.addSlovo(reg.getValue());
 }
 
 void ThompsonNodes::visit_char_class(const Char_class_reg_node &reg)
@@ -217,6 +226,11 @@ int ThompsonNodes::getLast() const
 int ThompsonNodes::getFirst() const
 {
     return t.getFirst();
+}
+
+QVector<char> ThompsonNodes::getSlova() const
+{
+    return t.getSlova();
 }
 
 QVector<Edge> ThompsonNodes::getEdges() const
