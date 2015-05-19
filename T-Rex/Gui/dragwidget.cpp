@@ -69,11 +69,17 @@ void DragWidget::dropEvent(QDropEvent *event)
         QPoint offset;
         dataStream >> pixmap >> offset;
 
-        QLabel *newIcon = new QLabel(this);
-        newIcon->setPixmap(pixmap);
-        newIcon->move(event->pos() - offset);
-        newIcon->show();
-        newIcon->setAttribute(Qt::WA_DeleteOnClose);
+        QLabel *boatIcon = new QLabel(this);
+        boatIcon->setPixmap(QPixmap(":images/DragDrop/dino3.png"));
+        boatIcon->move(event->pos() - offset);
+        boatIcon->show();
+        boatIcon->setAttribute(Qt::WA_DeleteOnClose);
+
+       // QLabel *newIcon = new QLabel(this);
+       // newIcon->setPixmap(pixmap);
+       // newIcon->move(event->pos() - offset);
+       // newIcon->show();
+       // newIcon->setAttribute(Qt::WA_DeleteOnClose);
 
         if (event->source() == this) {
             //event->setDropAction(Qt::MoveAction);
