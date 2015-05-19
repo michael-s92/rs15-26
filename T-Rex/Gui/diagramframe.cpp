@@ -2,6 +2,7 @@
 #include "ui_diagramframe.h"
 
 #include "guibuilder.h"
+#include "dragwidget.h"
 
 #include <QVBoxLayout>
 #include <QHBoxLayout>
@@ -35,13 +36,10 @@ QWidget* DiagramFrame::makePanel(){
 
     QWidget *tmp = new QWidget();
 
-    QVBoxLayout *vlay = new QVBoxLayout();
     QHBoxLayout *hlay = new QHBoxLayout();
 
-    view = new QGraphicsView();
-
-    hlay->addLayout(vlay);
-    hlay->addWidget(view, 1);
+    hlay->addWidget(new DragWidget);
+    hlay->addWidget(new DragWidget, 1);
 
     tmp->setLayout(hlay);
     return tmp;
