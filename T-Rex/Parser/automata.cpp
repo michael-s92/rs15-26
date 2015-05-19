@@ -1,5 +1,6 @@
 #include "automata.h"
 #include <QMap>
+#include <QtAlgorithms>
 
 using namespace std;
 
@@ -27,16 +28,6 @@ int Edge::getC() const
     return _c;
 }
 
-void Edge::setState1(int state1)
-{
-    _state1 = state1;
-}
-
-void Edge::setState2(int state2)
-{
-    _state2 = state2;
-}
-
 bool Edge::equal1(int state, char c)
 {
     if (state ==_state1 && c==_c)
@@ -44,20 +35,18 @@ bool Edge::equal1(int state, char c)
     return false;
 }
 
-int Thompson::state_count=0;
-
-Automata::Automata(int first)
-    :_first(first)
+Automata::Automata(int start_state)
+    :_start_state(start_state)
 {}
 
-int Automata::getFirst() const
+int Automata::getStart() const
 {
-    return _first;
+    return _start_state;
 }
 
-QVector<int> Automata::getZavrsna() const
+QVector<int> Automata::getAcceptStates() const
 {
-    return _zavrsna;
+    return _accept_states;
 }
 
 QVector<Edge> Automata::getEdges() const
@@ -65,19 +54,19 @@ QVector<Edge> Automata::getEdges() const
     return _edges;
 }
 
-QVector<char> Automata::getSlova() const
+QVector<char> Automata::getAlphabet() const
 {
-    return _slova;
+    return _alphabet;
 }
 
-void Automata::setFirst(int first)
+void Automata::setStart(int start_state)
 {
-    _first=first;
+    _start_state=start_state;
 }
 
-void Automata::addZavrsno(int state)
+void Automata::addAcceptState(int accept_state)
 {
-    _zavrsna.append(state);
+    _accept_states.append(accept_state);
 
 }
 
@@ -92,21 +81,26 @@ void Automata::addEdges(QVector<Edge> edges)
     _edges << edges;
 }
 
-void Automata::addSlovo(char c)
+void Automata::addChar(char c)
 {
-    if (!_slova.contains(c))
-        _slova.append(c);
+    if (!_alphabet.contains(c))
+        _alphabet.append(c);
 }
 
-void Automata::addSlova(QVector<char> slova)
+void Automata::addAlphabet(QVector<char> alphabet)
 {
-    QVector<char>::iterator i = slova.begin();
-    for (; i!=slova.end(); i++)
-        if (!_slova.contains(*i))
-        _slova.append(*i);
+    QVector<char>::iterator i = alphabet.begin();
+    for (; i!=alphabet.end(); i++)
+        if (!_alphabet.contains(*i))
+            _alphabet.append(*i);
 }
 
-void Automata::make_dot_file(ostream &osr)
+void Automata::addState(int state)
+{
+   _states.append(state);
+}
+
+void Automata::makeDotFile(ostream &osr)
 {
     osr << "digraph G {" << endl;
     osr <<" rankdir = LR;" << endl;
@@ -114,12 +108,12 @@ void Automata::make_dot_file(ostream &osr)
     osr << "-1;" << endl;
     osr <<" node [shape = circle];" << endl;
     int j;
-    for (j=0; j<_stanja.length(); j++)
+    for (j=0; j<_states.size(); j++)
     {
-        if(!_zavrsna.contains(_stanja[j]))
-          osr << _stanja[j] << "[label=\"" << _stanja[j] << "\"];" << endl;
+        if(!_accept_states.contains(_states[j]))
+          osr << _states[j] << "[label=\"" << _states[j] << "\"];" << endl;
         else
-          osr << _stanja[j] << "[label=\"" << _stanja[j] << "\" shape=\"doublecircle\"];" << endl;
+          osr << _states[j] << "[label=\"" << _states[j] << "\" shape=\"doublecircle\"];" << endl;
     }
     QVector<Edge>::iterator i = _edges.begin();
     for (;i!=_edges.end(); i++)
@@ -136,79 +130,77 @@ void Automata::make_dot_file(ostream &osr)
     osr << "}";
 }
 
+int Thompson::state_count=0;
+
 
 Thompson::Thompson()
 {
 
 }
 
-Thompson::Thompson(int first, int last)
- : Automata(first)
-   {
-    _zavrsna.append(last);
+Thompson::Thompson(int start_state, int last)
+ : Automata(start_state)
+{
+  _accept_states.append(last);
 }
 
 int Thompson::getLast() const
 {
-  return _zavrsna[0];
+  return _accept_states[0];
 }
 
 
 Gluskov Thompson::make_gluskov()
 {
-    Gluskov g;
-    QVector<Edge>::iterator i = _edges.begin();
-    for (; i!=_edges.end(); i++)
-    {
-        if (i->getC()!='\0')
-            g.prelazi << *i;
-        else
-        {
-            if (g.epsilon_prelazi.find(i->getState1())==g.epsilon_prelazi.end())
-              g.epsilon_prelazi[i->getState1()] = QVector<int>();
-            g.epsilon_prelazi[i->getState1()] << i->getState2();
-         }
-    }
-
-
-    for (int j=0; j<Thompson::state_count; j++)
-    {
-        if (g.kandidati.contains(j))
-            g.epsilon_zatvorenja[j]=g.odredi_zatvorenje(j);
-    }
-
-    QVector<Edge>::iterator iter = g.prelazi.begin();
-    for (; iter!=g.prelazi.end(); iter++)
-    {
-        QMap<int, QVector<int>>::iterator i = g.epsilon_zatvorenja.begin();
-        QMap<int, QVector<int>>::iterator j;
-        for (; i!=g.epsilon_zatvorenja.end(); i++)
-        {
-            j = g.epsilon_zatvorenja.begin();
-            for (; j!=g.epsilon_zatvorenja.end(); j++)
-                if (i.value().contains(iter->getState1()) &&
-                    j.value().contains(iter->getState2()))
-                   g.addEdge(i.key(),j.key(),iter->getC());
-        }
-    }
-
-    QMap<int, QVector<int>>::iterator it = g.epsilon_zatvorenja.begin();
-    for (; it!= g.epsilon_zatvorenja.end(); it++)
-    {
-        g._stanja.append(it.key());
-        if (it.value().contains(getLast()))
-            g._zavrsna.append(it.key());
-    }
-    g._slova = _slova;
+    Gluskov g(*this);
     return g;
 }
 
 
-Gluskov::Gluskov()
+Gluskov::Gluskov(const Thompson & t)
  :Automata(0)
    {
        for (int i=0; i<Thompson::state_count; i++)
            kandidati << i;
+       QVector<Edge> edges_T = t.getEdges();
+       QVector<Edge>::iterator i = edges_T.begin();
+       for (; i!=edges_T.end(); i++)
+       {
+           if (i->getC()!='\0')
+               prelazi_po_slovu << *i;
+           else
+               epsilon_prelazi[i->getState1()] << i->getState2();
+       }
+
+       for (int j=0; j<Thompson::state_count; j++)
+       {
+           if (kandidati.contains(j))
+               epsilon_zatvorenja[j]=odredi_zatvorenje(j);
+       }
+
+       QVector<Edge>::iterator iter = prelazi_po_slovu.begin();
+       for (; iter!=prelazi_po_slovu.end(); iter++)
+       {
+           QMap<int, QVector<int>>::iterator i = epsilon_zatvorenja.begin();
+           QMap<int, QVector<int>>::iterator j;
+           for (; i!=epsilon_zatvorenja.end(); i++)
+           {
+               j = epsilon_zatvorenja.begin();
+               for (; j!=epsilon_zatvorenja.end(); j++)
+                   if (i.value().contains(iter->getState1()) &&
+                       j.value().contains(iter->getState2()))
+                      addEdge(i.key(),j.key(),iter->getC());
+           }
+       }
+
+       QMap<int, QVector<int>>::iterator it = epsilon_zatvorenja.begin();
+       for (; it!= epsilon_zatvorenja.end(); it++)
+       {
+           addState(it.key());
+           if (it.value().contains(t.getLast()))
+               addAcceptState(it.key());
+       }
+       addAlphabet(t.getAlphabet());
    }
 
 QVector<int> Gluskov::odredi_zatvorenje(int state)
@@ -227,38 +219,52 @@ QVector<int> Gluskov::odredi_zatvorenje(int state)
 
 Deterministicki Gluskov::makeDeterministicki()
 {
-  Deterministicki d;
-  d._slova = _slova;
-  d._first = 0;
-  d.prelazi_G = _edges;
-  d.dodajPrelaze(0);
-
-  QVector<Edge> edges = d.getEdges();
-  QVector<Edge>::iterator i = edges.begin();
-  for (; i!=edges.end(); i++)
-      cout << i->getState1() << " " << i->getState2() << " " << i->getC() << endl;
+  Deterministicki d(*this);
   return d;
 }
 
 
 int Deterministicki::state_count = 0;
 
-Deterministicki::Deterministicki()
+Deterministicki::Deterministicki(const Gluskov & g)
 {
   QVector<int> start;
   start.append(0);
   kandidati[Deterministicki::state_count++] = start;
+  addAlphabet(g.getAlphabet());
+  qSort(_alphabet);
+  setStart(0);
+  prelazi_G = g.getEdges();
+  dodajPrelaze(0,g);
+
+  prelazi.resize(state_count);
+  for (int i=0; i<state_count; i++)
+      prelazi[i].resize(_alphabet.length());
+
+  QVector<Edge>::iterator i = _edges.begin();
+  for (; i!=_edges.end(); i++)
+  {
+      int index = _alphabet.indexOf(i->getC());
+      prelazi[i->getState1()][index] = i->getState2();
+  }
 }
 
-void Deterministicki::dodajPrelaze(int i)
+void Deterministicki::dodajPrelaze(int i, const Gluskov & g)
 {
     QVector<int> stanja = kandidati[i];
+    addState(i);
 
-    QVector<char>::iterator i_slova = _slova.begin();
-    for (; i_slova!=_slova.end(); i_slova++)
+    QVector<int>::iterator i1 = stanja.begin();
+    for (; i1!=stanja.end(); i1++)
+    if (g.getAcceptStates().contains(*i1))
     {
-        cout << *i_slova << endl;
+        addAcceptState(i);
+        break;
+    }
 
+    QVector<char>::iterator i_slova = _alphabet.begin();
+    for (; i_slova!=_alphabet.end(); i_slova++)
+    {
         if (kandidati[i].size()==0)
         {
             addEdge(i,i,*i_slova);
@@ -273,7 +279,6 @@ void Deterministicki::dodajPrelaze(int i)
            QVector<Edge>::iterator i_edges = prelazi_G.begin();
            for (; i_edges!=prelazi_G.end(); i_edges++)
            {
-               cout << "Ivica" << endl;
                if (i_edges->equal1(*i_stanja, *i_slova))
                    stanjaPoSlovu.append(i_edges->getState2());
            }
@@ -286,12 +291,13 @@ void Deterministicki::dodajPrelaze(int i)
                cout << "xxx" << endl;
                kandidati[state_count] = stanjaPoSlovu;
                addEdge(i,state_count,*i_slova);
-               dodajPrelaze(state_count++);
+               dodajPrelaze(state_count++,g);
            }
            else
                addEdge(i,kandidati.key(stanjaPoSlovu),*i_slova);
         }
     }
+
 
 
 

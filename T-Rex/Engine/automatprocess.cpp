@@ -28,7 +28,7 @@ bool AutomatProcess::tomson_draw(QString regular, QGraphicsView* panel){
 
     fstream f;
     f.open("thompson.dot",fstream::out);
-    t.make_dot_file(f);
+    t.makeDotFile(f);
     f.close();
 
     QGraphicsScene *scene = new GraphView("thompson.dot");
@@ -65,7 +65,7 @@ bool AutomatProcess::glusko_draw(QString regular, QGraphicsView* panel){
 
      fstream f;
      f.open("gluskov.dot",fstream::out);
-     g.make_dot_file(f);
+     g.makeDotFile(f);
      f.close();
 
      QGraphicsScene *scene = new GraphView("gluskov.dot");
@@ -103,7 +103,7 @@ bool AutomatProcess::determi_draw(QString regular, QGraphicsView *panel)
      Deterministicki d = g.makeDeterministicki();
      fstream f;
      f.open("deterministicki.dot",fstream::out);
-     d.make_dot_file(f);
+     d.makeDotFile(f);
      f.close();
 
      QGraphicsScene *scene = new GraphView("deterministicki.dot");

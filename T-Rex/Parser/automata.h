@@ -20,9 +20,8 @@ public:
     int getState2() const;
     int getC() const;
 
-    void setState1(int state1);
-    void setState2(int state2);
-
+    // videti jos koliko ima smisla za ovu funkciju
+    // nesto prakticnije
     bool equal1(int state, char c);
 
 private:
@@ -35,33 +34,33 @@ private:
 
 class Automata
 {
-    //TO-DO
-    //prebaciti u protected
 
-public:
-    QVector<int> _stanja;
-    int _first;
-    QVector<int> _zavrsna;
+protected:
+    int _start_state;
+    QVector<int> _states;
+    QVector<int> _accept_states;
     QVector<Edge> _edges;
-    QVector<char> _slova;
+    QVector<char> _alphabet;
 
 public:
     Automata()
     {}
-    Automata(int first);
+    Automata(int start_state);
 
-    int getFirst() const;
-    QVector<int> getZavrsna() const;
+    int getStart() const;
+    QVector<int> getAcceptStates() const;
     QVector<Edge> getEdges() const;
-    QVector<char> getSlova() const;
-    void setFirst(int first);
-    void addZavrsno(int state);
+    QVector<char> getAlphabet() const;
+
+    void setStart(int start_state);
+    void addAcceptState(int accept_state);
     void addEdge(int state1, int state2, char c);
     void addEdges(QVector<Edge> edges);
-    void addSlovo(char c);
-    void addSlova(QVector<char> slova);
+    void addChar(char c);
+    void addAlphabet(QVector<char> alphabet);
+    void addState(int state);
 
-    void make_dot_file(std::ostream & osr);
+    void makeDotFile(std::ostream & osr);
 };
 
 
@@ -74,7 +73,7 @@ public:
     int getLast() const;
     Gluskov make_gluskov();
 
-static int state_count;
+    static int state_count;
 };
 
 
@@ -84,25 +83,30 @@ class Gluskov : public Automata
  //TO-DO
  // ne treba sve da bude public
 public:
-  Gluskov();
-  QMap<int, QVector<int>> epsilon_prelazi;
-  QVector<Edge> prelazi;
+  Gluskov(const Thompson & t);
+  Deterministicki makeDeterministicki();
+
+private:
   QMap<int,QVector<int>> epsilon_zatvorenja;
   QLinkedList<int> kandidati;
-
   QVector<int> odredi_zatvorenje(int state);
-  Deterministicki makeDeterministicki();
+  QMap<int, QVector<int>> epsilon_prelazi;
+  QVector<Edge> prelazi_po_slovu;
+
 };
 
 class Deterministicki : public Automata
 {
 public:
-    Deterministicki();
-    QMap<int, QVector<int>> kandidati;
-    QVector<Edge> prelazi_G;
-    void dodajPrelaze(int i);
+    Deterministicki(const Gluskov & g);
 
-  static int state_count;
+    static int state_count;
+
+private:
+    QMap<int, QVector<int>> kandidati;
+    QVector<QVector<int>> prelazi;
+    QVector<Edge> prelazi_G;
+    void dodajPrelaze(int i, const Gluskov & g);
 };
 
 
