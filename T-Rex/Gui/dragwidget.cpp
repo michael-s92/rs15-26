@@ -48,8 +48,9 @@ void DragWidget::dragMoveEvent(QDragMoveEvent *event)
 {
     if (event->mimeData()->hasFormat("application/x-dnditemdata")) {
         if (event->source() == this) {
-            event->setDropAction(Qt::MoveAction);
-            event->accept();
+            //event->setDropAction(Qt::MoveAction);
+            //event->accept();
+            event->ignore();
         } else {
             event->acceptProposedAction();
         }
@@ -75,8 +76,9 @@ void DragWidget::dropEvent(QDropEvent *event)
         newIcon->setAttribute(Qt::WA_DeleteOnClose);
 
         if (event->source() == this) {
-            event->setDropAction(Qt::MoveAction);
-            event->accept();
+            //event->setDropAction(Qt::MoveAction);
+            //event->accept();
+            event->ignore();
         } else {
             event->acceptProposedAction();
         }
