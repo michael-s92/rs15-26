@@ -25,7 +25,7 @@ void DiagramFrame::setElements(){
     QVBoxLayout *lay = new QVBoxLayout();
 
     lay->addWidget(new QLabel("Diagram"));
-    lay->addWidget(makePanel());
+    lay->addWidget(makePanel(), 1);
     lay->addWidget(makeShow());
 
     setLayout(lay);
@@ -33,7 +33,18 @@ void DiagramFrame::setElements(){
 
 QWidget* DiagramFrame::makePanel(){
 
-    return nullptr;
+    QWidget *tmp = new QWidget();
+
+    QVBoxLayout *vlay = new QVBoxLayout();
+    QHBoxLayout *hlay = new QHBoxLayout();
+
+    view = new QGraphicsView();
+
+    hlay->addLayout(vlay);
+    hlay->addWidget(view, 1);
+
+    tmp->setLayout(hlay);
+    return tmp;
 }
 
 

@@ -4,6 +4,7 @@
 #include <QFrame>
 #include <QLineEdit>
 #include <QPushButton>
+#include <QGraphicsView>
 
 namespace Ui {
 class DiagramFrame;
@@ -22,6 +23,7 @@ private:
 
     QLineEdit* regex;
     QPushButton* makeReg;
+    QGraphicsView *view;
 
     void setElements();
     QWidget* makePanel();
