@@ -10,13 +10,13 @@
         <file>images/saddino.jpg</file>
         <file>images/menus/code_i1.png</file>
         <file>images/menus/fb_icon.png</file>
-        <file>images/simulator/reset.jpg</file>
-        <file>images/simulator/play.jpg</file>
-        <file>images/simulator/back.jpg</file>
-        <file>images/simulator/next.jpg</file>
         <file>images/DragDrop/dino3.png</file>
         <file>images/DragDrop/dino4.png</file>
         <file>images/DragDrop/dino5.png</file>
+        <file>images/simulator/next.ico</file>
+        <file>images/simulator/play.ico</file>
+        <file>images/simulator/back.ico</file>
+        <file>images/simulator/reset.ico</file>
     </qresource>
     <qresource prefix="/msn">
         <file>images/exitdino.jpg</file>

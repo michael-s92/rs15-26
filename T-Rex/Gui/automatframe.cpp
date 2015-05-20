@@ -98,8 +98,8 @@ void AutomatFrame::setElements(){
 
 QPushButton* AutomatFrame::createSimButton(const char *name, const char *info){
 
-    QString path = QString(":/images/simulator/") + QString(name) + QString(".jpg");
-    return GuiBuilder::createIconButton(path, QString(info), 30);
+    QString path = QString(":/images/simulator/") + QString(name) + QString(".ico");
+    return GuiBuilder::createIconButton(path, QString(info), 35);
 }
 
 QWidget* AutomatFrame::simulatorWidget(){
