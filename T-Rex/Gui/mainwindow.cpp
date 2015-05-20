@@ -218,6 +218,14 @@ void MainWindow::createButtonGroup(){
 
 void MainWindow::go_to_form(int i){
     mainw->setCurrentIndex(i);
+    if(i == 0)
+        this->setWindowTitle("T-Rex: Uvod");
+    else if(i == 1)
+        this->setWindowTitle("T-Rex: Editor");
+    else if(i == 2)
+            this->setWindowTitle("T-Rex: Automat");
+    else if(i == 3)
+        this->setWindowTitle("T-Rex: Diagram");
 }
 
 

@@ -22,12 +22,11 @@ private:
     Ui::DiagramFrame *ui;
 
     QLineEdit* regex;
-    QPushButton* makeReg;
+    QPushButton *makeReg, *cleanDiagram;
     QGraphicsView *view;
 
-    void setElements();
-    QWidget* makePanel();
-    QWidget* makeShow();
+    void makePanel();
+    void makeShow();
 
 };
 

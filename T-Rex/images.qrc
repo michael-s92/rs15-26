@@ -25,4 +25,8 @@
         <file>images/flags.ico</file>
         <file>images/loadfile.ico</file>
     </qresource>
+    <qresource prefix="/diagram">
+        <file>images/makeReg.ico</file>
+        <file>images/clearDiagram.ico</file>
+    </qresource>
 </RCC>

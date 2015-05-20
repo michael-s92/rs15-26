@@ -40,7 +40,7 @@ private:
 
     void setElements();
     QWidget* makeEditCover();
-    QWidget* makeMatchingFrame();
+
 };
 
 #endif // EDITORFRAME_H

@@ -30,34 +30,16 @@ void EditorFrame::setElements(){
     textArea = new QPlainTextEdit();
     textArea->setPlaceholderText("Unesite text koji pretrazujete ili ga ucitajte iz proizvoljnog fajla...");
 
-    QVBoxLayout* layoutB = new QVBoxLayout();
-    QLabel *name = new QLabel("Editor");
+    chkNum = new QCheckBox("Prikazi broj pronadjenih");
 
-    layoutB->addWidget(name);
+    QVBoxLayout* layoutB = new QVBoxLayout();
+
     layoutB->addWidget(makeEditCover());
-    layoutB->addWidget(makeMatchingFrame());
+    layoutB->addWidget(chkNum);
     layoutB->addWidget(textArea, 1); //drugi argument je strech factor
 
     this->setLayout(layoutB);
 
-}
-
-QWidget* EditorFrame::makeMatchingFrame(){
-
-    inputReg = GuiBuilder::createLineEdit("Mesto za unos regularnog izraza koji se trazi.");
-
-    chkNum = new QCheckBox("Prikazi broj pronadjenih");
-
-    QWidget *_cover = new QWidget();
-
-    QHBoxLayout *_lay = new QHBoxLayout();
-
-    _lay->addWidget(inputReg, 1);
-    _lay->addWidget(chkNum);
-
-    _cover->setLayout(_lay);
-
-    return _cover;
 }
 
 QWidget *EditorFrame::makeEditCover(){
@@ -69,9 +51,9 @@ QWidget *EditorFrame::makeEditCover(){
      * i dok ga opet ne pritisnemo on stoji tu
      */
 
-    loadFile = GuiBuilder::createIconButton(":/editor/images/loadfile.ico", "Ucitaj text koji pretrazujes iz file-a", 35);
-    loadFile->setCheckable(false);
+    inputReg = GuiBuilder::createLineEdit("Mesto za unos regularnog izraza koji se trazi.");
 
+    loadFile = GuiBuilder::createIconButton(":/editor/images/loadfile.ico", "Ucitaj text koji pretrazujes iz file-a", 35, false);
     flagsBtn = GuiBuilder::createIconButton(":/editor/images/flags.ico", "Atributi pretrazivanja", 35);
 
     QWidget *cover = new QWidget();
@@ -80,7 +62,7 @@ QWidget *EditorFrame::makeEditCover(){
 
     //stilizovati coverLabel
 
-    lay->addWidget(new QLabel(), 1);
+    lay->addWidget(inputReg, 1);
     lay->addWidget(flagsBtn);
     lay->addWidget(loadFile);
 

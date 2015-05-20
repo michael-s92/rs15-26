@@ -14,7 +14,8 @@ DiagramFrame::DiagramFrame(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    setElements();
+    makePanel();
+    makeShow();
 }
 
 DiagramFrame::~DiagramFrame()
@@ -22,45 +23,29 @@ DiagramFrame::~DiagramFrame()
     delete ui;
 }
 
-void DiagramFrame::setElements(){
-    QVBoxLayout *lay = new QVBoxLayout();
+void DiagramFrame::makePanel(){
 
-    lay->addWidget(new QLabel("Diagram"));
-    lay->addWidget(makePanel(), 1);
-    lay->addWidget(makeShow());
+    auto lay = ui->centralLayout;
 
-    setLayout(lay);
-}
+    lay->addWidget(new DragWidget);
+    lay->addWidget(new DragWidget, 1);
 
-QWidget* DiagramFrame::makePanel(){
-
-    QWidget *tmp = new QWidget();
-
-    QHBoxLayout *hlay = new QHBoxLayout();
-
-    hlay->addWidget(new DragWidget);
-    hlay->addWidget(new DragWidget, 1);
-
-    tmp->setLayout(hlay);
-    return tmp;
 }
 
 
-QWidget* DiagramFrame::makeShow(){
+void DiagramFrame::makeShow(){
 
-    QWidget* tmp = new QWidget();
-    QHBoxLayout *hlay = new QHBoxLayout();
+    auto lay = ui->bottomLayout;
 
     regex = new QLineEdit();
     regex->setToolTip("Rezultat konstrukcije");
     regex->setEnabled(false);
 
-    //makeReg = GuiBuilder::createIconButton();
-    makeReg = new QPushButton("Make");
+    makeReg = GuiBuilder::createIconButton(":/diagram/images/makeReg.ico", "Generisi regularni izraz", 35, false);
+    cleanDiagram = GuiBuilder::createIconButton(":/diagram/images/clearDiagram.ico", "Ocisti radnu povrsinu", 35, false);
 
-    hlay->addWidget(makeReg);
-    hlay->addWidget(regex);
+    lay->addWidget(cleanDiagram);
+    lay->addWidget(makeReg);
+    lay->addWidget(regex);
 
-    tmp->setLayout(hlay);
-    return tmp;
 }

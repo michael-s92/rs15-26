@@ -86,13 +86,11 @@ AutomatFrame::~AutomatFrame()
 void AutomatFrame::setElements(){
     QVBoxLayout *lay = new QVBoxLayout();
 
-    QLabel *cover = new QLabel("Automat");
     simulator = new QCheckBox("Kretanje reci kroz automat");
     simulator->setChecked(true);
     inputReg = GuiBuilder::createLineEdit("Polje za unos regularnog izraza.");
     sim = simulatorWidget();
 
-    lay->addWidget(cover);
     lay->addWidget(inputReg);
     lay->addWidget(makeAutomatWidget());
     lay->addWidget(simulator, Qt::AlignRight);
