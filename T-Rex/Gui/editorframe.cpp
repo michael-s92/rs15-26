@@ -21,6 +21,8 @@ EditorFrame::EditorFrame(QWidget *parent) :
     connect(loadFile, SIGNAL(clicked(bool)), this, SLOT(LoadFile()));
     connect(inputReg, SIGNAL(returnPressed()), this, SLOT(SearchText()));
     connect(chkNum, SIGNAL(toggled(bool)), this, SLOT(showNumMatched(bool)));
+
+    //fali konektor za flagsBtn
 }
 
 void EditorFrame::setElements(){
@@ -67,7 +69,10 @@ QWidget *EditorFrame::makeEditCover(){
      * i dok ga opet ne pritisnemo on stoji tu
      */
 
-    loadFile = new QPushButton("Ucitajte fajl");
+    loadFile = GuiBuilder::createIconButton(":/editor/images/loadfile.ico", "Ucitaj text koji pretrazujes iz file-a", 35);
+    loadFile->setCheckable(false);
+
+    flagsBtn = GuiBuilder::createIconButton(":/editor/images/flags.ico", "Atributi pretrazivanja", 35);
 
     QWidget *cover = new QWidget();
 
@@ -75,7 +80,10 @@ QWidget *EditorFrame::makeEditCover(){
 
     //stilizovati coverLabel
 
-    lay->addWidget(loadFile, 0 , Qt::AlignRight);
+    lay->addWidget(new QLabel(), 1);
+    lay->addWidget(flagsBtn);
+    lay->addWidget(loadFile);
+
 
     cover->setLayout(lay);
     return cover;

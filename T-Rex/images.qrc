@@ -21,4 +21,8 @@
     <qresource prefix="/msn">
         <file>images/exitdino.jpg</file>
     </qresource>
+    <qresource prefix="/editor">
+        <file>images/flags.ico</file>
+        <file>images/loadfile.ico</file>
+    </qresource>
 </RCC>

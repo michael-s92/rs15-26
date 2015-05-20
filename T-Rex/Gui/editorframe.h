@@ -33,7 +33,7 @@ private:
 
     QPlainTextEdit *textArea;
     QLineEdit *inputReg;
-    QPushButton *loadFile;
+    QPushButton *loadFile, *flagsBtn;
     QCheckBox *chkNum;
 
     EditorProcess _eproc;
