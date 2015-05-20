@@ -135,7 +135,7 @@ void Automata::makeDotFile(ostream &osr)
     }
 
     osr << "-1 [label = \"\"];" << endl;
-    osr << "-1 -> 0 [label = \"\"];" << endl;
+    osr << "-1 -> 0 [label = \" \"];" << endl;
     osr << "}";
 }
 
@@ -151,6 +151,8 @@ Thompson::Thompson(int start_state, int last)
  : Automata(start_state)
 {
   _accept_states.append(last);
+  for (int i=0; i<=last; i++)
+      _states.append(i);
 }
 
 int Thompson::getLast() const
@@ -256,7 +258,7 @@ Deterministicki::Deterministicki(const Gluskov & g)
       int index = _alphabet.indexOf(i->getC());
       prelazi[i->getState1()][index] = i->getState2();
   }
-
+/*
   QMap<int, QVector<int>>::iterator i11 = kandidati.begin();
   for (; i11!=kandidati.end();i11++)
   {
@@ -266,6 +268,7 @@ Deterministicki::Deterministicki(const Gluskov & g)
               cout << *i22 << " ";
       cout << endl;
   }
+ */
 
 }
 
@@ -307,12 +310,6 @@ void Deterministicki::dodajPrelaze(int i, const Gluskov & g)
                }
            }
         }
-           QVector<int>::iterator ixx = stanjaPoSlovu.begin();
-           for (; ixx!=stanjaPoSlovu.end(); ixx++)
-           {
-               cout << *ixx << " ";
-           }
-           cout << endl << "xxxxxxxxxxxxxxxxxx" << endl;
 
            if (!kandidati.values().contains(stanjaPoSlovu))
            {

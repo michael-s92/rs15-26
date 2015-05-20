@@ -30,8 +30,13 @@ private:
 
     QString aggetToQString(void* obj, const char* name, const QString& fallback) const;
 
-    QPainterPath makeShape(node_t* node) const;
-    QPolygonF makeShapeHelper(node_t* node) const;
+//    QPainterPath makeShape(node_t* node) const;
+//    QPolygonF makeShapeHelper(node_t* node) const;
+
+
+    void make_polygon_helper(node_t *node, QPainterPath &path) const;
+    void make_ellipse_helper(node_t *node, QPainterPath &path) const;
+    QPainterPath make_shape(node_t *node) const;
 
     QPainterPath makeBezier(const bezier& bezier) const;
 
@@ -50,7 +55,6 @@ class GraphNode : public QObject, public QGraphicsPathItem
 public:
 
     GraphNode(const QPainterPath& path, const QPicture& picture, const QString& name);
-
     void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget);
 
 private:

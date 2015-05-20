@@ -122,7 +122,7 @@ GraphView::renderGraph(const QString& filename)
     }
 }
 
-
+/*
 QPolygonF GraphView::makeShapeHelper(node_t* node) const
 {
     const polygon_t* poly = (polygon_t*) ND_shape_info(node);
@@ -172,6 +172,102 @@ QPainterPath GraphView::makeShape(node_t* node) const
     else
     {
     qWarning("unsupported shape %s", name);
+    }
+
+    return path;
+}
+
+*/
+
+//------------------------------------------------------------------------------
+// Name: make_polygon_helper
+// Desc:
+//------------------------------------------------------------------------------
+void GraphView::make_polygon_helper(node_t *node, QPainterPath &path) const {
+    const polygon_t *const poly = static_cast<polygon_t *>(ND_shape_info(node));
+
+    if(poly->peripheries != 1) {
+       // qWarning("unsupported number of peripheries %d", poly->peripheries);
+    }
+
+    const int sides = poly->sides;
+    const pointf* vertices = poly->vertices;
+
+    QPolygonF polygon;
+    for (int side = 0; side < sides; side++) {
+        polygon.append(gToQ(vertices[side], false));
+    }
+    polygon.append(polygon[0]);
+
+    path.addPolygon(polygon);
+}
+
+//------------------------------------------------------------------------------
+// Name: make_ellipse_helper
+// Desc:
+//------------------------------------------------------------------------------
+void GraphView::make_ellipse_helper(node_t *node, QPainterPath &path) const {
+    const polygon_t *const poly = static_cast<polygon_t *>(ND_shape_info(node));
+
+    if(poly->peripheries != 1) {
+      //  qWarning("unsupported number of peripheries %d", poly->peripheries);
+    }
+
+    const int sides = poly->sides;
+    const pointf* vertices = poly->vertices;
+
+    QPolygonF polygon;
+    for (int side = 0; side < sides; side++) {
+        polygon.append(gToQ(vertices[side], false));
+    }
+
+    QRectF ellipse_bounds(polygon[0], polygon[1]);
+
+    for (int i = 0; i < poly->peripheries; ++i) {
+        path.addEllipse(ellipse_bounds.adjusted(-2 * i, 2 * i, 2 * i, -2 * i));
+    }
+}
+
+//------------------------------------------------------------------------------
+// Name: make_shape
+// Desc:
+//------------------------------------------------------------------------------
+QPainterPath GraphView::make_shape(node_t *node) const {
+    QPainterPath path;
+
+    const QString name = QString::fromUtf8(ND_shape(node)->name);
+
+    // TODO: point, egg, doublecircle, doubleoctagon, tripleoctagon,
+    // note, tab, folder, box3d, component, record, plaintext
+
+    // handle all of the "regular" polygons
+    if(     name == "invhouse"      ||
+            name == "invtrapezium"  ||
+            name == "invtriangle"   ||
+            name == "box"           ||
+            name == "polygon"       ||
+            name == "triangle"      ||
+            name == "diamond"       ||
+            name == "trapezium"     ||
+            name == "parallelogram" ||
+            name == "house"         ||
+            name == "pentagon"      ||
+            name == "hexagon"       ||
+            name == "septagon"      ||
+            name == "octagon"       ||
+            name == "rect"          ||
+            name == "rectangle"     ||
+            name == "Msquare"       || // incomplete
+            name == "Mdiamond"         // incomplete
+            ) {
+
+        make_polygon_helper(node, path);
+    } else if(name == "ellipse" || name=="doublecircle" || name == "circle" || name == "point" || name == "Mcircle") {
+        make_ellipse_helper(node, path);
+    } else if(name == "none") {
+        // NO-OP
+    } else {
+        qWarning("unsupported shape %s", qPrintable(name));
     }
 
     return path;
@@ -242,84 +338,81 @@ GraphView::renderGraph(graph_t* graph)
     setBackgroundBrush(Qt::white);
 
     for (node_t* node = agfstnode(graph); node != NULL; node = agnxtnode(graph, node))
-    {
-    QPicture pictureNode;
-    QPainter painterNode;
-
-    painterNode.begin(&pictureNode);
-    drawLabel(ND_label(node), &painterNode);
-    painterNode.end();
-
-    GraphNode* item = new GraphNode(makeShape(node), pictureNode, "igor");
-
-    item->setPos(gToQ(ND_coord(node)));
-
-    QPen pen(Qt::black);
-    pen.setWidthF(3.0);
-    item->setPen(pen);
-
-    QBrush brush(Qt::green);
-    item->setBrush(brush);
-
-    QString tooltip = aggetToQString(node, "tooltip", "igor");
-    if (!tooltip.isEmpty())
-    {
-        tooltip.replace("\\n", "\n");
-        item->setToolTip(tooltip);
-    }
-
-    addItem(item);
-
-    for (edge_t* edge = agfstout(graph, node); edge != NULL; edge = agnxtout(graph, edge))
-    {
-        const splines* spl = ED_spl(edge);
-        if (spl == NULL)
-        continue;
-
-        QPicture pictureLabel;
-        QPainter painterLabel;
-
-        if (ED_label(edge)==0)
-            continue;
-        //std::cout << ED_label(edge)->text << std::endl;
-
-        QPicture pictureEdge;
-        QPainter painterEdge;
-
-       // painterLabel.begin(&pictureLabel);
-       // drawLabel2(ED_label(edge),&painterLabel);
-       // painterLabel.end();
-
-        for (int i = 0; i < spl->size; ++i)
         {
-        const bezier& bz = spl->list[i];
+        QPicture picture;
+        QPainter painter;
 
-        QColor color(Qt::black);
+        painter.begin(&picture);
+        drawLabel(ND_label(node), &painter);
+        painter.end();
 
-        QPainterPath path(makeBezier(bz));
+        GraphNode* item = new GraphNode(make_shape(node), picture, "igor");
 
-        painterEdge.begin(&pictureEdge);
-        if (bz.sflag)
-            drawArrow(QLineF(gToQ(bz.list[0]), gToQ(bz.sp)), color, &painterEdge);
-        if (bz.eflag)
-            drawArrow(QLineF(gToQ(bz.list[bz.size-1]), gToQ(bz.ep)), color, &painterEdge);
-        painterEdge.end();
+        item->setPos(gToQ(ND_coord(node)));
 
-        GraphEdge* item = new GraphEdge(path, pictureEdge);
-
-        QPen pen(color);
-        pen.setStyle(Qt::SolidLine);
+        QPen pen(Qt::black);
         pen.setWidthF(1.0);
         item->setPen(pen);
 
-        item->setZValue(-1.0);
+        QBrush brush(Qt::green);
+        item->setBrush(brush);
+
+        QString tooltip = aggetToQString(node, "tooltip", "igor");
+        if (!tooltip.isEmpty())
+        {
+            tooltip.replace("\\n", "\n");
+            item->setToolTip(tooltip);
+        }
 
         addItem(item);
+
+        for (edge_t* edge = agfstout(graph, node); edge != NULL; edge = agnxtout(graph, edge))
+        {
+            const splines* spl = ED_spl(edge);
+            if (spl == NULL)
+            continue;
+
+            QPicture picture1;
+            QPainter painter1;
+
+            if (ED_label(edge)==0)
+                continue;
+            painter1.begin(&picture1);
+            drawLabel2(ED_label(edge),&painter1);
+            //painter1.end();
+
+            for (int i = 0; i < spl->size; ++i)
+            {
+            const bezier& bz = spl->list[i];
+
+            QColor color(Qt::black);
+
+            QPainterPath path(makeBezier(bz));
+           // QPicture picture;
+           // QPainter painter;
+
+
+             //painter.begin(&picture);
+            if (bz.sflag)
+                drawArrow(QLineF(gToQ(bz.list[0]), gToQ(bz.sp)), color, &painter1);
+            if (bz.eflag)
+                drawArrow(QLineF(gToQ(bz.list[bz.size-1]), gToQ(bz.ep)), color, &painter1);
+             painter1.end();
+
+            GraphEdge* item = new GraphEdge(path, picture1);
+
+            QPen pen(color);
+            pen.setStyle(Qt::SolidLine);
+            pen.setWidthF(1.0);
+            item->setPen(pen);
+
+            item->setZValue(-1.0);
+
+            addItem(item);
+            }
+        }
         }
     }
-    }
-}
-
 
 GraphNode::GraphNode(const QPainterPath& path, const QPicture& picture, const QString& name)
     : QGraphicsPathItem(path),
