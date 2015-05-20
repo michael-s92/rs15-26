@@ -7,6 +7,7 @@
 #include <QCheckBox>
 #include <QLineEdit>
 #include <QPushButton>
+#include <QPlainTextEdit>
 
 #include "Engine/automatprocess.h"
 
@@ -25,16 +26,18 @@ public:
 private Q_SLOTS:
     void displaySimulator(bool display);
     void drawAutomata(int ind = 0, bool chk = false);
+    void displayDetails(bool display);
 
 private:
     Ui::AutomatFrame *ui;
 
     QGraphicsView *platno;
     QButtonGroup* automatGroup;
-    QCheckBox* simulator;
+    QCheckBox* simulator, *opis;
     QLineEdit *inputReg, *word;
     QPushButton *s_reset, *s_next, *s_previous, *s_start;
     QWidget *sim;
+    QPlainTextEdit *opisArea;
 
     AutomatProcess _aproc;
 

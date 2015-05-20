@@ -27,10 +27,15 @@ void AutomatFrame::setSlotAndSignal(){
     //SIGNAL(QLineEdit::editingFinished())
     connect(inputReg, SIGNAL(returnPressed()), this, SLOT(drawAutomata()));
     connect(automatGroup, SIGNAL(buttonToggled(int,bool)), this, SLOT(drawAutomata(int, bool)));
+    connect(opis, SIGNAL(clicked(bool)), this, SLOT(displayDetails(bool)));
 
     //konekcije za simulator
 
     //-------------------------------
+}
+
+void AutomatFrame::displayDetails(bool display){
+    display ? opisArea->show() : opisArea->hide();
 }
 
 void AutomatFrame::drawAutomata(int ind, bool chk){
@@ -46,13 +51,13 @@ void AutomatFrame::drawAutomata(int ind, bool chk){
         else if(chk){
             bool draw = false;
             if(ind == 1) //tomson je u pitanju
-                draw = _aproc.tomson_draw(inputReg->text(), platno);
+                draw = _aproc.tomson_draw(inputReg->text(), platno, opisArea);
             if(ind == 2) //glusko je u pitanju
-                draw = _aproc.glusko_draw(inputReg->text(), platno);
+                draw = _aproc.glusko_draw(inputReg->text(), platno, opisArea);
             if(ind == 3) //deterministicki je u pitanju
-                draw = _aproc.determi_draw(inputReg->text(), platno);
+                draw = _aproc.determi_draw(inputReg->text(), platno, opisArea);
             if(ind == 4) //minimalni je u pitanju
-                draw = _aproc.minimal_draw(inputReg->text(), platno);
+                draw = _aproc.minimal_draw(inputReg->text(), platno, opisArea);
 
             if(!draw)
                 GuiBuilder::throwErrorMessage("Neispravan rularni izraz.");
@@ -144,12 +149,15 @@ QWidget* AutomatFrame::makeAutomatWidget(){
     QRadioButton *deterBox = new QRadioButton("deterministicki");
     QRadioButton *minimalBox = new QRadioButton("minimalni");
 
-    //option_automat->addSeparator();
     option_automat->addWidget(tomsonBox);
     option_automat->addWidget(gluskoBox);
     option_automat->addWidget(deterBox);
     option_automat->addWidget(minimalBox);
-    //option_automat->addSeparator();
+
+    option_automat->addSeparator();
+    opis = new QCheckBox("Opisi automat");
+    opis->setChecked(true);
+    option_automat->addWidget(opis);
 
     automatGroup->addButton(tomsonBox, 1);
     automatGroup->addButton(gluskoBox, 2);
@@ -158,9 +166,12 @@ QWidget* AutomatFrame::makeAutomatWidget(){
     //-------------------------------------
 
     platno = new QGraphicsView();
+    //podesiti je minimalnu duzinu mozda, ali tek kad se vidi koliko ispis zaista zauzima
+    opisArea = new QPlainTextEdit();
 
     lay->addWidget(option_automat, 0, Qt::AlignCenter);
-    lay->addWidget(platno);
+    lay->addWidget(platno, 1);
+    lay->addWidget(opisArea);
 
     form->setLayout(lay);
     return form;

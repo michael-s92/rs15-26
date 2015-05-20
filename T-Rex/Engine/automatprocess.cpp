@@ -15,7 +15,7 @@ AutomatProcess::~AutomatProcess()
 
 }
 
-bool AutomatProcess::tomson_draw(QString regular, QGraphicsView* panel){
+bool AutomatProcess::tomson_draw(QString regular, QGraphicsView* panel, QPlainTextEdit *opis){
 
 
    try {
@@ -51,7 +51,7 @@ bool AutomatProcess::tomson_draw(QString regular, QGraphicsView* panel){
 
 }
 
-bool AutomatProcess::glusko_draw(QString regular, QGraphicsView* panel){
+bool AutomatProcess::glusko_draw(QString regular, QGraphicsView* panel, QPlainTextEdit* opis){
 
 
     try {
@@ -89,7 +89,7 @@ bool AutomatProcess::glusko_draw(QString regular, QGraphicsView* panel){
 
  }
 
-bool AutomatProcess::determi_draw(QString regular, QGraphicsView *panel)
+bool AutomatProcess::determi_draw(QString regular, QGraphicsView *panel, QPlainTextEdit* opis)
 {
     try {
      parser = ParserEngine(regular);
@@ -127,7 +127,7 @@ bool AutomatProcess::determi_draw(QString regular, QGraphicsView *panel)
  }
 
 
-bool AutomatProcess::minimal_draw(QString regular, QGraphicsView *panel){
+bool AutomatProcess::minimal_draw(QString regular, QGraphicsView *panel, QPlainTextEdit* opis){
     {
         try {
          parser = ParserEngine(regular);
