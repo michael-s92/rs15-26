@@ -128,6 +128,41 @@ bool AutomatProcess::determi_draw(QString regular, QGraphicsView *panel)
 
 
 bool AutomatProcess::minimal_draw(QString regular, QGraphicsView *panel){
+    {
+        try {
+         parser = ParserEngine(regular);
+         Thompson::state_count=0;
+         Reg_node * reg_node = parser.getRegNode();
+         ThompsonNodes thompsonNodes;
+         reg_node->accept(thompsonNodes);
+         Thompson t = thompsonNodes.getTh();
+         Gluskov g = t.make_gluskov();
+         Deterministicki::state_count = 0;
+         Deterministicki d = g.makeDeterministicki();
+         Minimalni::state_count = 2;
+         Minimalni m = d.makeMinimalni();
+         fstream f;
+         f.open("minimalni.dot",fstream::out);
+         m.makeDotFile(f);
+         f.close();
 
-    return false;
+         QGraphicsScene *scene = new GraphView("minimalni.dot");
+
+         panel->setRenderHint(QPainter::Antialiasing);
+         panel->setRenderHint(QPainter::TextAntialiasing);
+         panel->setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
+         panel->setResizeAnchor(QGraphicsView::AnchorUnderMouse);
+
+         panel->setScene(scene);
+
+
+         }
+       catch (ParserException p)
+         {
+           return false;
+         }
+
+         return true;
+
+     }
 }

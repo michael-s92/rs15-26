@@ -2,6 +2,10 @@
 #include <QMap>
 #include <QtAlgorithms>
 
+// TO-DO
+// sve iteratore zameniti ugradjenim iteratorima
+
+
 using namespace std;
 
 Edge::Edge()
@@ -57,6 +61,11 @@ QVector<Edge> Automata::getEdges() const
 QVector<char> Automata::getAlphabet() const
 {
     return _alphabet;
+}
+
+QVector<int> Automata::getStates() const
+{
+    return _states;
 }
 
 void Automata::setStart(int start_state)
@@ -247,7 +256,19 @@ Deterministicki::Deterministicki(const Gluskov & g)
       int index = _alphabet.indexOf(i->getC());
       prelazi[i->getState1()][index] = i->getState2();
   }
+
+  QMap<int, QVector<int>>::iterator i11 = kandidati.begin();
+  for (; i11!=kandidati.end();i11++)
+  {
+      QVector<int>::iterator i22 = i11->begin();
+      cout << i11.key() << " - ";
+      for (; i22!=i11->end(); i22++)
+              cout << *i22 << " ";
+      cout << endl;
+  }
+
 }
+
 
 void Deterministicki::dodajPrelaze(int i, const Gluskov & g)
 {
@@ -271,36 +292,125 @@ void Deterministicki::dodajPrelaze(int i, const Gluskov & g)
             continue;
         }
 
+        QVector<int> stanjaPoSlovu;
+
         QVector<int>::iterator i_stanja = stanja.begin();
         for (; i_stanja!=stanja.end(); i_stanja++)
         {
-           QVector<int> stanjaPoSlovu;
-           cout << *i_stanja << endl;
            QVector<Edge>::iterator i_edges = prelazi_G.begin();
            for (; i_edges!=prelazi_G.end(); i_edges++)
            {
                if (i_edges->equal1(*i_stanja, *i_slova))
+               {
+                   if (!stanjaPoSlovu.contains(i_edges->getState2()))
                    stanjaPoSlovu.append(i_edges->getState2());
+               }
            }
+        }
+           QVector<int>::iterator ixx = stanjaPoSlovu.begin();
+           for (; ixx!=stanjaPoSlovu.end(); ixx++)
+           {
+               cout << *ixx << " ";
+           }
+           cout << endl << "xxxxxxxxxxxxxxxxxx" << endl;
+
            if (!kandidati.values().contains(stanjaPoSlovu))
            {
-               cout << "State: " << state_count << endl;
-               QVector<int>::iterator it = stanjaPoSlovu.begin();
-               for (;it!=stanjaPoSlovu.end(); it++)
-                   cout << *it;
-               cout << "xxx" << endl;
                kandidati[state_count] = stanjaPoSlovu;
                addEdge(i,state_count,*i_slova);
                dodajPrelaze(state_count++,g);
            }
            else
                addEdge(i,kandidati.key(stanjaPoSlovu),*i_slova);
-        }
     }
+}
 
+Minimalni Deterministicki::makeMinimalni()
+{
+    Minimalni m(*this);
+    return m;
+}
 
-
-
+QVector<QVector<int>> Deterministicki::getPrelazi() const
+{
+    return prelazi;
 }
 
 
+int Minimalni::state_count = 2;
+
+
+
+Minimalni::Minimalni(const Deterministicki &d)
+{
+   QVector<QVector<int>> prelaziD = d.getPrelazi();
+   _alphabet = d.getAlphabet();
+
+   for (int i=d.getStates().length()-1; i>=0; i--)
+   if (d.getAcceptStates().contains(i))
+       classes.insertMulti(1,i);
+   else
+       classes.insertMulti(0,i);
+
+   bool ind_promene = 1;
+   while(ind_promene)
+   {
+     ind_promene=0;
+
+     QMultiMap<int,int>::iterator i_map = classes.begin();
+     for (; i_map!=classes.end();)
+     {
+        QMultiMap<int,int>::iterator j_map = i_map++;
+        while((j_map.key()==i_map.key()))
+         {
+          for (int j=0; j<prelaziD[0].length(); j++)
+          {
+             int state1=prelaziD[j_map.value()][j];
+             int state2=prelaziD[i_map.value()][j];
+
+             if (classes.key(state1)!=classes.key(state2))
+             {
+                 int remove_key = i_map.key();
+                 int value = i_map.value();
+                 classes.remove(remove_key,value);
+                 classes.insertMulti(state_count,value);
+
+                 ind_promene=1;
+                 break;
+             }
+          }
+          i_map++;
+        }
+        if (ind_promene==1)
+        {
+            state_count++;
+            break;
+        }
+     }
+   }
+
+   prelazi.resize(state_count);
+   for (int i=0; i< prelazi.length(); i++)
+       prelazi[i].resize(_alphabet.length());
+
+   for (int i=0; i < prelazi.length(); i++)
+   {
+       addState(i);
+       QList<int> stanja = classes.values(i);
+       QList<int>::iterator it = stanja.begin();
+       for (; it!=stanja.end(); it++)
+       {
+           if (d.getAcceptStates().contains(*it))
+               if (!_accept_states.contains(i))
+                   addAcceptState(i);
+       }
+       for (int j=0; j < prelazi[0].length(); j++)
+       {
+           int state = prelaziD[classes.value(i)][j];
+           prelazi[i][j] = classes.key(state);
+           addEdge(i,prelazi[i][j],_alphabet[j]);
+       }
+   }
+
+
+}

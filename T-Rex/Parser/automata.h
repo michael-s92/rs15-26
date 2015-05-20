@@ -8,6 +8,7 @@
 
 class Gluskov;
 class Deterministicki;
+class Minimalni;
 
 class Edge {
 
@@ -51,6 +52,7 @@ public:
     QVector<int> getAcceptStates() const;
     QVector<Edge> getEdges() const;
     QVector<char> getAlphabet() const;
+    QVector<int> getStates() const;
 
     void setStart(int start_state);
     void addAcceptState(int accept_state);
@@ -79,7 +81,7 @@ public:
 
 
 class Gluskov : public Automata
-{ 
+{
  //TO-DO
  // ne treba sve da bude public
 public:
@@ -99,7 +101,8 @@ class Deterministicki : public Automata
 {
 public:
     Deterministicki(const Gluskov & g);
-
+    Minimalni makeMinimalni();
+    QVector<QVector<int>> getPrelazi() const;
     static int state_count;
 
 private:
@@ -107,6 +110,17 @@ private:
     QVector<QVector<int>> prelazi;
     QVector<Edge> prelazi_G;
     void dodajPrelaze(int i, const Gluskov & g);
+};
+
+class Minimalni : public Automata
+{
+public:
+    Minimalni (const Deterministicki & d);
+    static int state_count;
+
+private:
+    QMultiMap<int, int> classes;
+    QVector<QVector<int>> prelazi;
 };
 
 
