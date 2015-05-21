@@ -4,6 +4,7 @@
 #include <QString>
 #include <QGraphicsView>
 #include <QPlainTextEdit>
+
 #include "parserengine.h"
 #include "Parser/TreeNodes.hpp"
 #include "Parser/visitor_nodes.h"
@@ -11,17 +12,19 @@
 class AutomatProcess
 {
 public:
-    AutomatProcess();
+    AutomatProcess(QGraphicsView* p, QPlainTextEdit* o);
     ~AutomatProcess();
 
-    bool tomson_draw(QString regular, QGraphicsView* panel, QPlainTextEdit* opis);
-    bool glusko_draw(QString regular, QGraphicsView* panel, QPlainTextEdit* opis);
-    bool determi_draw(QString regular, QGraphicsView* panel, QPlainTextEdit* opis);
-    bool minimal_draw(QString regular, QGraphicsView* panel, QPlainTextEdit* opis);
-
+    bool tomson_draw(const QString& regular);
+    bool glusko_draw(const QString &regular);
+    bool determi_draw(const QString &regular);
+    bool minimal_draw(const QString &regular);
 
 private:
     ParserEngine parser;
+
+    QGraphicsView* panel;
+    QPlainTextEdit* opis;
 
 };
 

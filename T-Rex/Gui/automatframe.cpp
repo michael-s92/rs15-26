@@ -17,7 +17,9 @@ AutomatFrame::AutomatFrame(QWidget *parent) :
     ui->setupUi(this);
 
     setElements();
+    _aproc = new AutomatProcess(platno, opisArea);
     setSlotAndSignal();
+
 }
 
 void AutomatFrame::setSlotAndSignal(){
@@ -25,6 +27,7 @@ void AutomatFrame::setSlotAndSignal(){
     connect(simulator, SIGNAL(clicked(bool)), this, SLOT(displaySimulator(bool)));
 
     //SIGNAL(QLineEdit::editingFinished())
+    //nece da se opet aktivira signal kad se pritisne enter?!
     connect(inputReg, SIGNAL(returnPressed()), this, SLOT(drawAutomata()));
     connect(automatGroup, SIGNAL(buttonToggled(int,bool)), this, SLOT(drawAutomata(int, bool)));
     connect(opis, SIGNAL(clicked(bool)), this, SLOT(displayDetails(bool)));
@@ -51,16 +54,16 @@ void AutomatFrame::drawAutomata(int ind, bool chk){
         else if(chk){
             bool draw = false;
             if(ind == 1) //tomson je u pitanju
-                draw = _aproc.tomson_draw(inputReg->text(), platno, opisArea);
+                draw = _aproc->tomson_draw(inputReg->text());
             if(ind == 2) //glusko je u pitanju
-                draw = _aproc.glusko_draw(inputReg->text(), platno, opisArea);
+                draw = _aproc->glusko_draw(inputReg->text());
             if(ind == 3) //deterministicki je u pitanju
-                draw = _aproc.determi_draw(inputReg->text(), platno, opisArea);
+                draw = _aproc->determi_draw(inputReg->text());
             if(ind == 4) //minimalni je u pitanju
-                draw = _aproc.minimal_draw(inputReg->text(), platno, opisArea);
+                draw = _aproc->minimal_draw(inputReg->text());
 
             if(!draw)
-                GuiBuilder::throwErrorMessage("Neispravan rularni izraz.");
+                GuiBuilder::throwErrorMessage("Neispravan regularni izraz.");
         }
     }
     else
@@ -81,6 +84,7 @@ AutomatFrame::~AutomatFrame()
     delete inputReg; delete word;
     delete s_reset; delete s_next; delete s_previous; delete s_start;
     delete sim;
+    delete _aproc;
 }
 
 void AutomatFrame::setElements(){
@@ -166,6 +170,7 @@ QWidget* AutomatFrame::makeAutomatWidget(){
     platno = new QGraphicsView();
     //podesiti je minimalnu duzinu mozda, ali tek kad se vidi koliko ispis zaista zauzima
     opisArea = new QPlainTextEdit();
+    opisArea->setEnabled(false);
 
     lay->addWidget(option_automat, 0, Qt::AlignCenter);
     lay->addWidget(platno, 1);

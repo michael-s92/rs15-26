@@ -9,11 +9,15 @@
 DragWidget::DragWidget(QWidget *parent)
     : QFrame(parent)
 {
-    setMinimumSize(100, 200);
+    setMinimumSize(75, 200);
     setFrameStyle(QFrame::Sunken | QFrame::StyledPanel);
     //setAcceptDrops(true);
 
+    //staviti scroll?!
+
     QVBoxLayout *layout = new QVBoxLayout(this);
+
+    layout->setAlignment(Qt::AlignCenter);
 
     layout->addWidget(makeToolIcon(":/toolBox/images/diag1.ico", "slovo", "slovo"));
     layout->addWidget(makeToolIcon(":/toolBox/images/diag2.ico", "Nadovezi", "konkatenacija"));
@@ -42,6 +46,8 @@ QLabel* DragWidget::makeToolIcon(const QString& path, const QString& write, cons
     imageLabel->setAlignment(Qt::AlignCenter);
     imageLabel->setToolTip(toolTip);
     imageLabel->setAttribute(Qt::WA_DeleteOnClose);
+
+    imageLabel->setFixedSize(50, 50);
 
     return imageLabel;
 }

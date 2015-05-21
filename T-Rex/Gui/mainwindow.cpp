@@ -101,6 +101,7 @@ void MainWindow::setUpMenuActions(){
     connect(ui->actionT_Rex_Twitter, SIGNAL(triggered()), &goToWeb, SLOT(map()));
     goToWeb.setMapping(ui->actionT_Rex_Twitter, "https://www.twitter.com");
     //----------------
+
 }
 
 void MainWindow::loadWebPage(QString id){

@@ -39,7 +39,7 @@ private:
     QWidget *sim;
     QPlainTextEdit *opisArea;
 
-    AutomatProcess _aproc;
+    AutomatProcess *_aproc;
 
     void setElements();
     void setSlotAndSignal();
