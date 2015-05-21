@@ -51,6 +51,8 @@ private:
     QWidget* simulatorWidget();
     QPushButton* createSimButton(const char *name, const char *info);
 
+    void enabledSimulatorBtn(bool vr);
+
 };
 
 #endif // AUTOMATFRAME_H

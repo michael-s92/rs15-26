@@ -45,19 +45,31 @@ void AutomatFrame::setSlotAndSignal(){
     connect(s_play, SIGNAL(clicked()), &simulator_map, SLOT(map()));
     connect(s_stop, SIGNAL(clicked()), &simulator_map, SLOT(map()));
 
-    simulator_map.setMapping(s_stop, "stop");
     simulator_map.setMapping(s_start, "start");
+    simulator_map.setMapping(s_stop, "stop");
+
     simulator_map.setMapping(s_previous, "previuse");
     simulator_map.setMapping(s_next, "next");
-    simulator_map.setMapping(s_pause, "pause");
     simulator_map.setMapping(s_reset, "reset");
+
     simulator_map.setMapping(s_play, "play");
+    simulator_map.setMapping(s_pause, "pause");
     //-------------------------------
 
 }
 
 void AutomatFrame::simulatorPlay(const QString& action){
     qDebug() << "AutomatProcess::simulatorPlay() ->  " << action;
+
+    if(action.compare("start") == 0){
+        word->setEnabled(false);
+        enabledSimulatorBtn(false);
+    }
+    else if(action.compare("stop") == 0){
+        word->setEnabled(true);
+        enabledSimulatorBtn(true);
+    }
+
 }
 
 void AutomatFrame::displayDetails(bool display){
@@ -124,6 +136,8 @@ void AutomatFrame::setElements(){
     lay->addWidget(sim);
 
     setLayout(lay);
+
+    enabledSimulatorBtn(true);
 }
 
 QPushButton* AutomatFrame::createSimButton(const char *name, const char *info){
@@ -222,4 +236,14 @@ QWidget* AutomatFrame::makeAutomatWidget(){
 
     form->setLayout(lay);
     return form;
+}
+
+void AutomatFrame::enabledSimulatorBtn(bool vr){
+    s_start->setEnabled(vr);
+    s_next->setEnabled(!vr);
+    s_previous->setEnabled(!vr);
+    s_stop->setEnabled(!vr);
+    s_pause->setEnabled(!vr);
+    s_reset->setEnabled(!vr);
+    s_play->setEnabled(!vr);
 }
