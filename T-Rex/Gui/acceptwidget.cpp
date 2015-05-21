@@ -43,12 +43,22 @@ void AcceptWidget::dropEvent(QDropEvent *event)
         QPoint offset;
         dataStream >> pixmap >> offset;
 
-        QLabel *boatIcon = new QLabel(this);
-        boatIcon->setPixmap(QPixmap(":images/DragDrop/dino3.png"));
-        boatIcon->move(event->pos() - offset);
-        boatIcon->show();
-        boatIcon->setAttribute(Qt::WA_DeleteOnClose);
+        QLabel *newIcon1 = new QLabel(this);
+        QLabel *newIcon2 = new QLabel(this);
 
+
+        newIcon1->setFrameStyle(3);
+        newIcon2->setFrameStyle(3);
+        newIcon1->setFixedSize(50,20);
+        newIcon2->setFixedSize(50,20);
+
+        //boatIcon->setPixmap(QPixmap(":images/DragDrop/dino3.png"));
+        newIcon1->move(mapToGlobal(rect().topLeft()));
+        newIcon2->move(mapToGlobal(rect().topLeft() + QPoint(60,0)));
+        newIcon1->show();
+        newIcon2->show();
+        newIcon1->setAttribute(Qt::WA_DeleteOnClose);
+        newIcon2->setAttribute(Qt::WA_DeleteOnClose);
        // QLabel *newIcon = new QLabel(this);
        // newIcon->setPixmap(pixmap);
        // newIcon->move(event->pos() - offset);
