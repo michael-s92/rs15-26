@@ -32,7 +32,7 @@ DragWidget::DragWidget(QWidget *parent)
 
 void DragWidget::dragEnterEvent(QDragEnterEvent *event)
 {
-    if (event->mimeData()->hasFormat("application/x-dnditemdata")) {
+    if (event->mimeData()->hasFormat("application/x-acceptdata")) {
         if (event->source() == this) {
             event->setDropAction(Qt::MoveAction);
             event->accept();
@@ -46,7 +46,7 @@ void DragWidget::dragEnterEvent(QDragEnterEvent *event)
 
 void DragWidget::dragMoveEvent(QDragMoveEvent *event)
 {
-    if (event->mimeData()->hasFormat("application/x-dnditemdata")) {
+    if (event->mimeData()->hasFormat("application/x-acceptdata")) {
         if (event->source() == this) {
             //event->setDropAction(Qt::MoveAction);
             //event->accept();
@@ -61,8 +61,8 @@ void DragWidget::dragMoveEvent(QDragMoveEvent *event)
 
 void DragWidget::dropEvent(QDropEvent *event)
 {
-    if (event->mimeData()->hasFormat("application/x-dnditemdata")) {
-        QByteArray itemData = event->mimeData()->data("application/x-dnditemdata");
+    if (event->mimeData()->hasFormat("application/x-acceptdata")) {
+        QByteArray itemData = event->mimeData()->data("application/x-acceptdata");
         QDataStream dataStream(&itemData, QIODevice::ReadOnly);
 
         QPixmap pixmap;
@@ -109,7 +109,7 @@ void DragWidget::mousePressEvent(QMouseEvent *event)
 
 //! [2]
     QMimeData *mimeData = new QMimeData;
-    mimeData->setData("application/x-dnditemdata", itemData);
+    mimeData->setData("application/x-acceptdata", itemData);
 //! [2]
 
 //! [3]
