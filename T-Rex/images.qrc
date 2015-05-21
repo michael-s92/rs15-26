@@ -29,4 +29,16 @@
         <file>images/makeReg.ico</file>
         <file>images/clearDiagram.ico</file>
     </qresource>
+    <qresource prefix="/toolBox">
+        <file>images/diag1.ico</file>
+        <file>images/diag2.ico</file>
+        <file>images/diag3.ico</file>
+        <file>images/diag4.ico</file>
+        <file>images/diag5.ico</file>
+        <file>images/diag6.ico</file>
+        <file>images/diag7.ico</file>
+        <file>images/diag8.ico</file>
+        <file>images/diag9.ico</file>
+        <file>images/diag10.ico</file>
+    </qresource>
 </RCC>

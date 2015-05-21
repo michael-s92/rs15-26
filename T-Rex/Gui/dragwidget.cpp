@@ -1,15 +1,55 @@
 #include <QtWidgets>
 
 #include "dragwidget.h"
+#include "guibuilder.h"
+
+#include <QVBoxLayout>
 
 //! [0]
 DragWidget::DragWidget(QWidget *parent)
     : QFrame(parent)
 {
-    setMinimumSize(200, 200);
+    setMinimumSize(100, 200);
     setFrameStyle(QFrame::Sunken | QFrame::StyledPanel);
-    setAcceptDrops(true);
+    //setAcceptDrops(true);
 
+    QVBoxLayout *layout = new QVBoxLayout(this);
+
+    QPushButton *tmp;
+
+    tmp = GuiBuilder::createIconButton(":/toolBox/images/diag1.ico", "slovo", 40, false);
+    tmp->setText("Slovo");
+    layout->addWidget(tmp);
+
+    tmp = GuiBuilder::createIconButton(":/toolBox/images/diag2.ico", "konkatenacija", 40, false);
+    tmp->setText("Nadovezi");
+    layout->addWidget(tmp);
+
+    tmp = GuiBuilder::createIconButton(":/toolBox/images/diag3.ico", "disjunkcija", 40, false);
+    tmp->setText("ili");
+    layout->addWidget(tmp);
+
+    tmp = GuiBuilder::createIconButton(":/toolBox/images/diag4.ico", "jednom ili ni jednom prikazi", 40, false);
+    tmp->setText("Jednom ili nijednom");
+    layout->addWidget(tmp);
+
+    tmp = GuiBuilder::createIconButton(":/toolBox/images/diag5.ico", "jedan ili vise puta", 40, false);
+    tmp->setText("Jedan ili vise");
+    layout->addWidget(tmp);
+
+    tmp = GuiBuilder::createIconButton(":/toolBox/images/diag6.ico", "nula ili vise puta prikazi", 40, false);
+    tmp->setText("Nula ili vise");
+    layout->addWidget(tmp);
+
+    tmp = GuiBuilder::createIconButton(":/toolBox/images/diag7.ico", "Tacno toliko", 40, false);
+    tmp->setText("Tacno toliko puta");
+    layout->addWidget(tmp);
+
+    tmp = GuiBuilder::createIconButton(":/toolBox/images/diag8.ico", "Karakterna klasa", 40, false);
+    tmp->setText("Jedno od");
+    layout->addWidget(tmp);
+
+    /*
     QLabel *boatIcon = new QLabel(this);
     boatIcon->setPixmap(QPixmap(":images/DragDrop/dino3.png"));
     boatIcon->move(10, 10);
@@ -27,6 +67,7 @@ DragWidget::DragWidget(QWidget *parent)
     houseIcon->move(10, 80);
     houseIcon->show();
     houseIcon->setAttribute(Qt::WA_DeleteOnClose);
+    */
 }
 //! [0]
 
