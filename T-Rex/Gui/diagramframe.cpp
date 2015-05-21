@@ -3,6 +3,7 @@
 
 #include "guibuilder.h"
 #include "dragwidget.h"
+#include "acceptwidget.h"
 
 #include <QVBoxLayout>
 #include <QHBoxLayout>
@@ -45,6 +46,6 @@ void DiagramFrame::makePanel(){
     auto lay = ui->centralLayout;
 
     lay->addWidget(new DragWidget);
-    lay->addWidget(new DragWidget, 1);
+    lay->addWidget(new AcceptWidget, 1);
 
 }

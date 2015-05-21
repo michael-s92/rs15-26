@@ -32,7 +32,7 @@ void EditorFrame::ShowChangeFlagsBox(bool chk){
 void EditorFrame::setElements(){
 
     textArea = ui->plainTextEdit;
-    textArea->setPlaceholderText("Unesite text koji pretrazujete ili ga ucitajte iz proizvoljnog fajla...");
+    //textArea->setPlaceholderText("Unesite text koji pretrazujete ili ga ucitajte iz proizvoljnog fajla...");
 
     makeEditCover();
 

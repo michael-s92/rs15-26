@@ -32,7 +32,8 @@ SOURCES += main.cpp\
     Gui/guibuilder.cpp \
     Engine/parserengine.cpp \
     Engine/graphview.cpp \
-    Gui/dragwidget.cpp
+    Gui/dragwidget.cpp \
+    Gui/acceptwidget.cpp
 
 HEADERS  += \
     Parser/TreeNodes.hpp \
@@ -48,7 +49,8 @@ HEADERS  += \
     Gui/guibuilder.h \
     Engine/parserengine.h \
     Engine/graphview.h \
-    Gui/dragwidget.h
+    Gui/dragwidget.h \
+    Gui/acceptwidget.h
 
 FORMS    += \
     Gui/uvodframe.ui \
