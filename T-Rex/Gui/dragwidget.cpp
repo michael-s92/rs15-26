@@ -46,7 +46,7 @@ QLabel* DragWidget::makeToolIcon(const QString& path, const QString& write, cons
     imageLabel->setAlignment(Qt::AlignCenter);
     imageLabel->setToolTip(toolTip);
     imageLabel->setAttribute(Qt::WA_DeleteOnClose);
-
+    imageLabel->setFixedSize(60,20);
     imageLabel->setFixedSize(50, 50);
 
     return imageLabel;
