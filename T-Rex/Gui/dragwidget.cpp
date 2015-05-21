@@ -34,11 +34,10 @@ DragWidget::DragWidget(QWidget *parent)
 QLabel* DragWidget::makeToolIcon(const QString& path, const QString& write, const QString& toolTip){
 
     QImage *image = new QImage(path);
-    image->scaledToWidth(50, Qt::SmoothTransformation); //nece da radi?!
 
     QPainter* painter = new QPainter(image);
     painter->setPen(Qt::blue);
-    painter->setFont(QFont("Arial", 20));
+    painter->setFont(QFont("Arial", 35));
     painter->drawText(image->rect(), Qt::AlignBaseline, write);
 
     QLabel* imageLabel = new QLabel();
@@ -46,8 +45,9 @@ QLabel* DragWidget::makeToolIcon(const QString& path, const QString& write, cons
     imageLabel->setAlignment(Qt::AlignCenter);
     imageLabel->setToolTip(toolTip);
     imageLabel->setAttribute(Qt::WA_DeleteOnClose);
-    imageLabel->setFixedSize(60,20);
-    imageLabel->setFixedSize(50, 50);
+    imageLabel->setScaledContents(true);
+    imageLabel->setSizePolicy( QSizePolicy::Ignored, QSizePolicy::Ignored );
+    imageLabel->setFixedSize(90, 70);
 
     return imageLabel;
 }
