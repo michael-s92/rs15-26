@@ -64,12 +64,28 @@ void AutomatFrame::simulatorPlay(const QString& action){
     if(action.compare("start") == 0){
         word->setEnabled(false);
         enabledSimulatorBtn(false);
+
     }
     else if(action.compare("stop") == 0){
         word->setEnabled(true);
         enabledSimulatorBtn(true);
-    }
 
+    }
+    else if(action.compare("previuse") == 0){
+
+    }
+    else if(action.compare("next") == 0){
+
+    }
+    else if(action.compare("reset") == 0){
+
+    }
+    else if(action.compare("play") == 0){
+
+    }
+    else if(action.compare("pause") == 0){
+
+    }
 }
 
 void AutomatFrame::displayDetails(bool display){
