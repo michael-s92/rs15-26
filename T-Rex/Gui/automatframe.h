@@ -8,6 +8,7 @@
 #include <QLineEdit>
 #include <QPushButton>
 #include <QPlainTextEdit>
+#include <QSignalMapper>
 
 #include "Engine/automatprocess.h"
 
@@ -27,6 +28,7 @@ private Q_SLOTS:
     void displaySimulator(bool display);
     void drawAutomata(int ind = 0, bool chk = false);
     void displayDetails(bool display);
+    void simulatorPlay(const QString &action);
 
 private:
     Ui::AutomatFrame *ui;
@@ -35,9 +37,11 @@ private:
     QButtonGroup* automatGroup;
     QCheckBox* simulator, *opis;
     QLineEdit *inputReg, *word;
-    QPushButton *s_reset, *s_next, *s_previous, *s_start;
+    QPushButton *s_reset, *s_next, *s_previous, *s_start, *s_pause, *s_stop, *s_play;
     QWidget *sim;
     QPlainTextEdit *opisArea;
+
+    QSignalMapper simulator_map;
 
     AutomatProcess *_aproc;
 

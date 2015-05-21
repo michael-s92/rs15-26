@@ -10,6 +10,8 @@
 #include <QRadioButton>
 #include <QMessageBox>
 
+#include <QDebug>
+
 AutomatFrame::AutomatFrame(QWidget *parent) :
     QFrame(parent),
     ui(new Ui::AutomatFrame)
@@ -33,8 +35,29 @@ void AutomatFrame::setSlotAndSignal(){
     connect(opis, SIGNAL(clicked(bool)), this, SLOT(displayDetails(bool)));
 
     //konekcije za simulator
+    connect(&simulator_map, SIGNAL(mapped(QString)), this, SLOT(simulatorPlay(QString)));
 
+    connect(s_next, SIGNAL(clicked()), &simulator_map, SLOT(map()));
+    connect(s_previous, SIGNAL(clicked()), &simulator_map, SLOT(map()));
+    connect(s_start, SIGNAL(clicked()), &simulator_map, SLOT(map()));
+    connect(s_pause, SIGNAL(clicked()), &simulator_map, SLOT(map()));
+    connect(s_reset, SIGNAL(clicked()), &simulator_map, SLOT(map()));
+    connect(s_play, SIGNAL(clicked()), &simulator_map, SLOT(map()));
+    connect(s_stop, SIGNAL(clicked()), &simulator_map, SLOT(map()));
+
+    simulator_map.setMapping(s_stop, "stop");
+    simulator_map.setMapping(s_start, "start");
+    simulator_map.setMapping(s_previous, "previuse");
+    simulator_map.setMapping(s_next, "next");
+    simulator_map.setMapping(s_pause, "pause");
+    simulator_map.setMapping(s_reset, "reset");
+    simulator_map.setMapping(s_play, "play");
     //-------------------------------
+
+}
+
+void AutomatFrame::simulatorPlay(const QString& action){
+    qDebug() << "AutomatProcess::simulatorPlay() ->  " << action;
 }
 
 void AutomatFrame::displayDetails(bool display){
@@ -82,7 +105,7 @@ AutomatFrame::~AutomatFrame()
     delete automatGroup;
     delete simulator;
     delete inputReg; delete word;
-    delete s_reset; delete s_next; delete s_previous; delete s_start;
+    delete s_reset; delete s_next; delete s_previous; delete s_start; delete s_pause; delete s_play; delete s_stop;
     delete sim;
     delete _aproc;
 }
@@ -106,32 +129,45 @@ void AutomatFrame::setElements(){
 QPushButton* AutomatFrame::createSimButton(const char *name, const char *info){
 
     QString path = QString(":/images/simulator/") + QString(name) + QString(".ico");
-    return GuiBuilder::createIconButton(path, QString(info), 35);
+    return GuiBuilder::createIconButton(path, QString(info), 40);
 }
 
 QWidget* AutomatFrame::simulatorWidget(){
     QWidget* sim = new QWidget();
 
-    word = GuiBuilder::createLineEdit("Polje za unos reci koju pustamo kroz automat.");
+    word = GuiBuilder::createLineEdit("Polje za unos reci.");
 
     QHBoxLayout *lay = new QHBoxLayout();
 
     s_previous = createSimButton("back", "Vratite se slovo unazad");
-    s_start = createSimButton("play", "Provucite rec kroz automat");
+    s_start = createSimButton("start", "Provucite rec kroz automat");
     s_next = createSimButton("next", "Uzmite sledece slovo iz reci");
     s_reset = createSimButton("reset", "Vratite se na pocetak reci");
+    s_pause = createSimButton("pause", "Pauzirajte kretanje");
+    s_play = createSimButton("play", "Pustite automacko provlacenje");
+    s_stop = createSimButton("stop", "Zaustavite provlacenje");
 
     QButtonGroup *simgr = new QButtonGroup();
     simgr->addButton(s_previous);
     simgr->addButton(s_start);
+    simgr->addButton(s_pause);
     simgr->addButton(s_next);
     simgr->addButton(s_reset);
+    simgr->addButton(s_play);
+    simgr->addButton(s_stop);
 
     lay->addWidget(word, 1);
-    lay->addWidget(s_previous);
+
     lay->addWidget(s_start);
+    lay->addWidget(s_previous);
     lay->addWidget(s_next);
+
     lay->addWidget(s_reset);
+
+    lay->addWidget(s_play);
+    lay->addWidget(s_pause);
+
+    lay->addWidget(s_stop);
 
     sim->setLayout(lay);
     return sim;

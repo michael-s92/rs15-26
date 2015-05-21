@@ -14,9 +14,12 @@
         <file>images/DragDrop/dino4.png</file>
         <file>images/DragDrop/dino5.png</file>
         <file>images/simulator/next.ico</file>
-        <file>images/simulator/play.ico</file>
+        <file>images/simulator/start.ico</file>
         <file>images/simulator/back.ico</file>
         <file>images/simulator/reset.ico</file>
+        <file>images/simulator/pause.ico</file>
+        <file>images/simulator/stop.ico</file>
+        <file>images/simulator/play.ico</file>
     </qresource>
     <qresource prefix="/msn">
         <file>images/exitdino.jpg</file>
