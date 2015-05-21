@@ -27,6 +27,7 @@ private Q_SLOTS:
     void LoadFile();
     void SearchText();
     void showNumMatched(bool ind);
+    void ShowChangeFlagsBox(bool chk);
 
 private:
     Ui::EditorFrame *ui;

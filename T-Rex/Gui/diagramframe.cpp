@@ -23,16 +23,6 @@ DiagramFrame::~DiagramFrame()
     delete ui;
 }
 
-void DiagramFrame::makePanel(){
-
-    auto lay = ui->centralLayout;
-
-    lay->addWidget(new DragWidget);
-    lay->addWidget(new DragWidget, 1);
-
-}
-
-
 void DiagramFrame::makeShow(){
 
     auto lay = ui->bottomLayout;
@@ -47,5 +37,14 @@ void DiagramFrame::makeShow(){
     lay->addWidget(cleanDiagram);
     lay->addWidget(makeReg);
     lay->addWidget(regex);
+
+}
+
+void DiagramFrame::makePanel(){
+
+    auto lay = ui->centralLayout;
+
+    lay->addWidget(new DragWidget);
+    lay->addWidget(new DragWidget, 1);
 
 }

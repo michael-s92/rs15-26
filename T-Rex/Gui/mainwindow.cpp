@@ -20,7 +20,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     this->setWindowIcon(QIcon(":/images/icon/prog.jpg"));
     this->setWindowTitle("T-Rex");
-    this->setMinimumSize(QSize(450, 350));
+    this->setMinimumSize(QSize(600, 450));
 
     createStatusBar();
     createMainView();
