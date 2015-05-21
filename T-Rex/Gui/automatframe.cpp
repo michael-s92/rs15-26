@@ -158,18 +158,26 @@ QWidget* AutomatFrame::simulatorWidget(){
 
     lay->addWidget(word, 1);
 
-    lay->addWidget(s_start);
-    lay->addWidget(s_previous);
-    lay->addWidget(s_next);
+    QToolBar *tmp = new QToolBar();
+    tmp->setAttribute(Qt::WA_DeleteOnClose);
 
-    lay->addWidget(s_reset);
 
-    lay->addWidget(s_play);
-    lay->addWidget(s_pause);
+    tmp->addWidget(s_start);
+    tmp->addWidget(s_stop);
+    tmp->addSeparator();
 
-    lay->addWidget(s_stop);
+    tmp->addWidget(s_previous);
+    tmp->addWidget(s_next);
+    tmp->addWidget(s_reset);
+    tmp->addSeparator();
+
+    tmp->addWidget(s_play);
+    tmp->addWidget(s_pause);
+
+    lay->addWidget(tmp);
 
     sim->setLayout(lay);
+
     return sim;
 }
 
