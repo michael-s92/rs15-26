@@ -35,43 +35,53 @@ void AutomatFrame::setSlotAndSignal(){
     connect(opis, SIGNAL(clicked(bool)), this, SLOT(displayDetails(bool)));
 
     //konekcije za simulator
-    connect(&simulator_map, SIGNAL(mapped(QString)), this, SLOT(simulatorPlay(QString)));
+
+    connect(&simulator_start, SIGNAL(mapped(QString)), this, SLOT(simulatorPlay(QString)));
+
+    connect(s_start, SIGNAL(clicked()), &simulator_start, SLOT(map()));
+    connect(s_stop, SIGNAL(clicked()), &simulator_start, SLOT(map()));
+    simulator_start.setMapping(s_start, "start");
+    simulator_start.setMapping(s_stop, "stop");
+
+    connect(&simulator_map, SIGNAL(mapped(QString)), this, SLOT(startPlay(QString)));
 
     connect(s_next, SIGNAL(clicked()), &simulator_map, SLOT(map()));
     connect(s_previous, SIGNAL(clicked()), &simulator_map, SLOT(map()));
-    connect(s_start, SIGNAL(clicked()), &simulator_map, SLOT(map()));
     connect(s_pause, SIGNAL(clicked()), &simulator_map, SLOT(map()));
     connect(s_reset, SIGNAL(clicked()), &simulator_map, SLOT(map()));
     connect(s_play, SIGNAL(clicked()), &simulator_map, SLOT(map()));
-    connect(s_stop, SIGNAL(clicked()), &simulator_map, SLOT(map()));
-
-    simulator_map.setMapping(s_start, "start");
-    simulator_map.setMapping(s_stop, "stop");
 
     simulator_map.setMapping(s_previous, "previuse");
     simulator_map.setMapping(s_next, "next");
     simulator_map.setMapping(s_reset, "reset");
-
     simulator_map.setMapping(s_play, "play");
     simulator_map.setMapping(s_pause, "pause");
-    //-------------------------------
 
 }
 
 void AutomatFrame::simulatorPlay(const QString& action){
-    qDebug() << "AutomatProcess::simulatorPlay() ->  " << action;
+
+    /*
+     * Izbaciti poruku da nije moguce menjati nista dok se ne ugasi simulator
+     * ili kako vec god to regulisati
+     *
+     * simulator regulisan
+     */
 
     if(action.compare("start") == 0){
-        word->setEnabled(false);
         enabledSimulatorBtn(false);
-
     }
     else if(action.compare("stop") == 0){
-        word->setEnabled(true);
         enabledSimulatorBtn(true);
-
     }
-    else if(action.compare("previuse") == 0){
+
+}
+
+void AutomatFrame::startPlay(const QString &action){
+    qDebug() << "AutomatProcess::startPlay() ->  " << action;
+
+    /*
+    if(action.compare("previuse") == 0){
 
     }
     else if(action.compare("next") == 0){
@@ -86,6 +96,7 @@ void AutomatFrame::simulatorPlay(const QString& action){
     else if(action.compare("pause") == 0){
 
     }
+    */
 }
 
 void AutomatFrame::displayDetails(bool display){
@@ -122,9 +133,15 @@ void AutomatFrame::drawAutomata(int ind, bool chk){
 }
 
 void AutomatFrame::displaySimulator(bool display){
-    display ? sim->show() : sim->hide();
-}
+    if(display)
+        sim->show();
+    else {
+        sim->hide();
+        enabledSimulatorBtn(true);
+        //mozda iscrtati automat bez obelezih stanja i prelaza
+    }
 
+}
 AutomatFrame::~AutomatFrame()
 {
     delete ui;
@@ -255,6 +272,20 @@ QWidget* AutomatFrame::makeAutomatWidget(){
 }
 
 void AutomatFrame::enabledSimulatorBtn(bool vr){
+
+    //dok radi simulator treba onemoguciti i da se bira automat i da se menja regularni izraz
+    //onemoguciti i chkBox da se prikaze simulator
+
+    //automatGroup -> buttons() pa iterator
+    //inputReg->setEnabled(vr);
+
+    /*
+     * mozda kad se promeni automat da se rec resetuje na pocetak
+     * ili da izadje automacki iz simulatora?
+     */
+
+    word->setEnabled(vr);
+
     s_start->setEnabled(vr);
     s_next->setEnabled(!vr);
     s_previous->setEnabled(!vr);

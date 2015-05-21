@@ -58,6 +58,7 @@ void EditorFrame::makeEditCover(){
     tmp->addWidget(chkNum);
 
     lay->addLayout(tmp, 1);
+
     lay->addWidget(flagsBtn);
     lay->addWidget(loadFile);
 
@@ -89,6 +90,7 @@ void EditorFrame::LoadFile(){
 
 void EditorFrame::SearchText(){
     if(inputReg->text().compare("") != 0){
+
         QString rez("Pronadjeno: ");
 
         int num = _eproc.doMatch(inputReg->text(), textArea);
@@ -101,6 +103,7 @@ void EditorFrame::SearchText(){
             if(chkNum->isChecked())
                 chkNum->setText(rez);
         }
+
     }
     else
         GuiBuilder::throwErrorMessage("Uneti prvo regularni izraz.", "Polje za unos regularnog izraza je prazno.");

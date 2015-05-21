@@ -29,6 +29,7 @@ private Q_SLOTS:
     void drawAutomata(int ind = 0, bool chk = false);
     void displayDetails(bool display);
     void simulatorPlay(const QString &action);
+    void startPlay(const QString &action);
 
 private:
     Ui::AutomatFrame *ui;
@@ -41,7 +42,7 @@ private:
     QWidget *sim;
     QPlainTextEdit *opisArea;
 
-    QSignalMapper simulator_map;
+    QSignalMapper simulator_map, simulator_start;
 
     AutomatProcess *_aproc;
 
