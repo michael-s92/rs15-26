@@ -39,7 +39,7 @@ private:
     EditorProcess _eproc;
 
     void setElements();
-    QWidget* makeEditCover();
+    void makeEditCover();
 
 };
 

@@ -27,22 +27,14 @@ EditorFrame::EditorFrame(QWidget *parent) :
 
 void EditorFrame::setElements(){
 
-    textArea = new QPlainTextEdit();
+    textArea = ui->plainTextEdit;
     textArea->setPlaceholderText("Unesite text koji pretrazujete ili ga ucitajte iz proizvoljnog fajla...");
 
-    chkNum = new QCheckBox("Prikazi broj pronadjenih");
-
-    QVBoxLayout* layoutB = new QVBoxLayout();
-
-    layoutB->addWidget(makeEditCover());
-    layoutB->addWidget(chkNum);
-    layoutB->addWidget(textArea, 1); //drugi argument je strech factor
-
-    this->setLayout(layoutB);
+    makeEditCover();
 
 }
 
-QWidget *EditorFrame::makeEditCover(){
+void EditorFrame::makeEditCover(){
 
     /*
      * Ovde treba dodati dugme za aktivaciju kontejnera sa flagovima
@@ -52,23 +44,22 @@ QWidget *EditorFrame::makeEditCover(){
      */
 
     inputReg = GuiBuilder::createLineEdit("Mesto za unos regularnog izraza koji se trazi.");
-
+    chkNum = new QCheckBox("Prikazi broj pronadjenih");
     loadFile = GuiBuilder::createIconButton(":/editor/images/loadfile.ico", "Ucitaj text koji pretrazujes iz file-a", 35, false);
     flagsBtn = GuiBuilder::createIconButton(":/editor/images/flags.ico", "Atributi pretrazivanja", 35);
 
-    QWidget *cover = new QWidget();
 
-    QHBoxLayout *lay = new QHBoxLayout();
+    auto lay = ui->topLayout;
+    QVBoxLayout *tmp = new QVBoxLayout();
 
-    //stilizovati coverLabel
+    tmp->addWidget(inputReg);
+    tmp->addWidget(chkNum);
 
-    lay->addWidget(inputReg, 1);
+    lay->addLayout(tmp, 1);
     lay->addWidget(flagsBtn);
     lay->addWidget(loadFile);
 
 
-    cover->setLayout(lay);
-    return cover;
 }
 
 void EditorFrame::showNumMatched(bool ind){
