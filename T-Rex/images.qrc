@@ -18,8 +18,8 @@
         <file>images/simulator/back.ico</file>
         <file>images/simulator/reset.ico</file>
         <file>images/simulator/pause.ico</file>
-        <file>images/simulator/stop.ico</file>
         <file>images/simulator/play.ico</file>
+        <file>images/simulator/stop.ico</file>
     </qresource>
     <qresource prefix="/msn">
         <file>images/exitdino.jpg</file>
