@@ -45,6 +45,10 @@ void DiagramFrame::makePanel(){
 
     auto lay = ui->centralLayout;
 
+    /*
+    * bag: kad prevlacim sa AcceptWidget na DragWidget program puca
+    * trebalo bi samo izignorisati dropAction
+    */
     lay->addWidget(new DragWidget);
     lay->addWidget(new AcceptWidget, 1);
 

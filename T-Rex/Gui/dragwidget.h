@@ -2,6 +2,7 @@
 #define DRAGWIDGET_H
 
 #include <QFrame>
+#include <QLabel>
 
 QT_BEGIN_NAMESPACE
 class QDragEnterEvent;
@@ -19,6 +20,10 @@ protected:
     void dragMoveEvent(QDragMoveEvent *event) Q_DECL_OVERRIDE;
     void dropEvent(QDropEvent *event) Q_DECL_OVERRIDE;
     void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
+
+private:
+    QLabel* makeToolIcon(const QString& path, const QString& write, const QString &toolTip);
+
 };
 //! [0]
 
