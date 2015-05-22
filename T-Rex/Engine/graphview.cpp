@@ -2,6 +2,15 @@
 #include "graphview.h"
 #include <iostream>
 
+#include <iostream>
+using namespace std;
+
+GraphView::GraphView()
+ :QGraphicsScene()
+{
+
+}
+
 GraphView::GraphView(const QString& filename, QWidget* parent)
     : QGraphicsScene(parent)
 {
@@ -19,6 +28,7 @@ GraphView::GraphView(graph_t* graph, QWidget* parent)
 
 GraphView::~GraphView()
 {
+    clearGraph();
 }
 
 
@@ -92,7 +102,6 @@ GraphView::renderGraph(const QString& filename)
         if (gvLayout(gvc, graph, "dot") == 0)
         {
             renderGraph(graph);
-
             gvFreeLayout(gvc, graph);
         }
         else
@@ -122,90 +131,7 @@ GraphView::renderGraph(const QString& filename)
     }
 }
 
-/*
-QPolygonF GraphView::makeShapeHelper(node_t* node) const
-{
-    const polygon_t* poly = (polygon_t*) ND_shape_info(node);
 
-    if (poly->peripheries != 1)
-    {
-  //  qWarning("unsupported number of peripheries %d", poly->peripheries);
-    }
-
-    const int sides = poly->sides;
-    const pointf* vertices = poly->vertices;
-
-    QPolygonF polygon;
-    for (int side = 0; side < sides; side++)
-    polygon.append(gToQ(vertices[side], false));
-    return polygon;
-}
-
-
-QPainterPath GraphView::makeShape(node_t* node) const
-{
-    QPainterPath path;
-
-    const char* name =ND_shape(node)->name;
-    //std::cout << name << std::endl;
-
-    if ((strcmp(name, "rectangle") == 0) ||
-    (strcmp(name, "box") == 0) ||
-    (strcmp(name, "hexagon") == 0) ||
-    (strcmp(name, "polygon") == 0) ||
-    (strcmp(name, "diamond") == 0))
-    {
-    QPolygonF polygon = makeShapeHelper(node);
-    polygon.append(polygon[0]);
-    path.addPolygon(polygon);
-    }
-    else if ((strcmp(name, "ellipse") == 0) ||
-             (strcmp(name, "doublecircle") == 0) ||
-         (strcmp(name, "circle") == 0))
-    {
-    QPolygonF polygon = makeShapeHelper(node);
-    path.addEllipse(QRectF(polygon[0], polygon[1]));
-    }
-    else if(strcmp(name,"none")==0) {
-
-        }
-    else
-    {
-    qWarning("unsupported shape %s", name);
-    }
-
-    return path;
-}
-
-*/
-
-//------------------------------------------------------------------------------
-// Name: make_polygon_helper
-// Desc:
-//------------------------------------------------------------------------------
-void GraphView::make_polygon_helper(node_t *node, QPainterPath &path) const {
-    const polygon_t *const poly = static_cast<polygon_t *>(ND_shape_info(node));
-
-    if(poly->peripheries != 1) {
-       // qWarning("unsupported number of peripheries %d", poly->peripheries);
-    }
-
-    const int sides = poly->sides;
-    const pointf* vertices = poly->vertices;
-
-    QPolygonF polygon;
-    for (int side = 0; side < sides; side++) {
-        polygon.append(gToQ(vertices[side], false));
-    }
-    polygon.append(polygon[0]);
-
-    path.addPolygon(polygon);
-}
-
-//------------------------------------------------------------------------------
-// Name: make_ellipse_helper
-// Desc:
-//------------------------------------------------------------------------------
 void GraphView::make_ellipse_helper(node_t *node, QPainterPath &path) const {
     const polygon_t *const poly = static_cast<polygon_t *>(ND_shape_info(node));
 
@@ -228,41 +154,14 @@ void GraphView::make_ellipse_helper(node_t *node, QPainterPath &path) const {
     }
 }
 
-//------------------------------------------------------------------------------
-// Name: make_shape
-// Desc:
-//------------------------------------------------------------------------------
+
 QPainterPath GraphView::make_shape(node_t *node) const {
     QPainterPath path;
 
     const QString name = QString::fromUtf8(ND_shape(node)->name);
 
-    // TODO: point, egg, doublecircle, doubleoctagon, tripleoctagon,
-    // note, tab, folder, box3d, component, record, plaintext
 
-    // handle all of the "regular" polygons
-    if(     name == "invhouse"      ||
-            name == "invtrapezium"  ||
-            name == "invtriangle"   ||
-            name == "box"           ||
-            name == "polygon"       ||
-            name == "triangle"      ||
-            name == "diamond"       ||
-            name == "trapezium"     ||
-            name == "parallelogram" ||
-            name == "house"         ||
-            name == "pentagon"      ||
-            name == "hexagon"       ||
-            name == "septagon"      ||
-            name == "octagon"       ||
-            name == "rect"          ||
-            name == "rectangle"     ||
-            name == "Msquare"       || // incomplete
-            name == "Mdiamond"         // incomplete
-            ) {
-
-        make_polygon_helper(node, path);
-    } else if(name == "ellipse" || name=="doublecircle" || name == "circle" || name == "point" || name == "Mcircle") {
+    if(name == "ellipse" || name=="doublecircle" || name == "circle" || name == "point" || name == "Mcircle") {
         make_ellipse_helper(node, path);
     } else if(name == "none") {
         // NO-OP
@@ -279,8 +178,6 @@ GraphView::drawLabel(const textlabel_t* textlabel, QPainter* painter) const
 {
     painter->setPen(textlabel->fontcolor);
 
-    // Since I always just take the points from graphviz and pass them to Qt
-    // as pixel I also have to set the pixel size of the font.
     QFont font(textlabel->fontname, textlabel->fontsize);
     font.setPixelSize(textlabel->fontsize);
     painter->setFont(font);
@@ -297,8 +194,6 @@ GraphView::drawLabel2(const textlabel_t* textlabel, QPainter* painter) const
 {
     painter->setPen(textlabel->fontcolor);
 
-    // Since I always just take the points from graphviz and pass them to Qt
-    // as pixel I also have to set the pixel size of the font.
     QFont font(textlabel->fontname, textlabel->fontsize);
     font.setPixelSize(textlabel->fontsize);
     painter->setFont(font);
@@ -315,6 +210,7 @@ void
 GraphView::clearGraph()
 {
     QList<QGraphicsItem*> items(this->items());
+
     while (!items.isEmpty())
     delete items.takeFirst();
 }
@@ -325,15 +221,8 @@ GraphView::renderGraph(graph_t* graph)
 {
     clearGraph();
 
-    if (GD_charset(graph) != 0)
-    {
-    qWarning("unsupported charset");
-    }
-
-    // don't use here since it adjusts the values
     graphRect = QRectF(GD_bb(graph).LL.x, GD_bb(graph).LL.y, GD_bb(graph).UR.x, GD_bb(graph).UR.y);
-    setSceneRect(graphRect);//.adjusted(-5, -5, +5, +5));
-
+    setSceneRect(graphRect.adjusted(-5, -5, +5, +5));
 
     setBackgroundBrush(Qt::white);
 
@@ -346,7 +235,7 @@ GraphView::renderGraph(graph_t* graph)
         drawLabel(ND_label(node), &painter);
         painter.end();
 
-        GraphNode* item = new GraphNode(make_shape(node), picture, "igor");
+        GraphNode* item = new GraphNode(QString(ND_label(node)->text).toInt(), make_shape(node), picture);
 
         item->setPos(gToQ(ND_coord(node)));
 
@@ -357,7 +246,8 @@ GraphView::renderGraph(graph_t* graph)
         QBrush brush(Qt::green);
         item->setBrush(brush);
 
-        QString tooltip = aggetToQString(node, "tooltip", "igor");
+
+        QString tooltip = aggetToQString(node, "tooltip", ND_label(node)->text);
         if (!tooltip.isEmpty())
         {
             tooltip.replace("\\n", "\n");
@@ -365,6 +255,7 @@ GraphView::renderGraph(graph_t* graph)
         }
 
         addItem(item);
+
 
         for (edge_t* edge = agfstout(graph, node); edge != NULL; edge = agnxtout(graph, edge))
         {
@@ -399,7 +290,11 @@ GraphView::renderGraph(graph_t* graph)
                 drawArrow(QLineF(gToQ(bz.list[bz.size-1]), gToQ(bz.ep)), color, &painter1);
              painter1.end();
 
-            GraphEdge* item = new GraphEdge(path, picture1);
+            int state1 = QString(ND_label(node)->text).toInt();
+            int state2 = QString(ND_label(edge->node)->text).toInt();
+            char c = ED_label(edge)->text[0];
+
+            GraphEdge* item = new GraphEdge(state1, c, state2,path, picture1);
 
             QPen pen(color);
             pen.setStyle(Qt::SolidLine);
@@ -409,22 +304,29 @@ GraphView::renderGraph(graph_t* graph)
             item->setZValue(-1.0);
 
             addItem(item);
+            //edges.append(item);
             }
         }
         }
     }
 
-GraphNode::GraphNode(const QPainterPath& path, const QPicture& picture, const QString& name)
+GraphItem::GraphItem(const QPainterPath& path, const QPicture& picture)
     : QGraphicsPathItem(path),
-      picture(picture),
-      name(name)
+      picture(picture)
 {
-   // setFlag(QGraphicsItem::ItemIsMovable);
+}
+
+
+
+GraphNode::GraphNode(int state, const QPainterPath& path, const QPicture& picture)
+    : GraphItem(path,picture),
+      state(state)
+{
 }
 
 
 void
-GraphNode::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
+GraphItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {
 
     painter->save();
@@ -434,9 +336,11 @@ GraphNode::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWid
 }
 
 
-GraphEdge::GraphEdge(const QPainterPath& path, const QPicture& picture)
-    : QGraphicsPathItem(path),
-      picture(picture)
+GraphEdge::GraphEdge(int state1, int state2, char c, const QPainterPath& path, const QPicture& picture)
+    : GraphItem(path,picture),
+      state1(state1),
+      state2(state2),
+      c(c)
 {
 }
 
@@ -447,30 +351,4 @@ GraphEdge::boundingRect() const
     return QGraphicsPathItem::boundingRect().united(picture.boundingRect());
 }
 
-
-void
-GraphEdge::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
-{
-    painter->save();
-    QGraphicsPathItem::paint(painter, option, widget);
-    painter->restore();
-
-    picture.play(painter);
-}
-
-GraphLabel::GraphLabel(const QPainterPath& path,const QPicture& picture)
-    : QGraphicsPathItem(path),
-      picture(picture)
-{
-}
-
-void
-GraphLabel::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
-{
-    painter->save();
-    QGraphicsPathItem::paint(painter, option, widget);
-    painter->restore();
-
-    picture.play(painter);
-}
 

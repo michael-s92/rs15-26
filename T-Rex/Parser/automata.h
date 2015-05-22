@@ -5,6 +5,7 @@
 #include <iostream>
 #include <QMap>
 #include <QLinkedList>
+#include <QtWidgets>
 
 class Gluskov;
 class Deterministicki;
@@ -63,6 +64,13 @@ public:
     void addState(int state);
 
     void makeDotFile(std::ostream & osr);
+
+    void plainTextAddAlphabet(QPlainTextEdit* opis);
+    void plainTextAddStart(QPlainTextEdit* opis);
+    void plainTextAddStates(QPlainTextEdit *opis);
+    void plainTextAddAcceptStates(QPlainTextEdit *opis);
+    void plainTextAddEdges(QPlainTextEdit *opis);
+
 };
 
 
@@ -85,6 +93,7 @@ class Gluskov : public Automata
  //TO-DO
  // ne treba sve da bude public
 public:
+  Gluskov();
   Gluskov(const Thompson & t);
   Deterministicki makeDeterministicki();
 
@@ -100,6 +109,7 @@ private:
 class Deterministicki : public Automata
 {
 public:
+    Deterministicki();
     Deterministicki(const Gluskov & g);
     Minimalni makeMinimalni();
     QVector<QVector<int>> getPrelazi() const;
@@ -115,6 +125,7 @@ private:
 class Minimalni : public Automata
 {
 public:
+    Minimalni();
     Minimalni (const Deterministicki & d);
     static int state_count;
 

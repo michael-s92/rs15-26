@@ -20,6 +20,8 @@ public:
     bool determi_draw(const QString &regular);
     bool minimal_draw(const QString &regular);
 
+    void ispisi_podatke(Automata & a);
+
 private:
     ParserEngine parser;
 
@@ -27,5 +29,6 @@ private:
     QPlainTextEdit* opis;
 
 };
+
 
 #endif // AUTOMATPROCESS_H
