@@ -7,7 +7,7 @@
 using namespace std;
 
 AutomatProcess::AutomatProcess(QGraphicsView* p, QPlainTextEdit* o)
-    :panel(p), opis(o)
+    :panel(p), opis(o), kretanje(0)
 {
     panel->setRenderHint(QPainter::Antialiasing);
     panel->setRenderHint(QPainter::TextAntialiasing);
@@ -44,21 +44,7 @@ bool AutomatProcess::tomson_draw(const QString &regular){
 
        panel->setScene(scene);
        ispisi_podatke(t);
-
-       QList<QGraphicsItem *> items = scene->items();
-       QList<QGraphicsItem *>::iterator i = items.begin();
-       for (; i!=items.end(); i++)
-       {
-       GraphItem *j = (GraphItem *)(*i);
-       if (j->ind()==0)
-           j->setPen(QPen(Qt::red));
-       else
-           j->setPen(QPen(Qt::blue));
-       }
-
-
-
-
+       kretanje = 0;
        return true;
     }
 
@@ -86,8 +72,9 @@ bool AutomatProcess::glusko_draw(const QString& regular){
      f.close();
 
      QGraphicsScene *scene = new GraphView("gluskov.dot");
-
      panel->setScene(scene);
+
+     kretanje = 0;
 
      ispisi_podatke(g);
      return true;
@@ -117,8 +104,12 @@ bool AutomatProcess::determi_draw(const QString& regular)
      d.makeDotFile(f);
      f.close();
 
+
      QGraphicsScene *scene = new GraphView("deterministicki.dot");
      panel->setScene(scene);
+
+     QList<QGraphicsItem*> items = scene->items();
+     kretanje = new Kretanje(d.getStates().length(), items);
 
      ispisi_podatke(d);
 

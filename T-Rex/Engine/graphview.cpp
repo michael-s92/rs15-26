@@ -235,7 +235,12 @@ GraphView::renderGraph(graph_t* graph)
         drawLabel(ND_label(node), &painter);
         painter.end();
 
-        GraphNode* item = new GraphNode(QString(ND_label(node)->text).toInt(), make_shape(node), picture);
+        QString tekst(ND_label(node)->text);
+        GraphNode * item;
+        if (tekst=="")
+            item = new GraphNode(-1, make_shape(node), picture);
+        else
+            item = new GraphNode(QString(ND_label(node)->text).toInt(), make_shape(node), picture);
 
         item->setPos(gToQ(ND_coord(node)));
 
@@ -290,11 +295,21 @@ GraphView::renderGraph(graph_t* graph)
                 drawArrow(QLineF(gToQ(bz.list[bz.size-1]), gToQ(bz.ep)), color, &painter1);
              painter1.end();
 
-            int state1 = QString(ND_label(node)->text).toInt();
-            int state2 = QString(ND_label(edge->node)->text).toInt();
+            QString text1(ND_label(node)->text);
+            QString text2(ND_label(edge->node)->text);
+            int state1;
+            int state2;
+            if (text1 == "")
+              state1 = -1;
+            else
+              state1 = text1.toInt();
+            if (text2 == "")
+                state2 = -1;
+            else
+               state2 = text2.toInt();
             char c = ED_label(edge)->text[0];
 
-            GraphEdge* item = new GraphEdge(state1, c, state2,path, picture1);
+            GraphEdge* item = new GraphEdge(state1,state2,c,path, picture1);
 
             QPen pen(color);
             pen.setStyle(Qt::SolidLine);
