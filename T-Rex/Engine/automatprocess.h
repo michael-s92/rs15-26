@@ -8,6 +8,7 @@
 #include "parserengine.h"
 #include "Parser/TreeNodes.hpp"
 #include "Parser/visitor_nodes.h"
+#include "kretanje.h"
 
 class AutomatProcess
 {
@@ -27,6 +28,8 @@ private:
 
     QGraphicsView* panel;
     QPlainTextEdit* opis;
+
+    Kretanje * kretanje;
 
 };
 
