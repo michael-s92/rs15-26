@@ -3,6 +3,8 @@
 #include <QApplication>
 #include <QSplashScreen>
 
+// samo pokusavam jer i dalje se mucim
+
 
 int main(int argc, char *argv[])
 {
