@@ -139,6 +139,106 @@ void Automata::makeDotFile(ostream &osr)
     osr << "}";
 }
 
+void Automata::plainTextAddAlphabet(QPlainTextEdit *opis)
+{
+        QString text_style = "style = '";
+        text_style.append("color: red;'");
+        QString text("<div " + text_style +">");
+        text.append("&Sigma; = { ");
+        for (int i=0; i< _alphabet.length()-1; i++)
+        {
+            text.append(_alphabet[i]);
+            text.append(", ");
+        }
+        text.append(_alphabet.last());
+        text.append(" }");
+        text.append("</div>");
+        opis->appendHtml(text);
+}
+
+void Automata::plainTextAddStart(QPlainTextEdit *opis)
+{
+        QString text_style = "style = '";
+        text_style.append("color: orange;'");
+        QString text("<div " + text_style +">");
+        text.append("S = { ");
+        text.append(QString::number(_start_state));
+        text.append(" }");
+        text.append("</div>");
+        opis->appendHtml(text);
+}
+
+
+void Automata::plainTextAddStates(QPlainTextEdit *opis)
+{
+        QString text_style = "style = '";
+        text_style.append("color: green;'");
+        QString text("<div " + text_style +">");
+        text.append("Q = { ");
+        for (int i=0; i< _states.length()-1; i++)
+        {
+            text.append(QString::number(_states[i]));
+            text.append(", ");
+        }
+        text.append(QString::number(_states.last()));
+        text.append(" }");
+        text.append("</div>");
+        opis->appendHtml(text);
+}
+
+void Automata::plainTextAddAcceptStates(QPlainTextEdit *opis)
+{
+        QString text_style = "style = '";
+        text_style.append("color: blue;'");
+        QString text("<div " + text_style +">");
+        text.append("F = { ");
+        for (int i=0; i< _accept_states.length()-1; i++)
+        {
+            text.append(QString::number(_accept_states[i]));
+            text.append(", ");
+        }
+        text.append(QString::number(_accept_states.last()));
+        text.append(" }");
+        text.append("</div>");
+        opis->appendHtml(text);
+}
+
+void Automata::plainTextAddEdges(QPlainTextEdit *opis)
+{
+        QString text_style = "style = '";
+        text_style.append("color: black;'");
+        QString text("<div " + text_style +">");
+        text.append("&Delta; = { ");
+        for (int i=0; i< _edges.length()-1; i++)
+        {
+            text.append("( ");
+            text.append(QString::number(_edges[i].getState1()));
+            text.append(", ");
+            if (_edges[i].getC()!='\0')
+                 text.append(_edges[i].getC());
+            else
+                text.append("&epsilon;");
+            text.append(", ");
+            text.append(QString::number(_edges[i].getState2()));
+            text.append(" ),<br>");
+        }
+        text.append("( ");
+        text.append(QString::number(_edges.last().getState1()));
+        text.append(", ");
+        if (_edges.last().getC()!='\0')
+             text.append(_edges.last().getC());
+        else
+            text.append("&epsilon;");
+        text.append(", ");
+        text.append(QString::number(_edges.last().getState2()));
+        text.append(" ), ");
+        text.append(" }");
+        text.append("</div>");
+        opis->appendHtml(text);
+}
+
+
+
 int Thompson::state_count=0;
 
 
@@ -167,6 +267,11 @@ Gluskov Thompson::make_gluskov()
     return g;
 }
 
+
+Gluskov::Gluskov()
+{
+
+}
 
 Gluskov::Gluskov(const Thompson & t)
  :Automata(0)
@@ -236,6 +341,11 @@ Deterministicki Gluskov::makeDeterministicki()
 
 
 int Deterministicki::state_count = 0;
+
+Deterministicki::Deterministicki()
+{
+
+}
 
 Deterministicki::Deterministicki(const Gluskov & g)
 {
@@ -338,6 +448,11 @@ int Minimalni::state_count = 2;
 
 
 
+Minimalni::Minimalni()
+{
+
+}
+
 Minimalni::Minimalni(const Deterministicki &d)
 {
    QVector<QVector<int>> prelaziD = d.getPrelazi();
@@ -408,6 +523,8 @@ Minimalni::Minimalni(const Deterministicki &d)
            addEdge(i,prelazi[i][j],_alphabet[j]);
        }
    }
+
+
 
 
 }
