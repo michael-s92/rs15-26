@@ -21,21 +21,34 @@ AutomatProcess::~AutomatProcess()
 }
 int AutomatProcess::kreciSe(QLineEdit *word, int k)
 {
-    if (kretanje->trenutno==-1 || k==0)
+    QString text = word->text();
+    if (k==-1)
     {
-        kretanje->prelazi[0][0]->setPen(QPen(Qt::blue));
-        kretanje->nodes[1]->setBrush(QBrush(Qt::blue));
-        kretanje->trenutno=0;
-        return 1;
+        if (count==0)
+            return -1;
+        count --;
+        return kretanje->kreci_se_nazad();
+
     }
-    if (k==1)
+    else if (k==0 || kretanje->trenutno==-1)
     {
-       kretanje->prelazi[0][0]->setPen(QPen(Qt::black));
-       kretanje->nodes[1]->setBrush(QBrush(Qt::green));
-       kretanje->prelazi[1][1]->setPen(QPen(Qt::blue));
-       kretanje->nodes[2]->setBrush(QBrush(Qt::blue));
+        count = 0;
+        return kretanje->postavi_na_pocetak();
     }
-    return 0;
+    else
+    {
+        if (count == text.length())
+        {
+        if ((kretanje->zavrsna).contains(kretanje->trenutno))
+            return -2;
+        else
+            return -1;
+        }
+        char c = text.toStdString().at(count);
+        count++;
+        return kretanje->kreci_se_napred(c);
+    }
+
 }
 
 bool AutomatProcess::tomson_draw(const QString &regular){
@@ -63,6 +76,7 @@ bool AutomatProcess::tomson_draw(const QString &regular){
        panel->setScene(scene);
        ispisi_podatke(t);
        kretanje = 0;
+       count = 0;
        return true;
     }
 
@@ -93,6 +107,7 @@ bool AutomatProcess::glusko_draw(const QString& regular){
      panel->setScene(scene);
 
      kretanje = 0;
+     count = 0;
 
      ispisi_podatke(g);
      return true;
@@ -128,6 +143,7 @@ bool AutomatProcess::determi_draw(const QString& regular)
 
      QList<QGraphicsItem*> items = scene->items();
      kretanje = new Kretanje(d, items);
+     count = 0;
 
      ispisi_podatke(d);
 
