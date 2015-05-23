@@ -58,7 +58,7 @@ private:
     QPushButton* createSimButton(const char *name, const char *info);
 
     void enabledSimulatorBtn(bool vr);
-
+    void RadiAutoSim(bool radi);
 };
 
 #endif // AUTOMATFRAME_H

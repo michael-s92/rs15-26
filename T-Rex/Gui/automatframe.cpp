@@ -77,11 +77,14 @@ void AutomatFrame::simulatorPlay(const QString& action){
             GuiBuilder::throwErrorMessage("Prazan unos reci.", "Unesite prvo rec u simulator.");
         else{
             enabledSimulatorBtn(false);
+            s_pause->setEnabled(false);
         }
 
     }
     else if(action.compare("stop") == 0){
         enabledSimulatorBtn(true);
+        if(simClock->isActive())
+            simClock->stop();
     }
 
 }
@@ -121,22 +124,53 @@ void AutomatFrame::startPlay(const QString &action){
         response = _aproc->kreciSe(word, 0);
     }
     else if(action.compare("play") == 0){
-        //ako je ukljucena simulacija da iskljuci sve dugmice sem "pause"
-        //neka pokrene metodu i da ima nesto QTimer i slots za njega da poziva stalno
-        //response = _aproc->kreciSe(word, 1);
-
-        //mozda i pause dugme da bude onemoguceno u startu?!
+        RadiAutoSim(true);
     }
     else if(action.compare("pause") == 0){
-        //zaustavlja simulaciju, znaci gasi tajmer
-        //i staje u prepoznavanju reci tamo dokle je stigao
-        //i ostali dugmici su slobodni opet
-
+        RadiAutoSim(false);
     }
 
 }
 
 void AutomatFrame::autoSimStart(){
+    int response = _aproc->kreciSe(word, 1);
+
+    if(response < 0){
+        QString info, ishod;
+        if(response == -1){
+            info = "Dosli ste do kraja reci.";
+            ishod = "Rec nije prepoznata automatom.";
+        }
+        if(response == -2){
+            info = "Dosli ste do kraja reci.";
+            ishod = "Rec je prepoznata automatom.";
+        }
+        if (response == -3){
+            info = "Automat je blokiran.";
+            ishod = "Nemoguc prelaz po oznacenom slovu";
+        }
+
+        GuiBuilder::throwInfoMessage(info, ishod);
+
+        RadiAutoSim(false);
+    }
+}
+
+void AutomatFrame::RadiAutoSim(bool radi){
+    if(radi){
+        simClock->start(300);
+    }
+    else {
+        simClock->stop();
+    }
+
+    s_next->setEnabled(!radi);
+    s_previous->setEnabled(!radi);
+    //neka je omoguceno da tokom simulacije mozemo da se vratim na pocetak reci tek tako
+    //s_reset->setEnabled(!radi);
+    s_play->setEnabled(!radi);
+
+    s_pause->setEnabled(radi);
 
 }
 
@@ -330,4 +364,5 @@ void AutomatFrame::enabledSimulatorBtn(bool vr){
     s_pause->setEnabled(!vr);
     s_reset->setEnabled(!vr);
     s_play->setEnabled(!vr);
+
 }
