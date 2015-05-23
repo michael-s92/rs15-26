@@ -41,3 +41,18 @@ void GuiBuilder::throwErrorMessage(QString msn, QString info){
 
     mBox.exec();
 }
+
+void GuiBuilder::throwInfoMessage(QString msn, QString info){
+    QMessageBox mBox;
+
+    QPixmap pic(QPixmap(":/images/infodino.png"));
+    mBox.setIconPixmap(pic.scaledToHeight(150, Qt::SmoothTransformation));
+    mBox.setStandardButtons(QMessageBox::Ok);
+
+    mBox.setWindowTitle("Greska!");
+
+    mBox.setText(msn);
+    mBox.setInformativeText(info);
+
+    mBox.exec();
+}

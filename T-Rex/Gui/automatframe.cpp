@@ -69,7 +69,10 @@ void AutomatFrame::simulatorPlay(const QString& action){
      */
 
     if(action.compare("start") == 0){
-        enabledSimulatorBtn(false);
+        if(word->text().compare("") == 0)
+            GuiBuilder::throwErrorMessage("Prazan unos reci.", "Unesite prvo rec u simulator.");
+        else
+            enabledSimulatorBtn(false);
     }
     else if(action.compare("stop") == 0){
         enabledSimulatorBtn(true);
@@ -78,17 +81,28 @@ void AutomatFrame::simulatorPlay(const QString& action){
 }
 
 void AutomatFrame::startPlay(const QString &action){
-    qDebug() << "AutomatProcess::startPlay() ->  " << action;
+    //qDebug() << "AutomatProcess::startPlay() ->  " << action;
 
-    /*
+    int response;
+
     if(action.compare("previuse") == 0){
-
+        response = _aproc->kreciSe(word, -1);
+        if(response == -1)
+            GuiBuilder::throwErrorMessage("Nije dostupno kretanje u tom smeru", "Dosli ste do pocetka reci.");
     }
     else if(action.compare("next") == 0){
-
+        response = _aproc->kreciSe(word, 1);
+        if(response < 0){
+            QString ishod;
+            if(response == -1)
+                ishod = "Rec nije prepoznata automatom.";
+            if(response == -2)
+                ishod = "Rec je prepoznata automatom.";
+            GuiBuilder::throwInfoMessage("Dosli ste do kraja reci.", ishod);
+        }
     }
     else if(action.compare("reset") == 0){
-
+        response = _aproc->kreciSe(word, 0);
     }
     else if(action.compare("play") == 0){
 
@@ -96,7 +110,7 @@ void AutomatFrame::startPlay(const QString &action){
     else if(action.compare("pause") == 0){
 
     }
-    */
+
 }
 
 void AutomatFrame::displayDetails(bool display){
