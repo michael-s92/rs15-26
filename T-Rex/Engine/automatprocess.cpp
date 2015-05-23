@@ -21,6 +21,8 @@ AutomatProcess::~AutomatProcess()
 }
 int AutomatProcess::kreciSe(QLineEdit *word, int k)
 {
+    if (kretanje!=0)
+    {
     QString text = word->text();
     if (k==-1)
     {
@@ -45,9 +47,12 @@ int AutomatProcess::kreciSe(QLineEdit *word, int k)
             return -1;
         }
         char c = text.toStdString().at(count);
-        count++;
+        count ++;
         return kretanje->kreci_se_napred(c);
     }
+    }
+    else
+        return -4;
 
 }
 
@@ -185,6 +190,10 @@ bool AutomatProcess::minimal_draw(const QString &regular){
      panel->setResizeAnchor(QGraphicsView::AnchorUnderMouse);
 
      panel->setScene(scene);
+
+     QList<QGraphicsItem*> items = scene->items();
+     kretanje = new Kretanje(m, items);
+     count = 0;
 
      ispisi_podatke(m);
 
