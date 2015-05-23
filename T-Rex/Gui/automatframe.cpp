@@ -90,10 +90,18 @@ void AutomatFrame::startPlay(const QString &action){
         if(response == -1)
             GuiBuilder::throwErrorMessage("Nije dostupno kretanje u tom smeru", "Dosli ste do pocetka reci.");
     }
+
+    // milane cackao sam ti malo ovde
+    // pa ti ispravi kako mislis da treba
+    // naime treba da imaju i ova dva upozorenja
+    // pa rekoh da stavim da se nadje <3
+
     else if(action.compare("next") == 0){
         response = _aproc->kreciSe(word, 1);
         if (response == -3)
            GuiBuilder::throwInfoMessage("Automat je blokiran.", "Nemoguc prelaz po oznacenom slovu");
+        else if (response == -4)
+           GuiBuilder::throwInfoMessage("Izabrani Automat mora biti deterministicki ili minimalni.", "Nemoguca simulacija kretanja");
         else if(response < 0){
             QString ishod;
             if(response == -1)
