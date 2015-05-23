@@ -105,9 +105,16 @@ void AutomatFrame::startPlay(const QString &action){
         response = _aproc->kreciSe(word, 0);
     }
     else if(action.compare("play") == 0){
+        //ako je ukljucena simulacija da iskljuci sve dugmice sem "pause"
+        //neka pokrene metodu i da ima nesto QTimer i slots za njega da poziva stalno
+        //response = _aproc->kreciSe(word, 1);
 
+        //mozda i pause dugme da bude onemoguceno u startu?!
     }
     else if(action.compare("pause") == 0){
+        //zaustavlja simulaciju, znaci gasi tajmer
+        //i staje u prepoznavanju reci tamo dokle je stigao
+        //i ostali dugmici su slobodni opet
 
     }
 
