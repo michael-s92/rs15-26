@@ -9,6 +9,7 @@
 #include <QPushButton>
 #include <QPlainTextEdit>
 #include <QSignalMapper>
+#include <QTimer>
 
 #include "Engine/automatprocess.h"
 
@@ -31,6 +32,8 @@ private Q_SLOTS:
     void simulatorPlay(const QString &action);
     void startPlay(const QString &action);
 
+    void autoSimStart();
+
 private:
     Ui::AutomatFrame *ui;
 
@@ -43,6 +46,8 @@ private:
     QPlainTextEdit *opisArea;
 
     QSignalMapper simulator_map, simulator_start;
+    QTimer *simClock;
+    QToolBar* option_automat;
 
     AutomatProcess *_aproc;
 
