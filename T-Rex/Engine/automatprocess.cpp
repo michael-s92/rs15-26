@@ -19,24 +19,22 @@ AutomatProcess::~AutomatProcess()
 {
 
 }
-
-int AutomatProcess::kreciSe(QLineEdit *word, int k){
-    /*
-     * k - korak
-     * 1 : jedan korak napred ides
-     * -1 : jedan korak nazad
-     * 0: reset na pocetak reci
-    */
-
-
-    /*
-     * povratni rezultat
-     * dosao si do kraja reci, nemas vise da ides nazad napred znaci nisi uradio akciju
-     *          -1: rec nije prepoznata automatom
-     *          -2: rec je prepoznata automatom
-     * 0 : sve ok i odradjena akcija
-    */
-
+int AutomatProcess::kreciSe(QLineEdit *word, int k)
+{
+    if (kretanje->trenutno==-1 || k==0)
+    {
+        kretanje->prelazi[0][0]->setPen(QPen(Qt::blue));
+        kretanje->nodes[1]->setBrush(QBrush(Qt::blue));
+        kretanje->trenutno=0;
+        return 1;
+    }
+    if (k==1)
+    {
+       kretanje->prelazi[0][0]->setPen(QPen(Qt::black));
+       kretanje->nodes[1]->setBrush(QBrush(Qt::green));
+       kretanje->prelazi[1][1]->setPen(QPen(Qt::blue));
+       kretanje->nodes[2]->setBrush(QBrush(Qt::blue));
+    }
     return 0;
 }
 
@@ -129,7 +127,7 @@ bool AutomatProcess::determi_draw(const QString& regular)
      panel->setScene(scene);
 
      QList<QGraphicsItem*> items = scene->items();
-     kretanje = new Kretanje(d.getStates().length(), items);
+     kretanje = new Kretanje(d, items);
 
      ispisi_podatke(d);
 
