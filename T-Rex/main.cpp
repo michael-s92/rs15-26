@@ -10,6 +10,9 @@ int main(int argc, char *argv[])
 {
    QApplication a(argc, argv);
 
+   a.setOrganizationName("RS15-26");
+   a.setApplicationName("T-Rex");
+
    QSplashScreen *splash = new QSplashScreen;
    splash->setPixmap(QPixmap(":/my_files.qrc")); //staciti neku sliku koju cu ubaciti u Resources
    splash->show();

@@ -23,6 +23,8 @@ public:
 
     void ispisi_podatke(Automata & a);
 
+    int kreciSe(QLineEdit *word, int k);
+
 private:
     ParserEngine parser;
 

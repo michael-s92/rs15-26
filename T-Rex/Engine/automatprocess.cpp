@@ -20,6 +20,26 @@ AutomatProcess::~AutomatProcess()
 
 }
 
+int AutomatProcess::kreciSe(QLineEdit *word, int k){
+    /*
+     * k - korak
+     * 1 : jedan korak napred ides
+     * -1 : jedan korak nazad
+     * 0: reset na pocetak reci
+    */
+
+
+    /*
+     * povratni rezultat
+     * dosao si do kraja reci, nemas vise da ides nazad napred znaci nisi uradio akciju
+     *          -1: rec nije prepoznata automatom
+     *          -2: rec je prepoznata automatom
+     * 0 : sve ok i odradjena akcija
+    */
+
+    return 0;
+}
+
 bool AutomatProcess::tomson_draw(const QString &regular){
 
         opis->clear();
