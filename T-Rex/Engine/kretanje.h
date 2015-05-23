@@ -4,17 +4,26 @@
 #include "graphview.h"
 #include "Parser/automata.h"
 
+
 class Kretanje
 {
 public:
     Kretanje();
-    Kretanje(int br_stanja, QList<QGraphicsItem*> & items);
+    Kretanje(Automata & a, QList<QGraphicsItem*> & items);
 
-private:
-    int br_stanja;
     QVector<GraphNode *> nodes;
     QVector< QVector<GraphEdge *>> prelazi;
     QList<GraphEdge> istorija;
+    int trenutno;
+
+    int brojac;
+    int ukupno;
+    QString rec;
+
+private:
+    int br_stanja;
+    QVector<char> alphabet;
+
 };
 
 #endif // KRETANJE_H
