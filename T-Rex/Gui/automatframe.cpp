@@ -92,7 +92,9 @@ void AutomatFrame::startPlay(const QString &action){
     }
     else if(action.compare("next") == 0){
         response = _aproc->kreciSe(word, 1);
-        if(response < 0){
+        if (response == -3)
+           GuiBuilder::throwInfoMessage("Automat je blokiran.", "Nemoguc prelaz po oznacenom slovu");
+        else if(response < 0){
             QString ishod;
             if(response == -1)
                 ishod = "Rec nije prepoznata automatom.";

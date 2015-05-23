@@ -11,18 +11,20 @@ public:
     Kretanje();
     Kretanje(Automata & a, QList<QGraphicsItem*> & items);
 
-    QVector<GraphNode *> nodes;
-    QVector< QVector<GraphEdge *>> prelazi;
-    QList<GraphEdge> istorija;
-    int trenutno;
+    int kreci_se_napred(char c);
+    int kreci_se_nazad();
+    int postavi_na_pocetak();
 
-    int brojac;
-    int ukupno;
-    QString rec;
+    int trenutno;
+    QVector<int> zavrsna;
 
 private:
     int br_stanja;
     QVector<char> alphabet;
+    QVector<GraphNode *> nodes;
+    QVector< QVector<GraphEdge *>> prelazi;
+    QList<GraphEdge*> istorija;
+
 
 };
 

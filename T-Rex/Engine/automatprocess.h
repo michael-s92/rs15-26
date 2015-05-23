@@ -32,6 +32,7 @@ private:
     QPlainTextEdit* opis;
 
     Kretanje * kretanje;
+    int count;
 
 };
 
