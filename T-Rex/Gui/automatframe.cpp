@@ -19,9 +19,22 @@ AutomatFrame::AutomatFrame(QWidget *parent) :
     ui->setupUi(this);
 
     setElements();
-
     setSlotAndSignal();
+    setStyle();
 
+}
+
+void AutomatFrame::setStyle(){
+    //za pocetak postavljam samo stilove za labele
+    //procitano i na_ulazu
+
+    inSimFrame->setFrameShape(QFrame::StyledPanel);
+    inSimFrame->setFrameShadow(QFrame::Raised);
+
+    procitano->setAlignment(Qt::AlignRight);
+    procitano->setStyleSheet("QLabel {color: blue; }");
+
+    //moze QPalette, pogledati
 }
 
 void AutomatFrame::setSlotAndSignal(){
@@ -95,12 +108,12 @@ void AutomatFrame::startPlay(const QString &action){
     int response;
 
     if(action.compare("previuse") == 0){
-        response = _aproc->kreciSe(word, -1);
+        response = _aproc->kreciSe(-1);
         if(response == -1)
             GuiBuilder::throwErrorMessage("Nije dostupno kretanje u tom smeru", "Dosli ste do pocetka reci.");
     }
     else if(action.compare("next") == 0){
-        response = _aproc->kreciSe(word, 1);
+        response = _aproc->kreciSe(1);
 
         if(response < 0){
             QString info, ishod;
@@ -121,7 +134,7 @@ void AutomatFrame::startPlay(const QString &action){
         }
     }
     else if(action.compare("reset") == 0){
-        response = _aproc->kreciSe(word, 0);
+        response = _aproc->kreciSe(0);
     }
     else if(action.compare("play") == 0){
         RadiAutoSim(true);
@@ -133,7 +146,7 @@ void AutomatFrame::startPlay(const QString &action){
 }
 
 void AutomatFrame::autoSimStart(){
-    int response = _aproc->kreciSe(word, 1);
+    int response = _aproc->kreciSe(1);
 
     if(response < 0){
         QString info, ishod;
@@ -249,7 +262,7 @@ void AutomatFrame::setElements(){
     enabledSimulatorBtn(true);
     simClock = new QTimer();
 
-    _aproc = new AutomatProcess(platno, opisArea);
+    _aproc = new AutomatProcess(platno, opisArea, word, procitano, na_ulazu);
 }
 
 QPushButton* AutomatFrame::createSimButton(const char *name, const char *info){
@@ -258,11 +271,35 @@ QPushButton* AutomatFrame::createSimButton(const char *name, const char *info){
     return GuiBuilder::createIconButton(path, QString(info), 40);
 }
 
-QWidget* AutomatFrame::simulatorWidget(){
-    QWidget* sim = new QWidget();
+QWidget* AutomatFrame::makeReadWidget(){
+    QWidget* tmp = new QWidget();
 
     word = GuiBuilder::createLineEdit("Polje za unos reci.");
+    procitano = new QLabel("");
+    na_ulazu = new QLabel("");
 
+    QVBoxLayout *_out = new QVBoxLayout();
+
+    QHBoxLayout *_in = new QHBoxLayout();
+    inSimFrame = new QFrame();
+
+    _in->addWidget(procitano);
+    _in->addWidget(na_ulazu);
+
+    inSimFrame->setLayout(_in);
+
+    _out->addWidget(inSimFrame);
+    _out->addWidget(word);
+
+    inSimFrame->hide();
+
+    tmp->setLayout(_out);
+
+    return tmp;
+}
+
+QWidget* AutomatFrame::simulatorWidget(){
+    QWidget* sim = new QWidget();
     QHBoxLayout *lay = new QHBoxLayout();
 
     s_previous = createSimButton("back", "Vratite se slovo unazad");
@@ -282,7 +319,7 @@ QWidget* AutomatFrame::simulatorWidget(){
     simgr->addButton(s_play);
     simgr->addButton(s_stop);
 
-    lay->addWidget(word, 1);
+    lay->addWidget(makeReadWidget(), 1);
 
     QToolBar *tmp = new QToolBar();
     tmp->setAttribute(Qt::WA_DeleteOnClose);
@@ -352,10 +389,17 @@ QWidget* AutomatFrame::makeAutomatWidget(){
 
 void AutomatFrame::enabledSimulatorBtn(bool vr){
 
+    if(!vr){
+        inSimFrame->show();
+        word->hide();
+    }
+    else{
+        inSimFrame->hide();
+        word->show();
+    }
+
     inputReg->setEnabled(vr);
     vr ? option_automat->show() : option_automat->hide();
-
-    word->setEnabled(vr);
 
     s_start->setEnabled(vr);
     s_next->setEnabled(!vr);
