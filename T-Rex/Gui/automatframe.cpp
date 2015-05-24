@@ -275,8 +275,8 @@ QWidget* AutomatFrame::makeReadWidget(){
     QWidget* tmp = new QWidget();
 
     word = GuiBuilder::createLineEdit("Polje za unos reci.");
-    procitano = new QLabel("asdasd");
-    na_ulazu = new QLabel("asdasd");
+    procitano = new QLabel("");
+    na_ulazu = new QLabel("");
 
     QVBoxLayout *_out = new QVBoxLayout();
 
