@@ -31,14 +31,14 @@ private:
     QGraphicsView* panel;
     QPlainTextEdit* opis;
 
+    Kretanje * kretanje;
+    int count;
+
     //word -> rec koju trazis u automatu
     //procitano -> labela gde upisujes slovo koje si procitao
     //na_ulazu -> labela iz koje citas i kako procitas skines i stavis u prvu labelu
     QLineEdit *word;
     QLabel *procitano, *na_ulazu;
-
-    Kretanje * kretanje;
-    int count;
 
 };
 
