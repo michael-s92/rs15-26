@@ -31,6 +31,7 @@ private:
     QGraphicsView* panel;
     QPlainTextEdit* opis;
 
+    GraphView *scene;
     Kretanje * kretanje;
     int count;
 
