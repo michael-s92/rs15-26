@@ -4,6 +4,22 @@
 #include <QGraphicsPixmapItem>
 #include "graphview.h"
 
+// TO-DO
+// obezbediti akcije za start i stop
+// DESTRUKTORI
+// kada se pojavi dialog box obezbediti da se ne moze vratiti na scenu
+// zameniti sve iteratore ugradjenim iteratorim u Qt-u
+// prelaze po vise slova stopiti u jedan prelaz
+// ispisati jos neke podatke o automatima
+// oznacavati slova u LineEdit-u po kojima se prelazi
+// kada se izvrsi promena neka, automatski se resetuje kretanje ukoliko je otpoceto
+
+
+// bagovi
+// nekad (iz nepoznatog razloga) puca kod minimalnog automata
+// kada ispisuje formalne podatke o grafu - ne radi scroll
+
+
 using namespace std;
 
 AutomatProcess::AutomatProcess(QGraphicsView* p, QPlainTextEdit* o, QLineEdit *rec, QLabel *pr, QLabel *nu)

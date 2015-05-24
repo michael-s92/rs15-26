@@ -25,6 +25,7 @@ public:
     // videti jos koliko ima smisla za ovu funkciju
     // nesto prakticnije
     bool equal1(int state, char c);
+    bool operator == (const Edge & edge);
 
 private:
     int _state1;
@@ -130,10 +131,13 @@ public:
     static int state_count;
 
 private:
-    QMultiMap<int, int> classes;
+    //QMultiMap<int, int> classes;
     QVector<QVector<int>> prelazi;
+    QMap<int, QVector<int> > classes_map;
+    QVector<int> classes;
 };
 
-
+void ispisi_mapu(QMap<int,QVector<int>> classes_map);
+void ispisi_vektor(QVector<int> classes);
 
 #endif // THOMSON_H
