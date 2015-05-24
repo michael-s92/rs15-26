@@ -13,7 +13,7 @@
 class AutomatProcess
 {
 public:
-    AutomatProcess(QGraphicsView* p, QPlainTextEdit* o);
+    AutomatProcess(QGraphicsView* p, QPlainTextEdit* o, QLineEdit *rec, QLabel *pr, QLabel *nu);
     ~AutomatProcess();
 
     bool tomson_draw(const QString& regular);
@@ -23,13 +23,19 @@ public:
 
     void ispisi_podatke(Automata & a);
 
-    int kreciSe(QLineEdit *word, int k);
+    int kreciSe(int k);
 
 private:
     ParserEngine parser;
 
     QGraphicsView* panel;
     QPlainTextEdit* opis;
+
+    //word -> rec koju trazis u automatu
+    //procitano -> labela gde upisujes slovo koje si procitao
+    //na_ulazu -> labela iz koje citas i kako procitas skines i stavis u prvu labelu
+    QLineEdit *word;
+    QLabel *procitano, *na_ulazu;
 
     Kretanje * kretanje;
     int count;

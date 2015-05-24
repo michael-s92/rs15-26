@@ -6,8 +6,8 @@
 
 using namespace std;
 
-AutomatProcess::AutomatProcess(QGraphicsView* p, QPlainTextEdit* o)
-    :panel(p), opis(o), kretanje(0)
+AutomatProcess::AutomatProcess(QGraphicsView* p, QPlainTextEdit* o, QLineEdit *rec, QLabel *pr, QLabel *nu)
+    :panel(p), opis(o), kretanje(0), word(rec), procitano(pr), na_ulazu(nu)
 {
     panel->setRenderHint(QPainter::Antialiasing);
     panel->setRenderHint(QPainter::TextAntialiasing);
@@ -17,9 +17,10 @@ AutomatProcess::AutomatProcess(QGraphicsView* p, QPlainTextEdit* o)
 
 AutomatProcess::~AutomatProcess()
 {
-
+    //destruktor ne treba nista da ima jer sve prosledjujemo po adresi
+    //i pravimo kopiju samo adrese
 }
-int AutomatProcess::kreciSe(QLineEdit *word, int k)
+int AutomatProcess::kreciSe(int k)
 {
     if (kretanje!=0)
     {
