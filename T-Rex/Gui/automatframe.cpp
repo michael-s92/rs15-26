@@ -19,9 +19,22 @@ AutomatFrame::AutomatFrame(QWidget *parent) :
     ui->setupUi(this);
 
     setElements();
-    _aproc = new AutomatProcess(platno, opisArea);
     setSlotAndSignal();
+    setStyle();
 
+}
+
+void AutomatFrame::setStyle(){
+    //za pocetak postavljam samo stilove za labele
+    //procitano i na_ulazu
+
+    inSimFrame->setFrameShape(QFrame::StyledPanel);
+    inSimFrame->setFrameShadow(QFrame::Raised);
+
+    procitano->setAlignment(Qt::AlignRight);
+    procitano->setStyleSheet("QLabel {color: blue; }");
+
+    //moze QPalette, pogledati
 }
 
 void AutomatFrame::setSlotAndSignal(){
@@ -57,25 +70,34 @@ void AutomatFrame::setSlotAndSignal(){
     simulator_map.setMapping(s_play, "play");
     simulator_map.setMapping(s_pause, "pause");
 
+    //konekcija za QTimer
+    connect(simClock, &QTimer::timeout, this, &AutomatFrame::autoSimStart);
 }
 
 void AutomatFrame::simulatorPlay(const QString& action){
 
     /*
-     * Izbaciti poruku da nije moguce menjati nista dok se ne ugasi simulator
-     * ili kako vec god to regulisati
-     *
-     * simulator regulisan
+     * Ubaciti neku proveru da ne moze da se pokrene simulator
+     * dok nije konstruisan automat
      */
 
     if(action.compare("start") == 0){
-        if(word->text().compare("") == 0)
+
+        //cekiran je Tomson ili Glusko
+        if(automatGroup->checkedId() == 1 || automatGroup->checkedId() == 2)
+            GuiBuilder::throwErrorMessage("Izabrani Automat mora biti deterministicki ili minimalni.", "Nemoguca simulacija kretanja");
+        else if(word->text().compare("") == 0)
             GuiBuilder::throwErrorMessage("Prazan unos reci.", "Unesite prvo rec u simulator.");
-        else
+        else{
             enabledSimulatorBtn(false);
+            s_pause->setEnabled(false);
+        }
+
     }
     else if(action.compare("stop") == 0){
         enabledSimulatorBtn(true);
+        if(simClock->isActive())
+            simClock->stop();
     }
 
 }
@@ -86,47 +108,82 @@ void AutomatFrame::startPlay(const QString &action){
     int response;
 
     if(action.compare("previuse") == 0){
-        response = _aproc->kreciSe(word, -1);
+        response = _aproc->kreciSe(-1);
         if(response == -1)
             GuiBuilder::throwErrorMessage("Nije dostupno kretanje u tom smeru", "Dosli ste do pocetka reci.");
     }
-
-    // milane cackao sam ti malo ovde
-    // pa ti ispravi kako mislis da treba
-    // naime treba da imaju i ova dva upozorenja
-    // pa rekoh da stavim da se nadje <3
-
     else if(action.compare("next") == 0){
-        response = _aproc->kreciSe(word, 1);
-        if (response == -3)
-           GuiBuilder::throwInfoMessage("Automat je blokiran.", "Nemoguc prelaz po oznacenom slovu");
-        else if (response == -4)
-           GuiBuilder::throwInfoMessage("Izabrani Automat mora biti deterministicki ili minimalni.", "Nemoguca simulacija kretanja");
-        else if(response < 0){
-            QString ishod;
-            if(response == -1)
+        response = _aproc->kreciSe(1);
+
+        if(response < 0){
+            QString info, ishod;
+            if(response == -1){
+                info = "Dosli ste do kraja reci.";
                 ishod = "Rec nije prepoznata automatom.";
-            if(response == -2)
+            }
+            if(response == -2){
+                info = "Dosli ste do kraja reci.";
                 ishod = "Rec je prepoznata automatom.";
-            GuiBuilder::throwInfoMessage("Dosli ste do kraja reci.", ishod);
+            }
+            if (response == -3){
+                info = "Automat je blokiran.";
+                ishod = "Nemoguc prelaz po oznacenom slovu";
+            }
+
+            GuiBuilder::throwInfoMessage(info, ishod);
         }
     }
     else if(action.compare("reset") == 0){
-        response = _aproc->kreciSe(word, 0);
+        response = _aproc->kreciSe(0);
     }
     else if(action.compare("play") == 0){
-        //ako je ukljucena simulacija da iskljuci sve dugmice sem "pause"
-        //neka pokrene metodu i da ima nesto QTimer i slots za njega da poziva stalno
-        //response = _aproc->kreciSe(word, 1);
-
-        //mozda i pause dugme da bude onemoguceno u startu?!
+        RadiAutoSim(true);
     }
     else if(action.compare("pause") == 0){
-        //zaustavlja simulaciju, znaci gasi tajmer
-        //i staje u prepoznavanju reci tamo dokle je stigao
-        //i ostali dugmici su slobodni opet
-
+        RadiAutoSim(false);
     }
+
+}
+
+void AutomatFrame::autoSimStart(){
+    int response = _aproc->kreciSe(1);
+
+    if(response < 0){
+        QString info, ishod;
+        if(response == -1){
+            info = "Dosli ste do kraja reci.";
+            ishod = "Rec nije prepoznata automatom.";
+        }
+        if(response == -2){
+            info = "Dosli ste do kraja reci.";
+            ishod = "Rec je prepoznata automatom.";
+        }
+        if (response == -3){
+            info = "Automat je blokiran.";
+            ishod = "Nemoguc prelaz po oznacenom slovu";
+        }
+
+        GuiBuilder::throwInfoMessage(info, ishod);
+
+        RadiAutoSim(false);
+    }
+}
+
+void AutomatFrame::RadiAutoSim(bool radi){
+    if(radi){
+        simClock->start(300);
+    }
+    else {
+        simClock->stop();
+    }
+
+    s_next->setEnabled(!radi);
+    s_previous->setEnabled(!radi);
+    //neka je omoguceno da tokom simulacije mozemo da se vratim na pocetak reci tek tako
+    //s_reset->setEnabled(!radi);
+    s_play->setEnabled(!radi);
+
+    s_pause->setEnabled(radi);
 
 }
 
@@ -173,6 +230,7 @@ void AutomatFrame::displaySimulator(bool display){
     }
 
 }
+
 AutomatFrame::~AutomatFrame()
 {
     delete ui;
@@ -202,6 +260,9 @@ void AutomatFrame::setElements(){
     setLayout(lay);
 
     enabledSimulatorBtn(true);
+    simClock = new QTimer();
+
+    _aproc = new AutomatProcess(platno, opisArea, word, procitano, na_ulazu);
 }
 
 QPushButton* AutomatFrame::createSimButton(const char *name, const char *info){
@@ -210,11 +271,35 @@ QPushButton* AutomatFrame::createSimButton(const char *name, const char *info){
     return GuiBuilder::createIconButton(path, QString(info), 40);
 }
 
-QWidget* AutomatFrame::simulatorWidget(){
-    QWidget* sim = new QWidget();
+QWidget* AutomatFrame::makeReadWidget(){
+    QWidget* tmp = new QWidget();
 
     word = GuiBuilder::createLineEdit("Polje za unos reci.");
+    procitano = new QLabel("");
+    na_ulazu = new QLabel("");
 
+    QVBoxLayout *_out = new QVBoxLayout();
+
+    QHBoxLayout *_in = new QHBoxLayout();
+    inSimFrame = new QFrame();
+
+    _in->addWidget(procitano);
+    _in->addWidget(na_ulazu);
+
+    inSimFrame->setLayout(_in);
+
+    _out->addWidget(inSimFrame);
+    _out->addWidget(word);
+
+    inSimFrame->hide();
+
+    tmp->setLayout(_out);
+
+    return tmp;
+}
+
+QWidget* AutomatFrame::simulatorWidget(){
+    QWidget* sim = new QWidget();
     QHBoxLayout *lay = new QHBoxLayout();
 
     s_previous = createSimButton("back", "Vratite se slovo unazad");
@@ -234,7 +319,7 @@ QWidget* AutomatFrame::simulatorWidget(){
     simgr->addButton(s_play);
     simgr->addButton(s_stop);
 
-    lay->addWidget(word, 1);
+    lay->addWidget(makeReadWidget(), 1);
 
     QToolBar *tmp = new QToolBar();
     tmp->setAttribute(Qt::WA_DeleteOnClose);
@@ -263,7 +348,7 @@ QWidget* AutomatFrame::makeAutomatWidget(){
     QWidget* form = new QWidget();
     QHBoxLayout *lay = new QHBoxLayout();
 
-    QToolBar* option_automat = new QToolBar();
+    option_automat = new QToolBar();
     option_automat->setOrientation(Qt::Vertical);
     automatGroup = new QButtonGroup();
 
@@ -304,18 +389,17 @@ QWidget* AutomatFrame::makeAutomatWidget(){
 
 void AutomatFrame::enabledSimulatorBtn(bool vr){
 
-    //dok radi simulator treba onemoguciti i da se bira automat i da se menja regularni izraz
-    //onemoguciti i chkBox da se prikaze simulator
+    if(!vr){
+        inSimFrame->show();
+        word->hide();
+    }
+    else{
+        inSimFrame->hide();
+        word->show();
+    }
 
-    //automatGroup -> buttons() pa iterator
-    //inputReg->setEnabled(vr);
-
-    /*
-     * mozda kad se promeni automat da se rec resetuje na pocetak
-     * ili da izadje automacki iz simulatora?
-     */
-
-    word->setEnabled(vr);
+    inputReg->setEnabled(vr);
+    vr ? option_automat->show() : option_automat->hide();
 
     s_start->setEnabled(vr);
     s_next->setEnabled(!vr);
@@ -324,4 +408,5 @@ void AutomatFrame::enabledSimulatorBtn(bool vr){
     s_pause->setEnabled(!vr);
     s_reset->setEnabled(!vr);
     s_play->setEnabled(!vr);
+
 }
