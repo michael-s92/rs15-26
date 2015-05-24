@@ -7,16 +7,14 @@
 // TO-DO
 // obezbediti akcije za start i stop
 // DESTRUKTORI
-// kada se pojavi dialog box obezbediti da se ne moze vratiti na scenu
 // zameniti sve iteratore ugradjenim iteratorim u Qt-u
 // prelaze po vise slova stopiti u jedan prelaz
 // ispisati jos neke podatke o automatima
 // oznacavati slova u LineEdit-u po kojima se prelazi
-// kada se izvrsi promena neka, automatski se resetuje kretanje ukoliko je otpoceto
 
 
 // bagovi
-// nekad (iz nepoznatog razloga) puca kod minimalnog automata
+// kada se pojavi dialog box obezbediti blokadu ostalog
 // kada ispisuje formalne podatke o grafu - ne radi scroll
 
 
@@ -29,6 +27,10 @@ AutomatProcess::AutomatProcess(QGraphicsView* p, QPlainTextEdit* o, QLineEdit *r
     panel->setRenderHint(QPainter::TextAntialiasing);
     panel->setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
     panel->setResizeAnchor(QGraphicsView::AnchorUnderMouse);
+    na_ulazu->setStyleSheet("QLabel {color: green;}");
+    procitano->setStyleSheet("QLabel {color: red;}");
+    QGraphicsScene *scene = new QGraphicsScene();
+
 }
 
 AutomatProcess::~AutomatProcess()
@@ -46,13 +48,19 @@ int AutomatProcess::kreciSe(int k)
         if (count==0)
             return -1;
         count --;
+        procitano->setText(word->text().left(count));
+        na_ulazu->setText(word->text().right(word->text().length()-count));
         return kretanje->kreci_se_nazad();
-
     }
     else if (k==0 || kretanje->trenutno==-1)
     {
         count = 0;
+        na_ulazu->setText(word->text());
+
+
+        procitano->setText("");
         return kretanje->postavi_na_pocetak();
+
     }
     else
     {
@@ -64,8 +72,14 @@ int AutomatProcess::kreciSe(int k)
             return -1;
         }
         char c = text.toStdString().at(count);
+        int ret = kretanje->kreci_se_napred(c);
+        if (ret!=-3)
+        {
         count ++;
-        return kretanje->kreci_se_napred(c);
+        procitano->setText(word->text().left(count));
+        na_ulazu->setText(word->text().right(word->text().length()-count));
+        }
+        return ret;
     }
     }
     else
@@ -81,7 +95,10 @@ bool AutomatProcess::tomson_draw(const QString &regular){
             }
         catch (ParserException p)
            {
-             return false;
+            if (scene!=0)
+             scene->clearGraph();
+            kretanje=0;
+            return false;
            }
        Thompson::state_count=0;
        Reg_node * reg_node = parser.getRegNode();
@@ -93,7 +110,9 @@ bool AutomatProcess::tomson_draw(const QString &regular){
        t.makeDotFile(f);
        f.close();
 
-       QGraphicsScene * scene = new GraphView("thompson.dot");
+       if (scene!=0)
+           scene->clearGraph();
+       scene = new GraphView("thompson.dot");
 
        panel->setScene(scene);
        ispisi_podatke(t);
@@ -110,9 +129,12 @@ bool AutomatProcess::glusko_draw(const QString& regular){
      parser = ParserEngine(regular);
     }
     catch (ParserException p)
-    {
-        return false;
-    }
+        {
+         if (scene!=0)
+          scene->clearGraph();
+         kretanje=0;
+         return false;
+        }
      Thompson::state_count=0;
      Reg_node * reg_node = parser.getRegNode();
      ThompsonNodes thompsonNodes;
@@ -125,7 +147,9 @@ bool AutomatProcess::glusko_draw(const QString& regular){
      g.makeDotFile(f);
      f.close();
 
-     QGraphicsScene *scene = new GraphView("gluskov.dot");
+     if (scene!=0)
+         scene->clearGraph();
+     scene = new GraphView("gluskov.dot");
      panel->setScene(scene);
 
      kretanje = 0;
@@ -144,7 +168,12 @@ bool AutomatProcess::determi_draw(const QString& regular)
     }
     catch (ParserException p)
     {
-        return false;
+        {
+         if (scene!=0)
+          scene->clearGraph();
+         kretanje=0;
+         return false;
+        }
     }
      Thompson::state_count=0;
      Reg_node * reg_node = parser.getRegNode();
@@ -159,8 +188,10 @@ bool AutomatProcess::determi_draw(const QString& regular)
      d.makeDotFile(f);
      f.close();
 
+     if (scene!=0)
+         scene->clearGraph();
 
-     QGraphicsScene *scene = new GraphView("deterministicki.dot");
+     scene = new GraphView("deterministicki.dot");
      panel->setScene(scene);
 
      QList<QGraphicsItem*> items = scene->items();
@@ -182,7 +213,12 @@ bool AutomatProcess::minimal_draw(const QString &regular){
     }
     catch (ParserException p)
       {
-        return false;
+        {
+         if (scene!=0)
+          scene->clearGraph();
+         kretanje=0;
+         return false;
+        }
       }
      Thompson::state_count=0;
      Reg_node * reg_node = parser.getRegNode();
@@ -199,13 +235,9 @@ bool AutomatProcess::minimal_draw(const QString &regular){
      m.makeDotFile(f);
      f.close();
 
-     QGraphicsScene *scene = new GraphView("minimalni.dot");
-
-     panel->setRenderHint(QPainter::Antialiasing);
-     panel->setRenderHint(QPainter::TextAntialiasing);
-     panel->setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
-     panel->setResizeAnchor(QGraphicsView::AnchorUnderMouse);
-
+     if (scene!=0)
+         scene->clear();
+     scene = new GraphView("minimalni.dot");
      panel->setScene(scene);
 
      QList<QGraphicsItem*> items = scene->items();
