@@ -7,16 +7,14 @@
 // TO-DO
 // obezbediti akcije za start i stop
 // DESTRUKTORI
-// kada se pojavi dialog box obezbediti da se ne moze vratiti na scenu
 // zameniti sve iteratore ugradjenim iteratorim u Qt-u
 // prelaze po vise slova stopiti u jedan prelaz
 // ispisati jos neke podatke o automatima
 // oznacavati slova u LineEdit-u po kojima se prelazi
-// kada se izvrsi promena neka, automatski se resetuje kretanje ukoliko je otpoceto
 
 
 // bagovi
-// nekad (iz nepoznatog razloga) puca kod minimalnog automata
+// kada se pojavi dialog box obezbediti blokadu ostalog
 // kada ispisuje formalne podatke o grafu - ne radi scroll
 
 
@@ -29,6 +27,9 @@ AutomatProcess::AutomatProcess(QGraphicsView* p, QPlainTextEdit* o, QLineEdit *r
     panel->setRenderHint(QPainter::TextAntialiasing);
     panel->setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
     panel->setResizeAnchor(QGraphicsView::AnchorUnderMouse);
+    na_ulazu->setStyleSheet("QLabel {color: green;}");
+    procitano->setStyleSheet("QLabel {color: red;}");
+
 }
 
 AutomatProcess::~AutomatProcess()
@@ -46,13 +47,17 @@ int AutomatProcess::kreciSe(int k)
         if (count==0)
             return -1;
         count --;
+        procitano->setText(word->text().left(count));
+        na_ulazu->setText(word->text().right(word->text().length()-count));
         return kretanje->kreci_se_nazad();
-
     }
     else if (k==0 || kretanje->trenutno==-1)
     {
         count = 0;
+        na_ulazu->setText(word->text());
+        procitano->setText("");
         return kretanje->postavi_na_pocetak();
+
     }
     else
     {
@@ -65,6 +70,8 @@ int AutomatProcess::kreciSe(int k)
         }
         char c = text.toStdString().at(count);
         count ++;
+        procitano->setText(word->text().left(count));
+        na_ulazu->setText(word->text().right(word->text().length()-count));
         return kretanje->kreci_se_napred(c);
     }
     }
