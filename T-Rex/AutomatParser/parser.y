@@ -3,7 +3,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include "Parser/TreeNodes.hpp"
+#include "AutomatParser/TreeNodes.hpp"
 #include <QString>
 #include <QDebug>
 
