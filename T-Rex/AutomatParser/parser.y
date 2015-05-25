@@ -11,7 +11,7 @@ using namespace std;
 extern int yylex();
 int greska = 0;
 
-void yyerror(const string s)
+void yyerror(const string)
 {
 
 }

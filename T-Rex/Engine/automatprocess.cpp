@@ -7,16 +7,14 @@
 // TO-DO
 // DESTRUKTORI
 // zameniti sve iteratore ugradjenim iteratorim u Qt-u
-// prelaze po vise slova stopiti u jedan prelaz
 // ispisati jos neke podatke o automatima
-// definisati pravila za karakterske klase i repetitition
 // izvrsiti prenumeraciju stanja
 
 // bagovi
 // kada se pojavi dialog box obezbediti blokadu ostalog
 // kada ispisuje formalne podatke o grafu - ne radi scroll
 // ako je rec koja se simulira duza?
-// neki bag pravi kod bekslesa
+
 
 
 using namespace std;
