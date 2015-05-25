@@ -56,3 +56,18 @@ void GuiBuilder::throwInfoMessage(QString msn, QString info){
 
     mBox.exec();
 }
+
+bool GuiBuilder::leaveProgramDialog(){
+
+    QMessageBox exitBox;
+    exitBox.setWindowTitle("T-Rex");
+    exitBox.setText(QObject::tr("Da li sigurno zelite da napustite program?"));
+    QPixmap pic(QPixmap(":/msn/images/exitdino.jpg"));
+    exitBox.setIconPixmap(pic.scaledToHeight(150, Qt::SmoothTransformation));
+    exitBox.setStandardButtons(QMessageBox::Cancel | QMessageBox::Yes);
+    exitBox.setDefaultButton(QMessageBox::Yes);
+
+    if(exitBox.exec() == QMessageBox::Yes)
+        return true;
+    return false;
+}

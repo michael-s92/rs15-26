@@ -38,6 +38,13 @@ MainWindow::MainWindow(QWidget *parent) :
      */
 }
 
+void MainWindow::closeEvent(QCloseEvent *event){
+    if(GuiBuilder::leaveProgramDialog())
+        event->accept();
+    else
+        event->ignore();
+}
+
 void MainWindow::updateStatusBar(QString& s){
     lStatus->setText(s);
 }
@@ -142,14 +149,7 @@ void MainWindow::about_app(){
 
 void MainWindow::napustiProgram(){
 
-    QMessageBox exitBox;
-    exitBox.setWindowTitle("T-Rex");
-    exitBox.setText(tr("Da li sigurno zelite da napustite program?"));
-    QPixmap pic(QPixmap(":/msn/images/exitdino.jpg"));
-    exitBox.setIconPixmap(pic.scaledToHeight(150, Qt::SmoothTransformation));
-    exitBox.setStandardButtons(QMessageBox::Cancel | QMessageBox::Yes);
-    exitBox.setDefaultButton(QMessageBox::Yes);
-    if(exitBox.exec() == QMessageBox::Yes)
+    if(GuiBuilder::leaveProgramDialog())
         QApplication::exit();
 }
 
