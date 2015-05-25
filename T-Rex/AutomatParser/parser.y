@@ -5,11 +5,11 @@
 #include <vector>
 #include "AutomatParser/TreeNodes.hpp"
 #include <QString>
-#include <QDebug>
 
 using namespace std;
 
 extern int yylex();
+int greska = 0;
 
 void yyerror(const string s)
 {
@@ -115,8 +115,19 @@ RegExp :
 
         // Reg{m,n}
        | RegSimple Repetition           {
-                                         $$  = new Repetition_reg_node($1,$2->a,$2->b);
-                                  //       ispisi("RegExp","RegSimple Repetition");
+                                         if ($2->a==1 && $2->b==1)
+                                            $$ = $1;
+                                         else if ($2->a==0 && $2->b==0)
+                                             greska=1;
+                                         else if ($2->b!=-1 && $2->a > $2->b)
+                                             greska=1;
+                                         else if ($2->a==0 && $2->b==1)
+                                            $$ = $1;
+                                         else
+                                         {
+                                            $$  = new Repetition_reg_node($1,$2->a,$2->b);
+                                         // ispisi("RegExp","RegSimple Repetition");
+                                          }
                                         }
         // Reg+? - za lenjo izracunavanje
         // izdvajamo posebno, jer bi u rekurziji dozvolili izraze a+????
@@ -186,8 +197,16 @@ RegLasy
 
         // Reg{2,3}
        | RegSimple Repetition           {
-                                         $$  = new Repetition_reg_node($1,$2->a,$2->b);
-                              //            ispisi("RegLasy","RegSimple Repetition");
+                                         if ($2->a==1 && $2->b==1)
+                                          $$ = $1;
+                                         else if ($2->a==0 && $2->a==0)
+                                          greska=1;
+                                         else if ($2->b!=-1 && $2->a > $2->b)
+                                          greska=1;
+                                         else
+                                          $$  = new Repetition_reg_node($1,$2->a,$2->b);
+
+                              //          ispisi("RegLasy","RegSimple Repetition");
                                         }
 ;
 
@@ -232,7 +251,7 @@ CharPart : SymbolChar minus_token SymbolChar    {
                                                 char c1=$1->getValue();
                                                 char c2=$3->getValue();
                                                 if (c1 > c2)
-                                                  yyerror("Syntax error: Karakterska klasa - neodgovarajuci redoled");
+                                                  greska=1;
                                                 $$ = new vector<Symbol_reg_node *>;
                                                 for (char c=c1; c<=c2; c++)
                                                 $$->push_back(new Normal_symbol_reg_node(c));
@@ -414,8 +433,9 @@ SymbolChar : symbol_token   {
 Reg_node * parse(const char *s)
 {
   reg = 0;
+  greska = 0;
   set_text(s);
-  if (yyparse()==0)
+  if (yyparse()==0 && greska == 0)
     return reg;
   else
     return 0;

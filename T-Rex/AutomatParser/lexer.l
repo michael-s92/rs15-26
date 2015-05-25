@@ -2,8 +2,6 @@
 %option noinput
 %option nounput
 
-
-
 %{
 #include <iostream>
 #include "AutomatParser//TreeNodes.hpp"
@@ -11,6 +9,7 @@
 #include "parser.h"
 
 using namespace std;
+extern int greska;
 
 void ispisi(string s)
 {

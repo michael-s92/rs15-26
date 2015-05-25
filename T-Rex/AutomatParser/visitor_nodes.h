@@ -82,4 +82,16 @@ private:
     Thompson t;
 };
 
+template <typename T>
+Union_reg_node * makeCharRegUnion(vector<T *> & elements)
+{
+   if (elements.size()==2)
+     return new Union_reg_node(elements[0],elements[1]);
+   T * sym = elements.back();
+   elements.pop_back();
+   return new Union_reg_node(makeCharRegUnion(elements),sym);
+}
+
+Concat_reg_node * makeCharRegConcat(Reg_node & reg, int k);
+
 #endif // VISITORNODES_H

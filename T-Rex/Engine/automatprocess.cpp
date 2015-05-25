@@ -16,6 +16,7 @@
 // kada se pojavi dialog box obezbediti blokadu ostalog
 // kada ispisuje formalne podatke o grafu - ne radi scroll
 // ako je rec koja se simulira duza?
+// neki bag pravi kod bekslesa
 
 
 using namespace std;
