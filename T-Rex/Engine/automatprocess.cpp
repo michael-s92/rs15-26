@@ -16,6 +16,7 @@
 // kada se pojavi dialog box obezbediti blokadu ostalog
 // kada ispisuje formalne podatke o grafu - ne radi scroll
 // ako je rec koja se simulira duza?
+// neki bag pravi kod bekslesa
 
 
 using namespace std;
@@ -108,14 +109,19 @@ bool AutomatProcess::tomson_draw(const QString &regular){
        ThompsonNodes thompsonNodes;
        reg_node->accept(thompsonNodes);
        Thompson t = thompsonNodes.getTh();
+
        fstream f;
        f.open("thompson.dot",fstream::out);
        t.makeDotFile(f);
        f.close();
 
        if (scene!=0)
+       {
            scene->clearGraph();
+       }
+
        scene = new GraphView("thompson.dot");
+
 
        panel->setScene(scene);
        ispisi_podatke(t);
@@ -159,6 +165,7 @@ bool AutomatProcess::glusko_draw(const QString& regular){
          scene->clearGraph();
      scene = new GraphView("gluskov.dot");
      panel->setScene(scene);
+
      if (kretanje!=0)
          delete kretanje;
      kretanje = 0;

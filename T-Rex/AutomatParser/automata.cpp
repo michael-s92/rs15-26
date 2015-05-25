@@ -156,7 +156,8 @@ void Automata::plainTextAddAlphabet(QPlainTextEdit *opis)
             text.append(_alphabet[i]);
             text.append(", ");
         }
-        text.append(_alphabet.last());
+        if (_alphabet.length()>0)
+          text.append(_alphabet.last());
         text.append(" }");
         text.append("</div>");
         opis->appendHtml(text);
@@ -186,7 +187,8 @@ void Automata::plainTextAddStates(QPlainTextEdit *opis)
             text.append(QString::number(_states[i]));
             text.append(", ");
         }
-        text.append(QString::number(_states.last()));
+        if (_states.length()>0)
+          text.append(QString::number(_states.last()));
         text.append(" }");
         text.append("</div>");
         opis->appendHtml(text);
@@ -203,7 +205,8 @@ void Automata::plainTextAddAcceptStates(QPlainTextEdit *opis)
             text.append(QString::number(_accept_states[i]));
             text.append(", ");
         }
-        text.append(QString::number(_accept_states.last()));
+        if (_accept_states.length()>0)
+           text.append(QString::number(_accept_states.last()));
         text.append(" }");
         text.append("</div>");
         opis->appendHtml(text);
@@ -228,16 +231,19 @@ void Automata::plainTextAddEdges(QPlainTextEdit *opis)
             text.append(QString::number(_edges[i].getState2()));
             text.append(" ),<br>");
         }
-        text.append("( ");
-        text.append(QString::number(_edges.last().getState1()));
-        text.append(", ");
-        if (_edges.last().getC()!='\0')
-             text.append(_edges.last().getC());
-        else
-            text.append("&epsilon;");
-        text.append(", ");
-        text.append(QString::number(_edges.last().getState2()));
-        text.append(" ), ");
+        if (_edges.length()>0)
+        {
+            text.append("( ");
+            text.append(QString::number(_edges.last().getState1()));
+            text.append(", ");
+            if (_edges.last().getC()!='\0')
+               text.append(_edges.last().getC());
+            else
+               text.append("&epsilon;");
+            text.append(", ");
+            text.append(QString::number(_edges.last().getState2()));
+            text.append(" ), ");
+        }
         text.append(" }");
         text.append("</div>");
         opis->appendHtml(text);
@@ -294,10 +300,12 @@ Gluskov::Gluskov(const Thompson & t)
                epsilon_prelazi[i->getState1()] << i->getState2();
        }
 
+
        for (int j=0; j<Thompson::state_count; j++)
        {
+           QVector<int> obradjeni;
            if (kandidati.contains(j))
-               epsilon_zatvorenja[j]=odredi_zatvorenje(j);
+               epsilon_zatvorenja[j]=odredi_zatvorenje(j,obradjeni);
        }
 
        QVector<Edge>::iterator iter = prelazi_po_slovu.begin();
@@ -325,17 +333,20 @@ Gluskov::Gluskov(const Thompson & t)
        addAlphabet(t.getAlphabet());
    }
 
-QVector<int> Gluskov::odredi_zatvorenje(int state)
+QVector<int> Gluskov::odredi_zatvorenje(int state, QVector<int> obradjeni)
 {
     QVector<int> zatvorenje;
     kandidati.removeOne(state);
+    obradjeni.append(state);
     zatvorenje << state;
     if (epsilon_prelazi.find(state)!=epsilon_prelazi.end())
     {
     QVector<int>::iterator i = epsilon_prelazi[state].begin();
     for (;i!=epsilon_prelazi[state].end(); i++)
-        zatvorenje << odredi_zatvorenje(*i);
+        if (!obradjeni.contains(*i))
+          zatvorenje << odredi_zatvorenje(*i, obradjeni);
     }
+    cout << "3" << endl;
     return zatvorenje;
 }
 
