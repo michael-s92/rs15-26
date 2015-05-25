@@ -91,7 +91,7 @@ void PrintNodes::visit_repetition(const Repetition_reg_node &reg)
     _ostr << "{" << reg.getMin() << "," << reg.getMax() << "}";
 }
 
-void PrintNodes::visit_empty(const Empty_reg_node &reg)
+void PrintNodes::visit_empty(const Empty_reg_node &)
 {
     _ostr<< "( eps )";
 }
@@ -280,7 +280,7 @@ void ThompsonNodes::visit_repetition(const Repetition_reg_node &reg)
     }
 }
 
-void ThompsonNodes::visit_empty(const Empty_reg_node &reg)
+void ThompsonNodes::visit_empty(const Empty_reg_node &)
 {
     int state = Thompson::state_count;
     t= Thompson(state,state+1);
