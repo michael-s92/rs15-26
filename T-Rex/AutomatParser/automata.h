@@ -101,7 +101,7 @@ public:
 private:
   QMap<int,QVector<int>> epsilon_zatvorenja;
   QLinkedList<int> kandidati;
-  QVector<int> odredi_zatvorenje(int state);
+  QVector<int> odredi_zatvorenje(int state, QVector<int> obradjeni);
   QMap<int, QVector<int>> epsilon_prelazi;
   QVector<Edge> prelazi_po_slovu;
 

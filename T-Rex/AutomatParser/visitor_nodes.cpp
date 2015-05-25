@@ -91,6 +91,11 @@ void PrintNodes::visit_repetition(const Repetition_reg_node &reg)
     _ostr << "{" << reg.getMin() << "," << reg.getMax() << "}";
 }
 
+void PrintNodes::visit_empty(const Empty_reg_node &reg)
+{
+    _ostr<< "( eps )";
+}
+
 
 void ThompsonNodes::visit_reg_node(const Reg_node &)
 {
@@ -223,6 +228,7 @@ void ThompsonNodes::visit_char_class(const Char_class_reg_node &reg)
 
 void ThompsonNodes::visit_repetition(const Repetition_reg_node &reg)
 {
+
     int m = reg.getMin();
     int n = reg.getMax();
     if (m==n)
@@ -272,6 +278,14 @@ void ThompsonNodes::visit_repetition(const Repetition_reg_node &reg)
       Union_reg_node *reg_union = makeCharRegUnion(konkatenacije);
         visit_union(*reg_union);
     }
+}
+
+void ThompsonNodes::visit_empty(const Empty_reg_node &reg)
+{
+    int state = Thompson::state_count;
+    t= Thompson(state,state+1);
+    Thompson::state_count+=2;
+    t.addEdge(state,state+1,'\0');
 }
 
 Concat_reg_node * makeCharRegConcat(Reg_node & reg, int k)

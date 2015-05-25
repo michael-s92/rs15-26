@@ -194,3 +194,14 @@ int Repetition_reg_node::getMax() const
 
 
 
+
+
+Empty_reg_node::Empty_reg_node()
+{
+
+}
+
+void Empty_reg_node::accept(Visitor_nodes &v) const
+{
+   v.visit_empty(*this);
+}

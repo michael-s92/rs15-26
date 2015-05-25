@@ -23,6 +23,7 @@ public:
     virtual void visit_backslash_symbol(const Backslash_symbol_reg_node & reg) = 0;
     virtual void visit_char_class(const Char_class_reg_node & reg) = 0;
     virtual void visit_repetition(const Repetition_reg_node & reg) = 0;
+    virtual void visit_empty(const Empty_reg_node & reg) = 0;
 };
 
 class PrintNodes : public Visitor_nodes
@@ -45,6 +46,7 @@ public:
     void visit_backslash_symbol(const Backslash_symbol_reg_node & reg);
     void visit_char_class(const Char_class_reg_node & reg);
     void visit_repetition(const Repetition_reg_node & reg);
+    void visit_empty(const Empty_reg_node & reg);
 
 public:
     ostream & _ostr;
@@ -71,6 +73,7 @@ public:
     void visit_backslash_symbol(const Backslash_symbol_reg_node & reg);
     void visit_char_class(const Char_class_reg_node & reg);
     void visit_repetition(const Repetition_reg_node & reg);
+    void visit_empty(const Empty_reg_node & reg);
 
     Thompson getTh() const;
     int getLast() const;

@@ -115,19 +115,19 @@ RegExp :
 
         // Reg{m,n}
        | RegSimple Repetition           {
-                                         if ($2->a==1 && $2->b==1)
+                                        if ($2->a==1 && $2->b==1)
                                             $$ = $1;
-                                         else if ($2->a==0 && $2->b==0)
-                                             greska=1;
-                                         else if ($2->b!=-1 && $2->a > $2->b)
-                                             greska=1;
-                                         else if ($2->a==0 && $2->b==1)
+                                        else if ($2->a==0 && $2->b==0)
+                                            $$ = new Empty_reg_node();
+                                        else if ($2->b!=-1 && $2->a > $2->b)
+                                            greska=1;
+                                        else if ($2->a==0 && $2->b==1)
                                             $$ = $1;
                                          else
                                          {
-                                            $$  = new Repetition_reg_node($1,$2->a,$2->b);
+                                         $$  = new Repetition_reg_node($1,$2->a,$2->b);
                                          // ispisi("RegExp","RegSimple Repetition");
-                                          }
+                                         }
                                         }
         // Reg+? - za lenjo izracunavanje
         // izdvajamo posebno, jer bi u rekurziji dozvolili izraze a+????
