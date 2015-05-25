@@ -2,7 +2,7 @@
 #define KRETANJE_H
 
 #include "graphview.h"
-#include "Parser/automata.h"
+#include "AutomatParser/automata.h"
 
 
 class Kretanje

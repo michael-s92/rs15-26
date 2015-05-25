@@ -1,6 +1,6 @@
 #ifndef PARSERENGINE_H
 #define PARSERENGINE_H
-#include "Parser/TreeNodes.hpp"
+#include "AutomatParser/TreeNodes.hpp"
 #include <QString>
 
 class ParserException:public exception{
