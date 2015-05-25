@@ -91,6 +91,7 @@ void AutomatFrame::simulatorPlay(const QString& action){
         else{
             enabledSimulatorBtn(false);
             s_pause->setEnabled(false);
+            _aproc->kreciSe(0);
         }
 
     }
@@ -98,6 +99,12 @@ void AutomatFrame::simulatorPlay(const QString& action){
         enabledSimulatorBtn(true);
         if(simClock->isActive())
             simClock->stop();
+        //drawAutomata(); iz nekog razloga ne radi
+        int ind = automatGroup->checkedId();
+        if(ind == 3) //deterministicki je u pitanju
+            _aproc->determi_draw(inputReg->text());
+        if(ind == 4) //minimalni je u pitanju
+            _aproc->minimal_draw(inputReg->text());
     }
 
 }
