@@ -9,6 +9,8 @@
 #include <QVBoxLayout>
 #include <QLabel>
 
+#include <QDebug>
+
 EditorFrame::EditorFrame(QWidget *parent) :
     QFrame(parent),
     ui(new Ui::EditorFrame)
@@ -22,10 +24,10 @@ EditorFrame::EditorFrame(QWidget *parent) :
     connect(inputReg, SIGNAL(returnPressed()), this, SLOT(SearchText()));
     connect(chkNum, SIGNAL(toggled(bool)), this, SLOT(showNumMatched(bool)));
 
-    connect(flagsBtn, SIGNAL(clicked(bool)), this, SLOT(ShowChangeFlagsBox(bool)));
-}
-
-void EditorFrame::ShowChangeFlagsBox(bool chk){
+    //inicijalni flagovi
+    _icFlag = _ignoreCase->isChecked();
+    _gFlag = _global->isChecked();
+    _mFlag = _multiline->isChecked();
 
 }
 
@@ -38,18 +40,83 @@ void EditorFrame::setElements(){
 
 }
 
+QToolButton* EditorFrame::makeFlagsBtn(){
+
+    QToolButton* btn = new QToolButton();
+    btn->setPopupMode(QToolButton::InstantPopup);
+    btn->setIcon(QIcon(":/editor/images/flags.ico"));
+    btn->setIconSize(QSize(40,40));
+    btn->setToolTip("Atributi pretrazivanja");
+
+    QMenu* options = new StayOpenMenu(btn);
+    btn->setMenu(options);
+
+    _ignoreCase = createAction("IgnoreCase", options);
+    _global = createAction("Global", options);
+    _multiline = createAction("Multiline", options);
+
+    _multiline->setChecked(true);
+    _global->setChecked(true);
+
+    options->addAction(_ignoreCase);
+    options->addAction(_global);
+    options->addAction(_multiline);
+
+    connect(_ignoreCase, SIGNAL(triggered(bool)), this, SLOT(ActIgnoreCase(bool)));
+    connect(_multiline, SIGNAL(triggered(bool)), this, SLOT(ActMultiline(bool)));
+    connect(_global, SIGNAL(triggered(bool)), this, SLOT(ActGlobal(bool)));
+
+    return btn;
+}
+
+void EditorFrame::ActIgnoreCase(bool chk){
+    _icFlag = chk;
+    SearchText();
+}
+
+void EditorFrame::ActMultiline(bool chk){
+    _mFlag = chk;
+    SearchText();
+}
+
+void EditorFrame::ActGlobal(bool chk){
+    _gFlag = chk;
+    SearchText();
+}
+
+QAction* EditorFrame::createAction(const QString &title, QObject* parent){
+    QAction *action = new QAction(title, parent);
+    action->setCheckable(true);
+    return action;
+}
+
+
+EditorFrame::StayOpenMenu::StayOpenMenu(QWidget *parent)
+    : QMenu(parent), m_inhibitClose(false)
+{
+}
+
+void EditorFrame::StayOpenMenu::mousePressEvent(QMouseEvent * event)
+{
+    QMenu::mousePressEvent(event);
+    m_inhibitClose = true;
+}
+
+void EditorFrame::StayOpenMenu::closeEvent(QCloseEvent * event) {
+    if (m_inhibitClose) {
+        event->ignore();
+        m_inhibitClose = false;
+    } else {
+        QMenu::closeEvent(event);
+        event->accept();
+    }
+}
+
 void EditorFrame::makeEditCover(){
 
     inputReg = GuiBuilder::createLineEdit("Mesto za unos regularnog izraza koji se trazi.");
     chkNum = new QCheckBox("Prikazi broj pronadjenih");
     loadFile = GuiBuilder::createIconButton(":/editor/images/loadfile.ico", "Ucitaj text koji pretrazujes iz file-a", 35, false);
-
-    flagsBtn = GuiBuilder::createIconButton(":/editor/images/flags.ico", "Atributi pretrazivanja", 35);
-    /*
-     * treba postaviti da kad se klikne negde sa strane da dugme izgubi fokus i padajuci meni nestane
-     * ili da se radi sa QDialog-zima pa da uopste nam ni ne treba chekable atribut, moze false
-     */
-
 
     auto lay = ui->topLayout;
     QVBoxLayout *tmp = new QVBoxLayout();
@@ -59,7 +126,7 @@ void EditorFrame::makeEditCover(){
 
     lay->addLayout(tmp, 1);
 
-    lay->addWidget(flagsBtn);
+    lay->addWidget(makeFlagsBtn());
     lay->addWidget(loadFile);
 
 }
@@ -93,7 +160,7 @@ void EditorFrame::SearchText(){
 
         QString rez("Pronadjeno: ");
 
-        int num = _eproc.doMatch(inputReg->text(), textArea);
+        int num = _eproc.doMatch(inputReg->text(), textArea, _icFlag, _gFlag, _mFlag);
 
         if(num == -1)
             //ako hvatamo poruku o gresci, onda ovde je uhvatiti i prikazati u ovoj poruci dole
