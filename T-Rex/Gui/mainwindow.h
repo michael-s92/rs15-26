@@ -62,6 +62,7 @@ private:
     void createStatusBar();
     void setUpMenuActions();
 
+    void closeEvent(QCloseEvent *event);
 };
 
 #endif // MAINWINDOW_H

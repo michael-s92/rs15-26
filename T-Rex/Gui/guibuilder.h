@@ -11,6 +11,7 @@ QPushButton* createIconButton(QString path, QString info, int size, bool checkab
 QLineEdit* createLineEdit(QString info, QString text = "");
 void throwErrorMessage(QString msn, QString info = "");
 void throwInfoMessage(QString msn, QString info = "");
+bool leaveProgramDialog();
 
 }
 
