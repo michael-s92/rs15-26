@@ -1,6 +1,6 @@
 #include "TreeNodes.hpp"
 #include "automata.h"
-#include "Parser/visitor_nodes.h"
+#include "visitor_nodes.h"
 #include <iostream>
 
 Binary_op_reg_node::Binary_op_reg_node(Reg_node* left, Reg_node* right)

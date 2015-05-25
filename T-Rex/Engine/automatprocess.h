@@ -5,10 +5,10 @@
 #include <QGraphicsView>
 #include <QPlainTextEdit>
 
-#include "parserengine.h"
-#include "Parser/TreeNodes.hpp"
-#include "Parser/visitor_nodes.h"
-#include "kretanje.h"
+#include "AutomatParser/parserengine.h"
+#include "AutomatParser/TreeNodes.hpp"
+#include "AutomatParser/visitor_nodes.h"
+#include "AutomatParser/kretanje.h"
 
 class AutomatProcess
 {

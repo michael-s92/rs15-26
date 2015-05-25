@@ -2,20 +2,20 @@
 #include <QMessageBox>
 #include <fstream>
 #include <QGraphicsPixmapItem>
-#include "graphview.h"
+#include "AutomatParser/graphview.h"
 
 // TO-DO
-// obezbediti akcije za start i stop
 // DESTRUKTORI
 // zameniti sve iteratore ugradjenim iteratorim u Qt-u
 // prelaze po vise slova stopiti u jedan prelaz
 // ispisati jos neke podatke o automatima
-// oznacavati slova u LineEdit-u po kojima se prelazi
-
+// definisati pravila za karakterske klase i repetitition
+// izvrsiti prenumeraciju stanja
 
 // bagovi
 // kada se pojavi dialog box obezbediti blokadu ostalog
 // kada ispisuje formalne podatke o grafu - ne radi scroll
+// ako je rec koja se simulira duza?
 
 
 using namespace std;
@@ -29,15 +29,15 @@ AutomatProcess::AutomatProcess(QGraphicsView* p, QPlainTextEdit* o, QLineEdit *r
     panel->setResizeAnchor(QGraphicsView::AnchorUnderMouse);
     na_ulazu->setStyleSheet("QLabel {color: green;}");
     procitano->setStyleSheet("QLabel {color: red;}");
-    QGraphicsScene *scene = new QGraphicsScene();
 
 }
 
 AutomatProcess::~AutomatProcess()
 {
-    //destruktor ne treba nista da ima jer sve prosledjujemo po adresi
-    //i pravimo kopiju samo adrese
+    delete scene;
+    delete kretanje;
 }
+
 int AutomatProcess::kreciSe(int k)
 {
     if (kretanje!=0)
@@ -97,7 +97,10 @@ bool AutomatProcess::tomson_draw(const QString &regular){
            {
             if (scene!=0)
              scene->clearGraph();
+            if (kretanje!=0)
+                delete kretanje;
             kretanje=0;
+            count = 0;
             return false;
            }
        Thompson::state_count=0;
@@ -116,8 +119,10 @@ bool AutomatProcess::tomson_draw(const QString &regular){
 
        panel->setScene(scene);
        ispisi_podatke(t);
+       if (kretanje!=0)
+           delete kretanje;
        kretanje = 0;
-       count = 0;
+       count =0;
        return true;
     }
 
@@ -132,7 +137,10 @@ bool AutomatProcess::glusko_draw(const QString& regular){
         {
          if (scene!=0)
           scene->clearGraph();
+         if (kretanje!=0)
+             delete kretanje;
          kretanje=0;
+         count = 0;
          return false;
         }
      Thompson::state_count=0;
@@ -151,7 +159,8 @@ bool AutomatProcess::glusko_draw(const QString& regular){
          scene->clearGraph();
      scene = new GraphView("gluskov.dot");
      panel->setScene(scene);
-
+     if (kretanje!=0)
+         delete kretanje;
      kretanje = 0;
      count = 0;
 
@@ -171,7 +180,10 @@ bool AutomatProcess::determi_draw(const QString& regular)
         {
          if (scene!=0)
           scene->clearGraph();
+         if (kretanje!=0)
+             delete kretanje;
          kretanje=0;
+         count = 0;
          return false;
         }
     }
@@ -195,6 +207,8 @@ bool AutomatProcess::determi_draw(const QString& regular)
      panel->setScene(scene);
 
      QList<QGraphicsItem*> items = scene->items();
+     if (kretanje!=0)
+         delete kretanje;
      kretanje = new Kretanje(d, items);
      count = 0;
 
@@ -216,7 +230,10 @@ bool AutomatProcess::minimal_draw(const QString &regular){
         {
          if (scene!=0)
           scene->clearGraph();
+         if (kretanje!=0)
+             delete kretanje;
          kretanje=0;
+         count =0;
          return false;
         }
       }
@@ -241,6 +258,8 @@ bool AutomatProcess::minimal_draw(const QString &regular){
      panel->setScene(scene);
 
      QList<QGraphicsItem*> items = scene->items();
+     if (kretanje!=0)
+         delete kretanje;
      kretanje = new Kretanje(m, items);
      count = 0;
 
