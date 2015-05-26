@@ -21,7 +21,7 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout" stretch="0,1">
    <item>
-    <layout class="QHBoxLayout" name="topLayout"/>
+    <layout class="QHBoxLayout" name="topLayout" stretch=""/>
    </item>
    <item>
     <widget class="QPlainTextEdit" name="plainTextEdit"/>
