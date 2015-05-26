@@ -346,7 +346,6 @@ QVector<int> Gluskov::odredi_zatvorenje(int state, QVector<int> obradjeni)
         if (!obradjeni.contains(*i))
           zatvorenje << odredi_zatvorenje(*i, obradjeni);
     }
-    cout << "3" << endl;
     return zatvorenje;
 }
 
