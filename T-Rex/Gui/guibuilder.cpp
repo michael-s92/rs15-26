@@ -39,6 +39,8 @@ void GuiBuilder::throwErrorMessage(QString msn, QString info){
     mBox.setText(msn);
     mBox.setInformativeText(info);
 
+    mBox.setModal(false);
+
     mBox.exec();
 }
 
@@ -54,6 +56,8 @@ void GuiBuilder::throwInfoMessage(QString msn, QString info){
     mBox.setText(msn);
     mBox.setInformativeText(info);
 
+    mBox.setModal(false);
+
     mBox.exec();
 }
 
@@ -66,6 +70,8 @@ bool GuiBuilder::leaveProgramDialog(){
     exitBox.setIconPixmap(pic.scaledToHeight(150, Qt::SmoothTransformation));
     exitBox.setStandardButtons(QMessageBox::Cancel | QMessageBox::Yes);
     exitBox.setDefaultButton(QMessageBox::Yes);
+
+    exitBox.setModal(false);
 
     if(exitBox.exec() == QMessageBox::Yes)
         return true;
