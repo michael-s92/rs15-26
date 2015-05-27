@@ -146,6 +146,14 @@ private:
     unsigned int _max;
 };
 
+class Empty_reg_node: public Reg_node
+{
+public:
+    Empty_reg_node();
+    void accept(Visitor_nodes &v) const;
+};
+
+
 
 struct numbers
 {
@@ -156,5 +164,7 @@ struct numbers
   {
   }
 };
+
+
 
 #endif // TREENODES_H

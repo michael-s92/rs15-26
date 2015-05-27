@@ -19,9 +19,22 @@ AutomatFrame::AutomatFrame(QWidget *parent) :
     ui->setupUi(this);
 
     setElements();
-    _aproc = new AutomatProcess(platno, opisArea);
     setSlotAndSignal();
+    setStyle();
 
+}
+
+void AutomatFrame::setStyle(){
+    //za pocetak postavljam samo stilove za labele
+    //procitano i na_ulazu
+
+    inSimFrame->setFrameShape(QFrame::StyledPanel);
+    inSimFrame->setFrameShadow(QFrame::Raised);
+
+    procitano->setAlignment(Qt::AlignRight);
+    procitano->setStyleSheet("QLabel {color: blue; }");
+
+    //moze QPalette, pogledati
 }
 
 void AutomatFrame::setSlotAndSignal(){
@@ -35,40 +48,149 @@ void AutomatFrame::setSlotAndSignal(){
     connect(opis, SIGNAL(clicked(bool)), this, SLOT(displayDetails(bool)));
 
     //konekcije za simulator
-    connect(&simulator_map, SIGNAL(mapped(QString)), this, SLOT(simulatorPlay(QString)));
+
+    connect(&simulator_start, SIGNAL(mapped(QString)), this, SLOT(simulatorPlay(QString)));
+
+    connect(s_start, SIGNAL(clicked()), &simulator_start, SLOT(map()));
+    connect(s_stop, SIGNAL(clicked()), &simulator_start, SLOT(map()));
+    simulator_start.setMapping(s_start, "start");
+    simulator_start.setMapping(s_stop, "stop");
+
+    connect(&simulator_map, SIGNAL(mapped(QString)), this, SLOT(startPlay(QString)));
 
     connect(s_next, SIGNAL(clicked()), &simulator_map, SLOT(map()));
     connect(s_previous, SIGNAL(clicked()), &simulator_map, SLOT(map()));
-    connect(s_start, SIGNAL(clicked()), &simulator_map, SLOT(map()));
     connect(s_pause, SIGNAL(clicked()), &simulator_map, SLOT(map()));
     connect(s_reset, SIGNAL(clicked()), &simulator_map, SLOT(map()));
     connect(s_play, SIGNAL(clicked()), &simulator_map, SLOT(map()));
-    connect(s_stop, SIGNAL(clicked()), &simulator_map, SLOT(map()));
-
-    simulator_map.setMapping(s_start, "start");
-    simulator_map.setMapping(s_stop, "stop");
 
     simulator_map.setMapping(s_previous, "previuse");
     simulator_map.setMapping(s_next, "next");
     simulator_map.setMapping(s_reset, "reset");
-
     simulator_map.setMapping(s_play, "play");
     simulator_map.setMapping(s_pause, "pause");
-    //-------------------------------
 
+    //konekcija za QTimer
+    connect(simClock, &QTimer::timeout, this, &AutomatFrame::autoSimStart);
 }
 
 void AutomatFrame::simulatorPlay(const QString& action){
-    qDebug() << "AutomatProcess::simulatorPlay() ->  " << action;
+
+    /*
+     * Ubaciti neku proveru da ne moze da se pokrene simulator
+     * dok nije konstruisan automat
+     */
 
     if(action.compare("start") == 0){
-        word->setEnabled(false);
-        enabledSimulatorBtn(false);
+
+        //cekiran je Tomson ili Glusko
+        if(automatGroup->checkedId() == 1 || automatGroup->checkedId() == 2)
+            GuiBuilder::throwErrorMessage("Izabrani Automat mora biti deterministicki ili minimalni.", "Nemoguca simulacija kretanja");
+        else if(word->text().compare("") == 0)
+            GuiBuilder::throwErrorMessage("Prazan unos reci.", "Unesite prvo rec u simulator.");
+        else{
+            enabledSimulatorBtn(false);
+            s_pause->setEnabled(false);
+            _aproc->kreciSe(0);
+        }
+
     }
     else if(action.compare("stop") == 0){
-        word->setEnabled(true);
         enabledSimulatorBtn(true);
+        if(simClock->isActive())
+            simClock->stop();
+        //drawAutomata(); iz nekog razloga ne radi
+        int ind = automatGroup->checkedId();
+        if(ind == 3) //deterministicki je u pitanju
+            _aproc->determi_draw(inputReg->text());
+        if(ind == 4) //minimalni je u pitanju
+            _aproc->minimal_draw(inputReg->text());
     }
+
+}
+
+void AutomatFrame::startPlay(const QString &action){
+    //qDebug() << "AutomatProcess::startPlay() ->  " << action;
+
+    int response;
+
+    if(action.compare("previuse") == 0){
+        response = _aproc->kreciSe(-1);
+        if(response == -1)
+            GuiBuilder::throwErrorMessage("Nije dostupno kretanje u tom smeru", "Dosli ste do pocetka reci.");
+    }
+    else if(action.compare("next") == 0){
+        response = _aproc->kreciSe(1);
+
+        if(response < 0){
+            QString info, ishod;
+            if(response == -1){
+                info = "Dosli ste do kraja reci.";
+                ishod = "Rec nije prepoznata automatom.";
+            }
+            if(response == -2){
+                info = "Dosli ste do kraja reci.";
+                ishod = "Rec je prepoznata automatom.";
+            }
+            if (response == -3){
+                info = "Automat je blokiran.";
+                ishod = "Nemoguc prelaz po oznacenom slovu";
+            }
+
+            GuiBuilder::throwInfoMessage(info, ishod);
+        }
+    }
+    else if(action.compare("reset") == 0){
+        response = _aproc->kreciSe(0);
+    }
+    else if(action.compare("play") == 0){
+        RadiAutoSim(true);
+    }
+    else if(action.compare("pause") == 0){
+        RadiAutoSim(false);
+    }
+
+}
+
+void AutomatFrame::autoSimStart(){
+    int response = _aproc->kreciSe(1);
+
+    if(response < 0){
+        QString info, ishod;
+        if(response == -1){
+            info = "Dosli ste do kraja reci.";
+            ishod = "Rec nije prepoznata automatom.";
+        }
+        if(response == -2){
+            info = "Dosli ste do kraja reci.";
+            ishod = "Rec je prepoznata automatom.";
+        }
+        if (response == -3){
+            info = "Automat je blokiran.";
+            ishod = "Nemoguc prelaz po oznacenom slovu";
+        }
+
+        GuiBuilder::throwInfoMessage(info, ishod);
+
+        RadiAutoSim(false);
+    }
+}
+
+void AutomatFrame::RadiAutoSim(bool radi){
+    if(radi){
+        simClock->start(300);
+    }
+    else {
+        simClock->stop();
+    }
+
+    s_next->setEnabled(!radi);
+    s_previous->setEnabled(!radi);
+    //neka je omoguceno da tokom simulacije mozemo da se vratim na pocetak reci tek tako
+    //s_reset->setEnabled(!radi);
+    s_play->setEnabled(!radi);
+
+    s_pause->setEnabled(radi);
 
 }
 
@@ -106,7 +228,14 @@ void AutomatFrame::drawAutomata(int ind, bool chk){
 }
 
 void AutomatFrame::displaySimulator(bool display){
-    display ? sim->show() : sim->hide();
+    if(display)
+        sim->show();
+    else {
+        sim->hide();
+        enabledSimulatorBtn(true);
+        //mozda iscrtati automat bez obelezih stanja i prelaza
+    }
+
 }
 
 AutomatFrame::~AutomatFrame()
@@ -138,6 +267,9 @@ void AutomatFrame::setElements(){
     setLayout(lay);
 
     enabledSimulatorBtn(true);
+    simClock = new QTimer();
+
+    _aproc = new AutomatProcess(platno, opisArea, word, procitano, na_ulazu);
 }
 
 QPushButton* AutomatFrame::createSimButton(const char *name, const char *info){
@@ -146,11 +278,35 @@ QPushButton* AutomatFrame::createSimButton(const char *name, const char *info){
     return GuiBuilder::createIconButton(path, QString(info), 40);
 }
 
-QWidget* AutomatFrame::simulatorWidget(){
-    QWidget* sim = new QWidget();
+QWidget* AutomatFrame::makeReadWidget(){
+    QWidget* tmp = new QWidget();
 
     word = GuiBuilder::createLineEdit("Polje za unos reci.");
+    procitano = new QLabel("");
+    na_ulazu = new QLabel("");
 
+    QVBoxLayout *_out = new QVBoxLayout();
+
+    QHBoxLayout *_in = new QHBoxLayout();
+    inSimFrame = new QFrame();
+
+    _in->addWidget(procitano);
+    _in->addWidget(na_ulazu);
+
+    inSimFrame->setLayout(_in);
+
+    _out->addWidget(inSimFrame);
+    _out->addWidget(word);
+
+    inSimFrame->hide();
+
+    tmp->setLayout(_out);
+
+    return tmp;
+}
+
+QWidget* AutomatFrame::simulatorWidget(){
+    QWidget* sim = new QWidget();
     QHBoxLayout *lay = new QHBoxLayout();
 
     s_previous = createSimButton("back", "Vratite se slovo unazad");
@@ -170,7 +326,7 @@ QWidget* AutomatFrame::simulatorWidget(){
     simgr->addButton(s_play);
     simgr->addButton(s_stop);
 
-    lay->addWidget(word, 1);
+    lay->addWidget(makeReadWidget(), 1);
 
     QToolBar *tmp = new QToolBar();
     tmp->setAttribute(Qt::WA_DeleteOnClose);
@@ -199,7 +355,7 @@ QWidget* AutomatFrame::makeAutomatWidget(){
     QWidget* form = new QWidget();
     QHBoxLayout *lay = new QHBoxLayout();
 
-    QToolBar* option_automat = new QToolBar();
+    option_automat = new QToolBar();
     option_automat->setOrientation(Qt::Vertical);
     automatGroup = new QButtonGroup();
 
@@ -239,6 +395,19 @@ QWidget* AutomatFrame::makeAutomatWidget(){
 }
 
 void AutomatFrame::enabledSimulatorBtn(bool vr){
+
+    if(!vr){
+        inSimFrame->show();
+        word->hide();
+    }
+    else{
+        inSimFrame->hide();
+        word->show();
+    }
+
+    inputReg->setEnabled(vr);
+    vr ? option_automat->show() : option_automat->hide();
+
     s_start->setEnabled(vr);
     s_next->setEnabled(!vr);
     s_previous->setEnabled(!vr);
@@ -246,4 +415,5 @@ void AutomatFrame::enabledSimulatorBtn(bool vr){
     s_pause->setEnabled(!vr);
     s_reset->setEnabled(!vr);
     s_play->setEnabled(!vr);
+
 }

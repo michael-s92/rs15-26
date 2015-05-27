@@ -1,6 +1,6 @@
 #include "TreeNodes.hpp"
 #include "automata.h"
-#include "Parser/visitor_nodes.h"
+#include "visitor_nodes.h"
 #include <iostream>
 
 Binary_op_reg_node::Binary_op_reg_node(Reg_node* left, Reg_node* right)
@@ -194,3 +194,14 @@ int Repetition_reg_node::getMax() const
 
 
 
+
+
+Empty_reg_node::Empty_reg_node()
+{
+
+}
+
+void Empty_reg_node::accept(Visitor_nodes &v) const
+{
+   v.visit_empty(*this);
+}

@@ -39,7 +39,10 @@ QString& EditorProcess::readFile(const QString &file){
     return buffer;
 }
 
-int EditorProcess::doMatch(QString what, QPlainTextEdit* area){
+int EditorProcess::doMatch(QString what, QPlainTextEdit* area, bool _ignorecaseFlag, bool _globalFlag, bool _multilineFlag){
+
+    //iskoristiti flagove:
+    //bool _ignorecaseFlag, bool _globalFlag, bool _multilineFlag
 
     /*
      * ima greska! kad radi replace, on gubi deo onoga sto je ucitano, skracuje sadrzaj (mozda buffer ne moze sve da prihvati?!)

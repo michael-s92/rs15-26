@@ -39,6 +39,11 @@ bool Edge::equal1(int state, char c)
     return false;
 }
 
+bool Edge::operator ==(const Edge &edge)
+{
+    return edge.getState1()==_state1 && edge.getState2()==_state2 && edge.getC()==_c;
+}
+
 Automata::Automata(int start_state)
     :_start_state(start_state)
 {}
@@ -82,7 +87,8 @@ void Automata::addAcceptState(int accept_state)
 void Automata::addEdge(int state1, int state2, char c)
 {
     Edge e(state1,state2,c);
-    _edges << e;
+    if (!_edges.contains(e))
+     _edges << e;
 }
 
 void Automata::addEdges(QVector<Edge> edges)
@@ -139,6 +145,112 @@ void Automata::makeDotFile(ostream &osr)
     osr << "}";
 }
 
+void Automata::plainTextAddAlphabet(QPlainTextEdit *opis)
+{
+        QString text_style = "style = '";
+        text_style.append("color: red;'");
+        QString text("<div " + text_style +">");
+        text.append("&Sigma; = { ");
+        for (int i=0; i< _alphabet.length()-1; i++)
+        {
+            text.append(_alphabet[i]);
+            text.append(", ");
+        }
+        if (_alphabet.length()>0)
+          text.append(_alphabet.last());
+        text.append(" }");
+        text.append("</div>");
+        opis->appendHtml(text);
+}
+
+void Automata::plainTextAddStart(QPlainTextEdit *opis)
+{
+        QString text_style = "style = '";
+        text_style.append("color: orange;'");
+        QString text("<div " + text_style +">");
+        text.append("S = { ");
+        text.append(QString::number(_start_state));
+        text.append(" }");
+        text.append("</div>");
+        opis->appendHtml(text);
+}
+
+
+void Automata::plainTextAddStates(QPlainTextEdit *opis)
+{
+        QString text_style = "style = '";
+        text_style.append("color: green;'");
+        QString text("<div " + text_style +">");
+        text.append("Q = { ");
+        for (int i=0; i< _states.length()-1; i++)
+        {
+            text.append(QString::number(_states[i]));
+            text.append(", ");
+        }
+        if (_states.length()>0)
+          text.append(QString::number(_states.last()));
+        text.append(" }");
+        text.append("</div>");
+        opis->appendHtml(text);
+}
+
+void Automata::plainTextAddAcceptStates(QPlainTextEdit *opis)
+{
+        QString text_style = "style = '";
+        text_style.append("color: blue;'");
+        QString text("<div " + text_style +">");
+        text.append("F = { ");
+        for (int i=0; i< _accept_states.length()-1; i++)
+        {
+            text.append(QString::number(_accept_states[i]));
+            text.append(", ");
+        }
+        if (_accept_states.length()>0)
+           text.append(QString::number(_accept_states.last()));
+        text.append(" }");
+        text.append("</div>");
+        opis->appendHtml(text);
+}
+
+void Automata::plainTextAddEdges(QPlainTextEdit *opis)
+{
+        QString text_style = "style = '";
+        text_style.append("color: black;'");
+        QString text("<div " + text_style +">");
+        text.append("&Delta; = { ");
+        for (int i=0; i< _edges.length()-1; i++)
+        {
+            text.append("( ");
+            text.append(QString::number(_edges[i].getState1()));
+            text.append(", ");
+            if (_edges[i].getC()!='\0')
+                 text.append(_edges[i].getC());
+            else
+                text.append("&epsilon;");
+            text.append(", ");
+            text.append(QString::number(_edges[i].getState2()));
+            text.append(" ),<br>");
+        }
+        if (_edges.length()>0)
+        {
+            text.append("( ");
+            text.append(QString::number(_edges.last().getState1()));
+            text.append(", ");
+            if (_edges.last().getC()!='\0')
+               text.append(_edges.last().getC());
+            else
+               text.append("&epsilon;");
+            text.append(", ");
+            text.append(QString::number(_edges.last().getState2()));
+            text.append(" ), ");
+        }
+        text.append(" }");
+        text.append("</div>");
+        opis->appendHtml(text);
+}
+
+
+
 int Thompson::state_count=0;
 
 
@@ -168,6 +280,11 @@ Gluskov Thompson::make_gluskov()
 }
 
 
+Gluskov::Gluskov()
+{
+
+}
+
 Gluskov::Gluskov(const Thompson & t)
  :Automata(0)
    {
@@ -183,10 +300,12 @@ Gluskov::Gluskov(const Thompson & t)
                epsilon_prelazi[i->getState1()] << i->getState2();
        }
 
+
        for (int j=0; j<Thompson::state_count; j++)
        {
+           QVector<int> obradjeni;
            if (kandidati.contains(j))
-               epsilon_zatvorenja[j]=odredi_zatvorenje(j);
+               epsilon_zatvorenja[j]=odredi_zatvorenje(j,obradjeni);
        }
 
        QVector<Edge>::iterator iter = prelazi_po_slovu.begin();
@@ -214,16 +333,18 @@ Gluskov::Gluskov(const Thompson & t)
        addAlphabet(t.getAlphabet());
    }
 
-QVector<int> Gluskov::odredi_zatvorenje(int state)
+QVector<int> Gluskov::odredi_zatvorenje(int state, QVector<int> obradjeni)
 {
     QVector<int> zatvorenje;
     kandidati.removeOne(state);
+    obradjeni.append(state);
     zatvorenje << state;
     if (epsilon_prelazi.find(state)!=epsilon_prelazi.end())
     {
     QVector<int>::iterator i = epsilon_prelazi[state].begin();
     for (;i!=epsilon_prelazi[state].end(); i++)
-        zatvorenje << odredi_zatvorenje(*i);
+        if (!obradjeni.contains(*i))
+          zatvorenje << odredi_zatvorenje(*i, obradjeni);
     }
     return zatvorenje;
 }
@@ -236,6 +357,11 @@ Deterministicki Gluskov::makeDeterministicki()
 
 
 int Deterministicki::state_count = 0;
+
+Deterministicki::Deterministicki()
+{
+
+}
 
 Deterministicki::Deterministicki(const Gluskov & g)
 {
@@ -258,17 +384,6 @@ Deterministicki::Deterministicki(const Gluskov & g)
       int index = _alphabet.indexOf(i->getC());
       prelazi[i->getState1()][index] = i->getState2();
   }
-/*
-  QMap<int, QVector<int>>::iterator i11 = kandidati.begin();
-  for (; i11!=kandidati.end();i11++)
-  {
-      QVector<int>::iterator i22 = i11->begin();
-      cout << i11.key() << " - ";
-      for (; i22!=i11->end(); i22++)
-              cout << *i22 << " ";
-      cout << endl;
-  }
- */
 
 }
 
@@ -338,76 +453,139 @@ int Minimalni::state_count = 2;
 
 
 
+Minimalni::Minimalni()
+{
+
+}
+
+
+
+
 Minimalni::Minimalni(const Deterministicki &d)
 {
    QVector<QVector<int>> prelaziD = d.getPrelazi();
    _alphabet = d.getAlphabet();
+   _start_state=0;
 
-   for (int i=d.getStates().length()-1; i>=0; i--)
-   if (d.getAcceptStates().contains(i))
-       classes.insertMulti(1,i);
-   else
-       classes.insertMulti(0,i);
+   classes.resize(d.getStates().length());
+
+   if (d.getAcceptStates().length()!=d.getStates().length())
+   {
+       for (int i=0; i<d.getStates().length(); i++)
+            if (d.getAcceptStates().contains(i))
+            {
+            classes[i]=1;
+            classes_map[1].append(i);
+            }
+       else
+            {
+            classes[i]=0;
+            classes_map[0].append(i);
+            }
 
    bool ind_promene = 1;
+   bool ind_state = 0;
    while(ind_promene)
    {
      ind_promene=0;
-
-     QMultiMap<int,int>::iterator i_map = classes.begin();
-     for (; i_map!=classes.end();)
+     int br_iteracija = state_count;
+     for (int i=0; i< br_iteracija; i++)
      {
-        QMultiMap<int,int>::iterator j_map = i_map++;
-        while((j_map.key()==i_map.key()))
-         {
-          for (int j=0; j<prelaziD[0].length(); j++)
-          {
-             int state1=prelaziD[j_map.value()][j];
-             int state2=prelaziD[i_map.value()][j];
+        ind_state = false;
 
-             if (classes.key(state1)!=classes.key(state2))
-             {
-                 int remove_key = i_map.key();
-                 int value = i_map.value();
-                 classes.remove(remove_key,value);
-                 classes.insertMulti(state_count,value);
-
-                 ind_promene=1;
-                 break;
-             }
-          }
-          i_map++;
-        }
-        if (ind_promene==1)
+        if (classes_map[i].length()==1)
+            continue;
+        for (int j=1; j<classes_map[i].length(); j++)
         {
+            for (int k=0; k<_alphabet.length(); k++)
+            {
+               int state1=prelaziD[classes_map[i][0]][k];
+               int state2=prelaziD[classes_map[i][j]][k];
+               if (classes[state1]!=classes[state2])
+               {
+                   classes_map[state_count].append(classes_map[i][j]);
+                   ind_promene=1;
+                   ind_state = 1;
+                   break;
+               }
+            }
+        }
+        if (ind_state==1)
+        {
+            QVector<int>::iterator it= classes_map[state_count].begin();
+            for (; it!=classes_map[state_count].end();it++)
+            {
+              classes[*it]=state_count;
+              classes_map[i].remove(classes_map[i].indexOf(*it));
+            }
             state_count++;
-            break;
         }
      }
    }
+
+   }
+   else
+   {
+      state_count=1;
+      for (int i=0; i<d.getAcceptStates().length(); i++)
+      {
+          classes[i]=0;
+          classes_map[0].append(i);
+      }
+   }
+
 
    prelazi.resize(state_count);
    for (int i=0; i< prelazi.length(); i++)
        prelazi[i].resize(_alphabet.length());
 
+   for (int i=0; i< d.getStates().length(); i++)
+   {
+       if (d.getAcceptStates().contains(i))
+           addAcceptState(classes[i]);
+   }
+
    for (int i=0; i < prelazi.length(); i++)
    {
        addState(i);
-       QList<int> stanja = classes.values(i);
-       QList<int>::iterator it = stanja.begin();
-       for (; it!=stanja.end(); it++)
-       {
-           if (d.getAcceptStates().contains(*it))
-               if (!_accept_states.contains(i))
-                   addAcceptState(i);
-       }
-       for (int j=0; j < prelazi[0].length(); j++)
-       {
-           int state = prelaziD[classes.value(i)][j];
-           prelazi[i][j] = classes.key(state);
-           addEdge(i,prelazi[i][j],_alphabet[j]);
-       }
    }
 
-
+   for (int i=0; i < prelaziD.length(); i++)
+   {
+       for (int j=0; j < prelaziD[0].length(); j++)
+       {
+           int state = prelaziD[i][j];
+           prelazi[classes[i]][j] = classes[state];
+           addEdge(classes[i],prelazi[classes[i]][j],_alphabet[j]);
+       }
+   }
 }
+
+
+
+
+void ispisi_mapu(QMap<int,QVector<int>> classes_map)
+{
+    QMap<int, QVector<int>>::iterator ix = classes_map.begin();
+    for (; ix!=classes_map.end(); ix++)
+    {
+        cout << ix.key() << ": ";
+        QVector<int> a = ix.value();
+        QVector<int>::iterator iy= a.begin();
+        for (; iy!=a.end(); iy++)
+            cout << *iy << " ";
+        cout << endl;
+    }
+}
+
+
+void ispisi_vektor(QVector<int> classes)
+{
+    QVector<int>::iterator ix = classes.begin();
+    for (; ix!=classes.end(); ix++)
+        cout << *ix << " ";
+    cout << endl;
+}
+
+
+

@@ -5,6 +5,7 @@
 #include <iostream>
 #include <QMap>
 #include <QLinkedList>
+#include <QtWidgets>
 
 class Gluskov;
 class Deterministicki;
@@ -24,6 +25,7 @@ public:
     // videti jos koliko ima smisla za ovu funkciju
     // nesto prakticnije
     bool equal1(int state, char c);
+    bool operator == (const Edge & edge);
 
 private:
     int _state1;
@@ -63,6 +65,13 @@ public:
     void addState(int state);
 
     void makeDotFile(std::ostream & osr);
+
+    void plainTextAddAlphabet(QPlainTextEdit* opis);
+    void plainTextAddStart(QPlainTextEdit* opis);
+    void plainTextAddStates(QPlainTextEdit *opis);
+    void plainTextAddAcceptStates(QPlainTextEdit *opis);
+    void plainTextAddEdges(QPlainTextEdit *opis);
+
 };
 
 
@@ -85,13 +94,14 @@ class Gluskov : public Automata
  //TO-DO
  // ne treba sve da bude public
 public:
+  Gluskov();
   Gluskov(const Thompson & t);
   Deterministicki makeDeterministicki();
 
 private:
   QMap<int,QVector<int>> epsilon_zatvorenja;
   QLinkedList<int> kandidati;
-  QVector<int> odredi_zatvorenje(int state);
+  QVector<int> odredi_zatvorenje(int state, QVector<int> obradjeni);
   QMap<int, QVector<int>> epsilon_prelazi;
   QVector<Edge> prelazi_po_slovu;
 
@@ -100,6 +110,7 @@ private:
 class Deterministicki : public Automata
 {
 public:
+    Deterministicki();
     Deterministicki(const Gluskov & g);
     Minimalni makeMinimalni();
     QVector<QVector<int>> getPrelazi() const;
@@ -115,14 +126,18 @@ private:
 class Minimalni : public Automata
 {
 public:
+    Minimalni();
     Minimalni (const Deterministicki & d);
     static int state_count;
 
 private:
-    QMultiMap<int, int> classes;
+    //QMultiMap<int, int> classes;
     QVector<QVector<int>> prelazi;
+    QMap<int, QVector<int> > classes_map;
+    QVector<int> classes;
 };
 
-
+void ispisi_mapu(QMap<int,QVector<int>> classes_map);
+void ispisi_vektor(QVector<int> classes);
 
 #endif // THOMSON_H

@@ -19,38 +19,40 @@ QMAKE_CXXFLAGS += -std=c++11
 
 
 SOURCES += main.cpp\
-    Parser/TreeNodes.cpp \
+    AutomatParser/TreeNodes.cpp \
     Gui/uvodframe.cpp \
     Gui/editorframe.cpp \
     Gui/diagramframe.cpp \
     Gui/mainwindow.cpp \
     Gui/automatframe.cpp \
     Engine/editorprocess.cpp \
-    Parser/automata.cpp \
-    Parser/visitor_nodes.cpp \
+    AutomatParser/automata.cpp \
+    AutomatParser/visitor_nodes.cpp \
     Engine/automatprocess.cpp \
     Gui/guibuilder.cpp \
-    Engine/parserengine.cpp \
-    Engine/graphview.cpp \
+    AutomatParser/parserengine.cpp \
+    AutomatParser/graphview.cpp \
     Gui/dragwidget.cpp \
-    Gui/acceptwidget.cpp
+    Gui/acceptwidget.cpp \
+    AutomatParser/kretanje.cpp
 
 HEADERS  += \
-    Parser/TreeNodes.hpp \
+    AutomatParser/TreeNodes.hpp \
     Gui/uvodframe.h \
     Gui/editorframe.h \
     Gui/diagramframe.h \
     Gui/mainwindow.h \
     Gui/automatframe.h \
     Engine/editorprocess.h \
-    Parser/automata.h \
-    Parser/visitor_nodes.h \
+    AutomatParser/automata.h \
+    AutomatParser/visitor_nodes.h \
     Engine/automatprocess.h \
     Gui/guibuilder.h \
-    Engine/parserengine.h \
-    Engine/graphview.h \
+    AutomatParser/parserengine.h \
+    AutomatParser/graphview.h \
     Gui/dragwidget.h \
-    Gui/acceptwidget.h
+    Gui/acceptwidget.h \
+    AutomatParser/kretanje.h
 
 FORMS    += \
     Gui/uvodframe.ui \
@@ -69,8 +71,8 @@ RESOURCES += \
 
 LIBS += -lfl -ly
 
-FLEXSOURCES = Parser/lexer.l
-BISONSOURCES = Parser/parser.y
+FLEXSOURCES = AutomatParser/lexer.l
+BISONSOURCES = AutomatParser/parser.y
 
 flexsource.input = FLEXSOURCES
 flexsource.output = ${QMAKE_FILE_BASE}.cpp
