@@ -47,23 +47,24 @@ void AcceptWidget::dropEvent(QDropEvent *event)
         QLabel *newIcon2 = new QLabel(this);
 
 
+
         newIcon1->setFrameStyle(3);
         newIcon2->setFrameStyle(3);
-        newIcon1->setFixedSize(50,20);
-        newIcon2->setFixedSize(50,20);
+        newIcon1->setFixedSize(100,30);
+        newIcon2->setFixedSize(100,30);
 
-        //boatIcon->setPixmap(QPixmap(":images/DragDrop/dino3.png"));
+
         newIcon1->move(mapToGlobal(rect().topLeft()));
-        newIcon2->move(mapToGlobal(rect().topLeft() + QPoint(60,0)));
+        newIcon2->move(mapToGlobal(rect().topLeft() + QPoint(110,0)));
         newIcon1->show();
         newIcon2->show();
         newIcon1->setAttribute(Qt::WA_DeleteOnClose);
         newIcon2->setAttribute(Qt::WA_DeleteOnClose);
-       // QLabel *newIcon = new QLabel(this);
-       // newIcon->setPixmap(pixmap);
-       // newIcon->move(event->pos() - offset);
-       // newIcon->show();
-       // newIcon->setAttribute(Qt::WA_DeleteOnClose);
+
+
+        //Treba dodati posebno ponasanje za svaku sliku
+
+        //takodje ako se nalazimo unutar neke labele, treba u njoj postavljati
 
         if (event->source() == this) {
             //event->setDropAction(Qt::MoveAction);
