@@ -1,4 +1,4 @@
-#include <QtWidgets>
+﻿#include <QtWidgets>
 
 #include "acceptwidget.h"
 #include "dragwidget.h"
@@ -16,7 +16,7 @@ AcceptWidget::AcceptWidget(QWidget *parent)
 
 void AcceptWidget::dragEnterEvent(QDragEnterEvent *event)
 {
-    if (event->mimeData()->hasFormat("application/x-acceptdata")) {
+    if (event->mimeData()->hasFormat("1") || event->mimeData()->hasFormat("2") || event->mimeData()->hasFormat("1") || event->mimeData()->hasFormat("3") ||event->mimeData()->hasFormat("4") || event->mimeData()->hasFormat("5") || event->mimeData()->hasFormat("6") || event->mimeData()->hasFormat("7") || event->mimeData()->hasFormat("8")) {
         if (event->source() == this) {
             event->setDropAction(Qt::MoveAction);
             event->accept();
@@ -35,8 +35,10 @@ void AcceptWidget::dragMoveEvent(QDragMoveEvent *event)
 
 void AcceptWidget::dropEvent(QDropEvent *event)
 {
-    if (event->mimeData()->hasFormat("application/x-acceptdata") && event->source() != this) {
-        QByteArray itemData = event->mimeData()->data("application/x-acceptdata");
+    if ((event->mimeData()->hasFormat("1") || event->mimeData()->hasFormat("2") || event->mimeData()->hasFormat("1") || event->mimeData()->hasFormat("3") ||event->mimeData()->hasFormat("4") || event->mimeData()->hasFormat("5") || event->mimeData()->hasFormat("6") || event->mimeData()->hasFormat("7") || event->mimeData()->hasFormat("8"))
+
+            && event->source() != this) {
+        QByteArray itemData = event->mimeData()->data("1");
         QDataStream dataStream(&itemData, QIODevice::ReadOnly);
 
         QPixmap pixmap;
@@ -44,26 +46,86 @@ void AcceptWidget::dropEvent(QDropEvent *event)
         dataStream >> pixmap >> offset;
 
         QLabel *newIcon1 = new QLabel(this);
+        QLabel* newIcon = new QLabel(this);
         QLabel *newIcon2 = new QLabel(this);
-
 
         newIcon1->setFrameStyle(3);
         newIcon2->setFrameStyle(3);
-        newIcon1->setFixedSize(50,20);
-        newIcon2->setFixedSize(50,20);
+        newIcon1->setFixedSize(100,30);
+        newIcon2->setFixedSize(100,30);
 
-        //boatIcon->setPixmap(QPixmap(":images/DragDrop/dino3.png"));
-        newIcon1->move(mapToGlobal(rect().topLeft()));
-        newIcon2->move(mapToGlobal(rect().topLeft() + QPoint(60,0)));
+        newIcon1->move(rect().center()
+                        );
+        newIcon2->move(rect().center() + QPoint(110,0));
+        newIcon->move(rect().center() + QPoint(103,15));
+
         newIcon1->show();
-        newIcon2->show();
+
+
+        if((event->mimeData()->hasFormat("2")))
+        {
+
+                newIcon->setText(".");
+                newIcon->show();
+                newIcon2->show();
+        }
+
+        if((event->mimeData()->hasFormat("3")))
+        {
+
+                newIcon->setText("|");
+                newIcon->show();
+                newIcon2->show();
+        }
+
+        if((event->mimeData()->hasFormat("4")))
+        {
+
+                newIcon->setText("?");
+                newIcon->show();
+
+        }
+
+        if((event->mimeData()->hasFormat("5")))
+        {
+
+                newIcon->setText("+");
+                newIcon->show();
+
+        }
+
+        if((event->mimeData()->hasFormat("6")))
+        {
+
+                newIcon->setText("*");
+                newIcon->show();
+
+        }
+
+        if((event->mimeData()->hasFormat("7")))
+        {
+
+                newIcon->setText("{a,b}");
+                newIcon->show();
+
+        }
+
+        if((event->mimeData()->hasFormat("8")))
+        {
+
+                newIcon->setText("[]");
+                newIcon->show();
+
+        }
+
+
         newIcon1->setAttribute(Qt::WA_DeleteOnClose);
         newIcon2->setAttribute(Qt::WA_DeleteOnClose);
-       // QLabel *newIcon = new QLabel(this);
-       // newIcon->setPixmap(pixmap);
-       // newIcon->move(event->pos() - offset);
-       // newIcon->show();
-       // newIcon->setAttribute(Qt::WA_DeleteOnClose);
+
+
+        //Treba dodati posebno ponasanje za svaku sliku
+
+        //takodje ako se nalazimo unutar neke labele, treba u njoj postavljati
 
         if (event->source() == this) {
             //event->setDropAction(Qt::MoveAction);

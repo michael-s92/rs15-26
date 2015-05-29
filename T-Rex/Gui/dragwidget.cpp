@@ -19,37 +19,43 @@ DragWidget::DragWidget(QWidget *parent)
 
     layout->setAlignment(Qt::AlignCenter);
 
-    layout->addWidget(makeToolIcon(":/toolBox/images/diag1.ico", "slovo", "slovo"));
-    layout->addWidget(makeToolIcon(":/toolBox/images/diag2.ico", "Nadovezi", "konkatenacija"));
-    layout->addWidget(makeToolIcon(":/toolBox/images/diag3.ico", "ili", "disjunkcija"));
-    layout->addWidget(makeToolIcon(":/toolBox/images/diag4.ico", "Jednom ili nijednom", "jednom ili ni jednom prikazi"));
-    layout->addWidget(makeToolIcon(":/toolBox/images/diag5.ico", "jedan ili vise", "jedan ili vise puta"));
-    layout->addWidget(makeToolIcon(":/toolBox/images/diag6.ico", "Nula ili vise", "nula ili vise puta prikazi"));
-    layout->addWidget(makeToolIcon(":/toolBox/images/diag7.ico", "Tacno toliko", "Tacno toliko puta"));
-    layout->addWidget(makeToolIcon(":/toolBox/images/diag8.ico", "jedno od", "Karakterska klasa"));
+    layout->addWidget(makeToolIcon(":/toolBox/images/diag1.ico", "slovo", "slovo",1, ""));
+    layout->addWidget(makeToolIcon(":/toolBox/images/diag2.ico", "Nadovezi", "konkatenacija",2,"."));
+    layout->addWidget(makeToolIcon(":/toolBox/images/diag3.ico", "ili", "disjunkcija",3,"|"));
+    layout->addWidget(makeToolIcon(":/toolBox/images/diag4.ico", "Jednom ili nijednom", "jednom ili ni jednom prikazi",4,"?"));
+    layout->addWidget(makeToolIcon(":/toolBox/images/diag5.ico", "jedan ili vise", "jedan ili vise puta",5,"+"));
+    layout->addWidget(makeToolIcon(":/toolBox/images/diag6.ico", "Nula ili vise", "nula ili vise puta prikazi",6,"*"));
+    layout->addWidget(makeToolIcon(":/toolBox/images/diag7.ico", "Tacno toliko", "Tacno toliko puta",7,"{a,b}"));
+    layout->addWidget(makeToolIcon(":/toolBox/images/diag8.ico", "jedno od", "Karakterska klasa",8,"[]"));
 
 }
 //! [0]
 
-QLabel* DragWidget::makeToolIcon(const QString& path, const QString& write, const QString& toolTip){
+QLabel* DragWidget::makeToolIcon(const QString& path, const QString& write, const QString& toolTip, int i, const QString& text){
 
     QImage *image = new QImage(path);
-    image->scaledToWidth(50, Qt::SmoothTransformation); //nece da radi?!
 
     QPainter* painter = new QPainter(image);
     painter->setPen(Qt::blue);
-    painter->setFont(QFont("Arial", 20));
+    painter->setFont(QFont("Arial", 35));
     painter->drawText(image->rect(), Qt::AlignBaseline, write);
 
-    QLabel* imageLabel = new QLabel();
-    imageLabel->setPixmap(QPixmap::fromImage(*image));
-    imageLabel->setAlignment(Qt::AlignCenter);
-    imageLabel->setToolTip(toolTip);
-    imageLabel->setAttribute(Qt::WA_DeleteOnClose);
-    imageLabel->setFixedSize(60,20);
-    imageLabel->setFixedSize(50, 50);
+    imageLabels[i] = new QLabel();
+    imageLabels[i]->setText(text);
+    imageLabels[i]->setPixmap(QPixmap::fromImage(*image));
+    imageLabels[i]->setAlignment(Qt::AlignCenter);
+    imageLabels[i]->setToolTip(toolTip);
+    imageLabels[i]->setAttribute(Qt::WA_DeleteOnClose);
+    imageLabels[i]->setScaledContents(true);
+    imageLabels[i]->setSizePolicy( QSizePolicy::Ignored, QSizePolicy::Ignored );
+    imageLabels[i]->setFixedSize(90, 70);
 
-    return imageLabel;
+    return imageLabels[i];
+}
+
+QString DragWidget::getLabelName(int i) const
+{
+    return imageLabels[i]->text();
 }
 
 void DragWidget::dragEnterEvent(QDragEnterEvent *event)
@@ -68,7 +74,7 @@ void DragWidget::dragEnterEvent(QDragEnterEvent *event)
 
 void DragWidget::dragMoveEvent(QDragMoveEvent *event)
 {
-    if (event->mimeData()->hasFormat("application/x-acceptdata")) {
+    if (event->mimeData()->hasFormat("application/x-acceptdata1")) {
         if (event->source() == this) {
             //event->setDropAction(Qt::MoveAction);
             //event->accept();
@@ -118,12 +124,13 @@ void DragWidget::dropEvent(QDropEvent *event)
 //! [1]
 void DragWidget::mousePressEvent(QMouseEvent *event)
 {
+    int i,j,k,pom;
     QLabel *child = static_cast<QLabel*>(childAt(event->pos()));
     if (!child)
         return;
 
     QPixmap pixmap = *child->pixmap();
-
+    qDebug() << event->pos();
     QByteArray itemData;
     QDataStream dataStream(&itemData, QIODevice::WriteOnly);
     dataStream << pixmap << QPoint(event->pos() - child->pos());
@@ -131,7 +138,22 @@ void DragWidget::mousePressEvent(QMouseEvent *event)
 
 //! [2]
     QMimeData *mimeData = new QMimeData;
-    mimeData->setData("application/x-acceptdata", itemData);
+    QString s;
+    //s. childAt(event->pos());
+
+    j = 10;
+    k = 80;
+    for(i = 1; i <= 8; i++)
+    {
+        if((event->pos().ry() >= j) && (event->pos().ry() <= k))
+            pom = i;
+        j+=75;
+        k+=75;
+
+    }
+    s.append(QString::number(pom));
+    qDebug() << s;
+    mimeData->setData(s , itemData);
 //! [2]
 
 //! [3]
