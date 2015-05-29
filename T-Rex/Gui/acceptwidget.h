@@ -2,6 +2,7 @@
 #define ACCEPTWIDGET_H
 
 #include <QFrame>
+#include "dragwidget.h"
 
 QT_BEGIN_NAMESPACE
 class QDragEnterEvent;
