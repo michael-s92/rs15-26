@@ -19,6 +19,7 @@ protected:
     void dragMoveEvent(QDragMoveEvent *event) Q_DECL_OVERRIDE;
     void dropEvent(QDropEvent *event) Q_DECL_OVERRIDE;
     void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
+    int _numberOfDrops = 0;
 };
 
 #endif // ACCEPTWIDGET_H
