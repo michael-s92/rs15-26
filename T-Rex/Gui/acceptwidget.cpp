@@ -38,6 +38,8 @@ void AcceptWidget::dropEvent(QDropEvent *event)
     if ((event->mimeData()->hasFormat("1") || event->mimeData()->hasFormat("2") || event->mimeData()->hasFormat("1") || event->mimeData()->hasFormat("3") ||event->mimeData()->hasFormat("4") || event->mimeData()->hasFormat("5") || event->mimeData()->hasFormat("6") || event->mimeData()->hasFormat("7") || event->mimeData()->hasFormat("8"))
 
             && event->source() != this) {
+        qDebug() << _numberOfDrops;
+        //ispravi, nije dobro
         QByteArray itemData = event->mimeData()->data("1");
         QDataStream dataStream(&itemData, QIODevice::ReadOnly);
 
@@ -49,13 +51,14 @@ void AcceptWidget::dropEvent(QDropEvent *event)
         QLabel* newIcon = new QLabel(this);
         QLabel *newIcon2 = new QLabel(this);
 
+     if(_numberOfDrops == 0)
+     {
         newIcon1->setFrameStyle(3);
         newIcon2->setFrameStyle(3);
         newIcon1->setFixedSize(100,30);
         newIcon2->setFixedSize(100,30);
 
-        newIcon1->move(rect().center()
-                        );
+        newIcon1->move(rect().center());
         newIcon2->move(rect().center() + QPoint(110,0));
         newIcon->move(rect().center() + QPoint(103,15));
 
@@ -118,6 +121,14 @@ void AcceptWidget::dropEvent(QDropEvent *event)
 
         }
 
+    }
+
+     else
+     {
+
+     }
+
+
 
         newIcon1->setAttribute(Qt::WA_DeleteOnClose);
         newIcon2->setAttribute(Qt::WA_DeleteOnClose);
@@ -137,6 +148,7 @@ void AcceptWidget::dropEvent(QDropEvent *event)
     } else {
         event->ignore();
     }
+    _numberOfDrops++;
 }
 
 //! [1]
