@@ -12,6 +12,8 @@ using namespace std;
 class Reg_node {
 public:
     virtual void accept(Visitor_nodes & v) const=0;
+    virtual ~Reg_node()
+    {}
 };
 
 
@@ -23,6 +25,7 @@ protected:
 
 public:
     Binary_op_reg_node(Reg_node* left, Reg_node* right);
+    ~Binary_op_reg_node();
     Reg_node *getLeft() const;
     Reg_node *getRight() const;
 };
@@ -36,6 +39,7 @@ protected:
 
 public:
     Unary_op_reg_node(Reg_node *reg);
+    ~Unary_op_reg_node();
     Reg_node * getReg() const;
 };
 

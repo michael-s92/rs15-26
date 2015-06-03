@@ -8,6 +8,12 @@ Binary_op_reg_node::Binary_op_reg_node(Reg_node* left, Reg_node* right)
 {
 }
 
+Binary_op_reg_node::~Binary_op_reg_node()
+{
+    delete _left;
+    delete _right;
+}
+
 Reg_node *Binary_op_reg_node::getLeft() const
 {
     return _left;
@@ -23,6 +29,11 @@ Reg_node *Binary_op_reg_node::getRight() const
 Unary_op_reg_node::Unary_op_reg_node(Reg_node *reg)
     :_reg(reg)
 {}
+
+Unary_op_reg_node::~Unary_op_reg_node()
+{
+    delete _reg;
+}
 
 Reg_node *Unary_op_reg_node::getReg() const
 {

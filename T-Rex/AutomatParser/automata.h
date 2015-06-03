@@ -22,8 +22,6 @@ public:
     int getState2() const;
     int getC() const;
 
-    // videti jos koliko ima smisla za ovu funkciju
-    // nesto prakticnije
     bool equal1(int state, char c);
     bool operator == (const Edge & edge);
 

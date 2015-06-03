@@ -107,50 +107,21 @@ GraphView::renderGraph(const QString& filename)
     if (fp)
     {
     GVC_t* gvc = gvContext();
-    if (gvc != NULL)
-    {
-        graph_t* graph = agread(fp,0);
-        if (graph != NULL)
-        {
-        if (gvLayout(gvc, graph, "dot") == 0)
-        {
-            renderGraph(graph);
-            gvFreeLayout(gvc, graph);
-        }
-        else
-        {
-            qCritical("gvLayout() failed");
-        }
-
-        agclose(graph);
-        }
-        else
-        {
-        qCritical("agread() failed");
-        }
-
-        gvFreeContext(gvc);
-    }
-    else
-    {
-        qCritical("gvContext() failed");
-    }
-
+    graph_t* graph = agread(fp,0);
+    gvLayout(gvc, graph, "dot");
+    renderGraph(graph);
+    gvFreeLayout(gvc, graph);
+    agclose(graph);
+    gvFreeContext(gvc);
     fclose(fp);
     }
     else
-    {
-    qCritical("failed to open %s", filename.toUtf8().constData());
-    }
+     std::cerr << "Greska prilikom otvaranja datoteke " << filename.toStdString() << std::endl;
 }
 
 
 void GraphView::make_ellipse_helper(node_t *node, QPainterPath &path) const {
     const polygon_t *const poly = static_cast<polygon_t *>(ND_shape_info(node));
-
-    if(poly->peripheries != 1) {
-      //  qWarning("unsupported number of peripheries %d", poly->peripheries);
-    }
 
     const int sides = poly->sides;
     const pointf* vertices = poly->vertices;
@@ -174,12 +145,10 @@ QPainterPath GraphView::make_shape(node_t *node) const {
     const QString name = QString::fromUtf8(ND_shape(node)->name);
 
 
-    if(name == "ellipse" || name=="doublecircle" || name == "circle" || name == "point" || name == "Mcircle") {
+    if(name=="doublecircle" || name == "circle" || name == "point" || name == "Mcircle") {
         make_ellipse_helper(node, path);
     } else if(name == "none") {
-        // NO-OP
-    } else {
-        qWarning("unsupported shape %s", qPrintable(name));
+
     }
 
     return path;
@@ -200,12 +169,6 @@ GraphView::drawLabel(const textlabel_t* textlabel, QPainter* painter) const
     QRectF rect(fm.boundingRect(text));
     rect.moveCenter(gToQ(textlabel->pos, false));
     painter->drawText(rect.adjusted(-1, -1, +1, +1), Qt::AlignCenter, text);
-}
-
-void
-GraphView::drawLabel2(const textlabel_t* textlabel, QPainter* painter) const
-{
-
 }
 
 
@@ -322,7 +285,6 @@ GraphView::renderGraph(graph_t* graph)
             item->setZValue(-1.0);
 
             addItem(item);
-            //edges.append(item);
             }
         }
         }
@@ -340,6 +302,11 @@ GraphNode::GraphNode(int state, const QPainterPath& path, const QPicture& pictur
     : GraphItem(path,picture),
       state(state)
 {
+}
+
+int GraphNode::ind()
+{
+    return 0;
 }
 
 
@@ -367,6 +334,11 @@ QRectF
 GraphEdge::boundingRect() const
 {
     return QGraphicsPathItem::boundingRect().united(picture.boundingRect());
+}
+
+int GraphEdge::ind()
+{
+    return 1;
 }
 
 
