@@ -69,15 +69,12 @@ extern void set_text(const char *s);
 
 %%
 
-// pravilo potrebno samo za ispisivanje cvora
+
 Reg : RegExp                {
                               reg = $1;
                           //     cout << *$1 << endl;
                             }
 ;
-
-// ovim pravilom obezbedjujemo da se kad imamo izraze ^^^^ reg_izraz $$$
-// uzimamo u obzir samo reg_izraz
 
 
 RegExp :
@@ -120,7 +117,10 @@ RegExp :
                                         else if ($2->a==0 && $2->b==0)
                                             $$ = new Empty_reg_node();
                                         else if ($2->b!=-1 && $2->a > $2->b)
+                                        {
                                             greska=1;
+                                            delete $1;
+                                        }
                                         else if ($2->a==0 && $2->b==1)
                                             $$ = $1;
                                          else
@@ -128,6 +128,7 @@ RegExp :
                                          $$  = new Repetition_reg_node($1,$2->a,$2->b);
                                          // ispisi("RegExp","RegSimple Repetition");
                                          }
+                                         delete $2;
                                         }
         // Reg+? - za lenjo izracunavanje
         // izdvajamo posebno, jer bi u rekurziji dozvolili izraze a+????
@@ -198,15 +199,22 @@ RegLasy
         // Reg{2,3}
        | RegSimple Repetition           {
                                          if ($2->a==1 && $2->b==1)
-                                          $$ = $1;
-                                         else if ($2->a==0 && $2->a==0)
-                                          greska=1;
+                                           $$ = $1;
+                                         else if ($2->a==0 && $2->b==0)
+                                           $$ = new Empty_reg_node();
                                          else if ($2->b!=-1 && $2->a > $2->b)
-                                          greska=1;
+                                         {
+                                           greska=1;
+                                           delete $1;
+                                         }
+                                         else if ($2->a==0 && $2->b==1)
+                                           $$ = $1;
                                          else
-                                          $$  = new Repetition_reg_node($1,$2->a,$2->b);
-
-                              //          ispisi("RegLasy","RegSimple Repetition");
+                                         {
+                                           $$  = new Repetition_reg_node($1,$2->a,$2->b);
+                                           // ispisi("RegLasy","RegSimple Repetition");
+                                         }
+                                         delete $2;
                                         }
 ;
 
@@ -228,17 +236,20 @@ Repetition : rep1_token         {
 CharacterClass : ou_token ArraySym zu_token
                                             {
                                             $$ = new Char_class_reg_node(*$2,true);
+                                            delete $2;
                                      //        ispisi("CharacterClass","[ ArraySym ]");
                                             }
                | ou_token caret_token ArraySym zu_token
                                                           {
                                                           $$ = new Char_class_reg_node(*$3,false);
+                                                          delete $3;
                                      //                      ispisi("CharacterClass","^  [ ArraySym ]");
                                                           }
 
 ;
 
 ArraySym : ArraySym CharPart           { $$ = $1; add_vector(*$1,*$2);
+                                         delete $2;
                                   //       ispisi("ArraySym","ArraySym CharPart");
                                        }
          | CharPart                    {
@@ -255,12 +266,15 @@ CharPart : SymbolChar minus_token SymbolChar    {
                                                 $$ = new vector<Symbol_reg_node *>;
                                                 for (char c=c1; c<=c2; c++)
                                                 $$->push_back(new Normal_symbol_reg_node(c));
+                                                delete $1;
+                                                delete $3;
                                        //          ispisi("CharPart","SymbolChar - SymbolChar");
 
                                                 }
          | SymbolChar                           {
                                                  $$ = new vector<Symbol_reg_node *>;
                                                  $$->push_back($1->clone());
+                                                 delete $1;
                                     //              ispisi("CharPart","SymbolChar");
                                                 }
 ;
@@ -299,6 +313,7 @@ BackslashReg : d_token                  {
              | backslash_token Symbol   {
                                         $$ = new Backslash_symbol_reg_node($2->getValue());
                                   //       ispisi("BackslashReg","\\ Symbol");
+                                        delete $2;
                                         }
              | n_token                  {
                                         $$ = new Backslash_symbol_reg_node('n');
