@@ -2,9 +2,6 @@
 #include <QMap>
 #include <QtAlgorithms>
 
-// TO-DO
-// sve iteratore zameniti ugradjenim iteratorima
-
 
 using namespace std;
 
@@ -80,7 +77,8 @@ void Automata::setStart(int start_state)
 
 void Automata::addAcceptState(int accept_state)
 {
-    _accept_states.append(accept_state);
+    if (!_accept_states.contains(accept_state))
+      _accept_states.append(accept_state);
 
 }
 
@@ -104,10 +102,13 @@ void Automata::addChar(char c)
 
 void Automata::addAlphabet(QVector<char> alphabet)
 {
-    QVector<char>::iterator i = alphabet.begin();
-    for (; i!=alphabet.end(); i++)
-        if (!_alphabet.contains(*i))
-            _alphabet.append(*i);
+    QVectorIterator<char> i(alphabet);
+    while (i.hasNext())
+    {
+        char c = i.next();
+        if (!_alphabet.contains(c))
+            _alphabet.append(c);
+    }
 }
 
 void Automata::addState(int state)
@@ -130,14 +131,15 @@ void Automata::makeDotFile(ostream &osr)
         else
           osr << _states[j] << "[label=\"" << _states[j] << "\" shape=\"doublecircle\"];" << endl;
     }
-    QVector<Edge>::iterator i = _edges.begin();
-    for (;i!=_edges.end(); i++)
+    QVectorIterator<Edge> i (_edges);
+    while (i.hasNext())
     {
-        osr << (*i).getState1() << "->" << (*i).getState2();
-        if ((*i).getC()=='\0')
+        Edge e = i.next();
+        osr << e.getState1() << "->" << e.getState2();
+        if (e.getC()=='\0')
             osr <<"[label=\"&epsilon;\"];" << endl;
         else
-          osr <<"[label=\"" << (char)(*i).getC() << "\"];" << endl;
+          osr <<"[label=\"" << (char)e.getC() << "\"];" << endl;
     }
 
     osr << "-1 [label = \"\"];" << endl;
@@ -308,18 +310,19 @@ Gluskov::Gluskov(const Thompson & t)
                epsilon_zatvorenja[j]=odredi_zatvorenje(j,obradjeni);
        }
 
-       QVector<Edge>::iterator iter = prelazi_po_slovu.begin();
-       for (; iter!=prelazi_po_slovu.end(); iter++)
+       QVectorIterator<Edge> iter(prelazi_po_slovu);
+       while(iter.hasNext())
        {
+           Edge prelaz = iter.next();
            QMap<int, QVector<int>>::iterator i = epsilon_zatvorenja.begin();
            QMap<int, QVector<int>>::iterator j;
            for (; i!=epsilon_zatvorenja.end(); i++)
            {
                j = epsilon_zatvorenja.begin();
                for (; j!=epsilon_zatvorenja.end(); j++)
-                   if (i.value().contains(iter->getState1()) &&
-                       j.value().contains(iter->getState2()))
-                      addEdge(i.key(),j.key(),iter->getC());
+                   if (i.value().contains(prelaz.getState1()) &&
+                       j.value().contains(prelaz.getState2()))
+                      addEdge(i.key(),j.key(),prelaz.getC());
            }
        }
 
@@ -341,10 +344,13 @@ QVector<int> Gluskov::odredi_zatvorenje(int state, QVector<int> obradjeni)
     zatvorenje << state;
     if (epsilon_prelazi.find(state)!=epsilon_prelazi.end())
     {
-    QVector<int>::iterator i = epsilon_prelazi[state].begin();
-    for (;i!=epsilon_prelazi[state].end(); i++)
-        if (!obradjeni.contains(*i))
-          zatvorenje << odredi_zatvorenje(*i, obradjeni);
+    QVectorIterator<int> i(epsilon_prelazi[state]);
+       while(i.hasNext())
+        {
+        int x = i.next();
+        if (!obradjeni.contains(x))
+          zatvorenje << odredi_zatvorenje(x, obradjeni);
+        }
     }
     return zatvorenje;
 }

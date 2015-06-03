@@ -17,6 +17,7 @@ class ParserEngine
 {
 public:
     ParserEngine();
+    ~ParserEngine();
     ParserEngine(QString regular);
     QString getRegular() const;
     Reg_node * getRegNode() const;

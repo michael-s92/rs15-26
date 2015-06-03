@@ -91,6 +91,37 @@ bool AutomatProcess::tomson_draw(const QString &regular){
         opis->clear();
         try {
              parser = ParserEngine(regular);
+             Thompson::state_count=0;
+
+             cout << "odradio sam ovo";
+             Reg_node * reg_node = parser.getRegNode();
+
+             ThompsonNodes thompsonNodes;
+             reg_node->accept(thompsonNodes);
+             Thompson t = thompsonNodes.getTh();
+
+
+             fstream f;
+             f.open("thompson.dot",fstream::out);
+             t.makeDotFile(f);
+             f.close();
+
+             if (scene!=0)
+             {
+                 scene->clearGraph();
+             }
+
+             scene = new GraphView("thompson.dot");
+
+
+             panel->setScene(scene);
+             ispisi_podatke(t);
+             if (kretanje!=0)
+                 delete kretanje;
+             kretanje = 0;
+             count =0;
+             return true;
+
             }
         catch (ParserException p)
            {
@@ -102,32 +133,6 @@ bool AutomatProcess::tomson_draw(const QString &regular){
             count = 0;
             return false;
            }
-       Thompson::state_count=0;
-       Reg_node * reg_node = parser.getRegNode();
-       ThompsonNodes thompsonNodes;
-       reg_node->accept(thompsonNodes);
-       Thompson t = thompsonNodes.getTh();
-
-       fstream f;
-       f.open("thompson.dot",fstream::out);
-       t.makeDotFile(f);
-       f.close();
-
-       if (scene!=0)
-       {
-           scene->clearGraph();
-       }
-
-       scene = new GraphView("thompson.dot");
-
-
-       panel->setScene(scene);
-       ispisi_podatke(t);
-       if (kretanje!=0)
-           delete kretanje;
-       kretanje = 0;
-       count =0;
-       return true;
     }
 
 

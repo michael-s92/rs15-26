@@ -9,7 +9,6 @@ ParserException::ParserException(const QString m)
 
 ParserException::~ParserException()
 {
-
 }
 
 QString ParserException::what()
@@ -19,6 +18,10 @@ QString ParserException::what()
 
 ParserEngine::ParserEngine()
  :_reg_node(0)
+{
+}
+
+ParserEngine::~ParserEngine()
 {
 }
 
