@@ -1,5 +1,4 @@
 #include "kretanje.h"
-
 #include <iostream>
 
 Kretanje::Kretanje()
@@ -20,10 +19,11 @@ Kretanje::Kretanje(Automata & a, QList<QGraphicsItem*> & items)
    for (int i=0; i< prelazi.length(); i++)
        prelazi[i].resize(alphabet.length()+1);
 
-   QList<QGraphicsItem*>::iterator i = items.begin();
-   for (; i!=items.end(); i++)
+   QListIterator<QGraphicsItem *> i(items);
+   while (i.hasNext())
    {
-       GraphItem * j = (GraphItem*)(*i);
+       QGraphicsItem* item = i.next();
+       GraphItem * j = (GraphItem*)(item);
        if (j->ind()==0)
        {
           int state = ((GraphNode*)j)->state;

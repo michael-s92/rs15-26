@@ -31,18 +31,16 @@ private:
     QVector<GraphNode *> nodes;
     QVector<GraphEdge *> edges;
 
-    QPointF gToQ(const point& p, bool upside_down = true) const;
-    QPointF gToQ(const pointf& p, bool upside_down = true) const;
-
-    QString aggetToQString(void* obj, const char* name, const QString& fallback) const;
+    QPointF transliraj(const point& p, bool up_down) const;
+    QPointF transliraj(const pointf& p, bool up_down = true) const;
 
     void make_ellipse_helper(node_t *node, QPainterPath &path) const;
     QPainterPath make_shape(node_t *node) const;
 
     QPainterPath makeBezier(const bezier& bezier) const;
 
-    void drawLabel(const textlabel_t* textlabel, QPainter* painter) const;
-    void drawArrow(const QLineF& line,const textlabel_t* textlabel, const QColor& color, QPainter* painter) const;
+    void drawNodeDetails(const textlabel_t* textlabel, QPainter* painter) const;
+    void drawEdgeDetails(const QLineF& line,const textlabel_t* textlabel, const QColor& color, QPainter* painter) const;
 
 };
 

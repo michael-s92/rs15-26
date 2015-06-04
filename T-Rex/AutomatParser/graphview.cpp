@@ -32,43 +32,39 @@ GraphView::~GraphView()
 }
 
 
-QPointF
-GraphView::gToQ(const point& p, bool upside_down) const
+QPointF GraphView::transliraj(const point& p, bool up_down) const
 {
-    return upside_down ? QPointF(p.x, graphRect.height() - p.y) : QPointF(p.x, -p.y);
+    if (up_down)
+        return QPointF(p.x, graphRect.height() - p.y);
+    else
+        return QPointF(p.x, -p.y);
 }
 
-QPointF
-GraphView::gToQ(const pointf& p, bool upside_down) const
+QPointF GraphView::transliraj(const pointf& p, bool up_down) const
 {
-    return upside_down ? QPointF(p.x, graphRect.height() - p.y) : QPointF(p.x, -p.y);
+    if (up_down)
+        return QPointF(p.x, graphRect.height() - p.y);
+    else
+        return QPointF(p.x, -p.y);
 }
 
-
-QString
-GraphView::aggetToQString(void* obj, const char* name, const QString& fallback) const
-{
-    const char* tmp = agget(obj, const_cast<char*>(name));
-    if (tmp == NULL || strlen(tmp) == 0)
-    return fallback;
-    return QString::fromUtf8(tmp);
-}
 
 QPainterPath
 GraphView::makeBezier(const bezier& bezier) const
 {
     QPainterPath path;
-    path.moveTo(gToQ(bezier.list[0]));
+    path.moveTo(transliraj(bezier.list[0]));
     for (int i = 1; i < bezier.size - 1; i += 3)
-    path.cubicTo(gToQ(bezier.list[i]), gToQ(bezier.list[i+1]), gToQ(bezier.list[i+2]));
+    path.cubicTo(transliraj(bezier.list[i]), transliraj(bezier.list[i+1]), transliraj(bezier.list[i+2]));
     return path;
 }
 
 
 void
-GraphView::drawArrow(const QLineF& line, const textlabel_t* textlabel, const QColor& color, QPainter* painter) const
+GraphView::drawEdgeDetails(const QLineF& line, const textlabel_t* textlabel, const QColor& color, QPainter* painter) const
 {
     QLineF n(line.normalVector());
+
     QPointF o(n.dx() / 3.0, n.dy() / 3.0);
 
     QPolygonF polygon;
@@ -94,7 +90,7 @@ GraphView::drawArrow(const QLineF& line, const textlabel_t* textlabel, const QCo
     QString text(QString::fromUtf8(textlabel->text));
     QFontMetricsF fm(painter->fontMetrics());
     QRectF rect(fm.boundingRect(text));
-    rect.moveCenter(gToQ(textlabel->pos, true));
+    rect.moveCenter(transliraj(textlabel->pos, true));
     painter->drawText(rect.adjusted(-1, -1, +1, +1), Qt::AlignCenter, text);
 
 }
@@ -128,7 +124,7 @@ void GraphView::make_ellipse_helper(node_t *node, QPainterPath &path) const {
 
     QPolygonF polygon;
     for (int side = 0; side < sides; side++) {
-        polygon.append(gToQ(vertices[side], false));
+        polygon.append(transliraj(vertices[side], false));
     }
 
     QRectF ellipse_bounds(polygon[0], polygon[1]);
@@ -156,9 +152,9 @@ QPainterPath GraphView::make_shape(node_t *node) const {
 
 
 void
-GraphView::drawLabel(const textlabel_t* textlabel, QPainter* painter) const
+GraphView::drawNodeDetails(const textlabel_t* textlabel, QPainter* painter) const
 {
-    painter->setPen(textlabel->fontcolor);
+    painter->setPen(Qt::black);
 
     QFont font(textlabel->fontname, textlabel->fontsize);
     font.setPixelSize(textlabel->fontsize);
@@ -167,8 +163,8 @@ GraphView::drawLabel(const textlabel_t* textlabel, QPainter* painter) const
     QString text(QString::fromUtf8(textlabel->text));
     QFontMetricsF fm(painter->fontMetrics());
     QRectF rect(fm.boundingRect(text));
-    rect.moveCenter(gToQ(textlabel->pos, false));
-    painter->drawText(rect.adjusted(-1, -1, +1, +1), Qt::AlignCenter, text);
+    rect.moveCenter(QPointF(0,0));
+    painter->drawText(rect,Qt::AlignCenter, text);
 }
 
 
@@ -188,7 +184,7 @@ GraphView::renderGraph(graph_t* graph)
     clearGraph();
 
     graphRect = QRectF(GD_bb(graph).LL.x, GD_bb(graph).LL.y, GD_bb(graph).UR.x, GD_bb(graph).UR.y);
-    setSceneRect(graphRect.adjusted(-5, -5, +5, +5));
+    setSceneRect(graphRect);
 
     setBackgroundBrush(Qt::white);
 
@@ -198,7 +194,7 @@ GraphView::renderGraph(graph_t* graph)
         QPainter painter;
 
         painter.begin(&picture);
-        drawLabel(ND_label(node), &painter);
+        drawNodeDetails(ND_label(node), &painter);
         painter.end();
 
         QString tekst(ND_label(node)->text);
@@ -208,7 +204,7 @@ GraphView::renderGraph(graph_t* graph)
         else
             item = new GraphNode(QString(ND_label(node)->text).toInt(), make_shape(node), picture);
 
-        item->setPos(gToQ(ND_coord(node)));
+        item->setPos(transliraj(ND_coord(node)));
 
         QPen pen(Qt::black);
         pen.setWidthF(1.0);
@@ -216,14 +212,6 @@ GraphView::renderGraph(graph_t* graph)
 
         QBrush brush(Qt::green);
         item->setBrush(brush);
-
-
-        QString tooltip = aggetToQString(node, "tooltip", ND_label(node)->text);
-        if (!tooltip.isEmpty())
-        {
-            tooltip.replace("\\n", "\n");
-            item->setToolTip(tooltip);
-        }
 
         addItem(item);
 
@@ -240,8 +228,6 @@ GraphView::renderGraph(graph_t* graph)
             if (ED_label(edge)==0)
                 continue;
             painter1.begin(&picture1);
-          //  drawLabel2(ED_label(edge),&painter1);
-            //painter1.end();
 
             for (int i = 0; i < spl->size; ++i)
             {
@@ -250,15 +236,11 @@ GraphView::renderGraph(graph_t* graph)
             QColor color(Qt::black);
 
             QPainterPath path(makeBezier(bz));
-           // QPicture picture;
-           // QPainter painter;
 
-
-             //painter.begin(&picture);
             if (bz.sflag)
-                drawArrow(QLineF(gToQ(bz.list[0]), gToQ(bz.sp)),ED_label(edge), color, &painter1);
+                drawEdgeDetails(QLineF(transliraj(bz.list[0]), transliraj(bz.sp)),ED_label(edge),color, &painter1);
             if (bz.eflag)
-                drawArrow(QLineF(gToQ(bz.list[bz.size-1]), gToQ(bz.ep)),ED_label(edge), color, &painter1);
+                drawEdgeDetails(QLineF(transliraj(bz.list[bz.size-1]), transliraj(bz.ep)),ED_label(edge), color, &painter1);
              painter1.end();
 
             QString text1(ND_label(node)->text);

@@ -22,6 +22,7 @@ public:
     bool minimal_draw(const QString &regular);
 
     void ispisi_podatke(Automata & a);
+    void save_picture(QGraphicsView * panel, QString filename);
 
     int kreciSe(int k);
 
@@ -32,7 +33,8 @@ private:
     QPlainTextEdit* opis;
 
     GraphView *scene;
-    Kretanje * kretanje;
+    Kretanje kretanje;
+    bool ind_kretanje;
     int count;
 
     QLineEdit *word;
