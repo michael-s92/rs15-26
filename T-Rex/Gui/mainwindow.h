@@ -36,6 +36,7 @@ private Q_SLOTS:
     void prikazCeline(bool chk);
     void azurirajMeniContent(bool tmp);
     void loadWebPage(QString id);
+    void sendMail();
 
 private:
 
