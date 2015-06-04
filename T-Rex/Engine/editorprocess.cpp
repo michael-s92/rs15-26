@@ -75,6 +75,9 @@ int EditorProcess::doMatch(QString what, QPlainTextEdit* area, bool _ignorecaseF
      */
     if(mark.isValid()){
 
+        if(_ignorecaseFlag)
+            mark.setPatternOptions(QRegularExpression::CaseInsensitiveOption);
+
         buffer = area->toPlainText();
         buffer.replace(mark, "<span style=\"color:#660033; font: italic bold\">\\1</span>");
         area->setPlainText("");

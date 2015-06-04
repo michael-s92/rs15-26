@@ -6,6 +6,7 @@
 #include "automatframe.h"
 #include "diagramframe.h"
 #include "guibuilder.h"
+#include "maildialog.h"
 
 #include <QPushButton>
 #include <QDockWidget>
@@ -107,21 +108,22 @@ void MainWindow::setUpMenuActions(){
 
     connect(ui->actionT_Rex_Twitter, SIGNAL(triggered()), &goToWeb, SLOT(map()));
     goToWeb.setMapping(ui->actionT_Rex_Twitter, "https://www.twitter.com");
+
+    connect(ui->actionPodrska, SIGNAL(triggered()), this, SLOT(sendMail()));
     //----------------
+
+}
+
+void MainWindow::sendMail(){
+
+    MailDialog mail;
+    mail.exec();
 
 }
 
 void MainWindow::loadWebPage(QString id){
 
     bool anw = QDesktopServices::openUrl(QUrl(id, QUrl::StrictMode));
-
-    /*
-     * Slanje mail sa:
-     * Test - naslov
-     * Just a test - poruka
-     * user@foo.com = mail
-     * mailto:user@foo.com?subject=Test&body=Just a test
-     */
 
     if(!anw)
         GuiBuilder::throwErrorMessage("Proverite internet konekciju ili ispravnost podrazumevanog web pretrazivaca.");
