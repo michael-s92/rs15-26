@@ -5,14 +5,9 @@
 #include "AutomatParser/graphview.h"
 
 
-// zameniti sve iteratore ugradjenim iteratorim u Qt-u
-// ispisati jos neke podatke o automatima
-// izvrsiti prenumeraciju stanja
-
 // bagovi
 // kada se pojavi dialog box obezbediti blokadu ostalog
 // kada ispisuje formalne podatke o grafu - ne radi scroll
-
 
 
 using namespace std;
@@ -114,6 +109,9 @@ bool AutomatProcess::tomson_draw(const QString &regular){
              ispisi_podatke(t);
              ind_kretanje = 0;
              count =0;
+
+             save_picture(panel,"thompson.png");
+
              return true;
 
             }
@@ -266,6 +264,18 @@ void AutomatProcess::ispisi_podatke(Automata & a)
     a.plainTextAddStates(opis);
     a.plainTextAddAcceptStates(opis);
     a.plainTextAddEdges(opis);
+}
+
+void AutomatProcess::save_picture(QGraphicsView * panel , QString filename)
+{
+    QGraphicsScene *scene= panel->scene();
+    scene->clearSelection();
+    QRectF rect = scene->sceneRect();
+    QImage image(rect.size().toSize(), QImage::Format_ARGB32);
+    image.fill(Qt::transparent);
+    QPainter painter(&image);
+    scene->render(&painter);
+    image.save(filename);
 }
 
 
