@@ -465,8 +465,6 @@ Minimalni::Minimalni()
 }
 
 
-
-
 Minimalni::Minimalni(const Deterministicki &d)
 {
    QVector<QVector<int>> prelaziD = d.getPrelazi();

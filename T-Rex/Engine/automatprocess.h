@@ -32,7 +32,8 @@ private:
     QPlainTextEdit* opis;
 
     GraphView *scene;
-    Kretanje * kretanje;
+    Kretanje kretanje;
+    bool ind_kretanje;
     int count;
 
     QLineEdit *word;
