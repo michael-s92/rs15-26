@@ -50,7 +50,7 @@ private:
     QDockWidget *content;
     QStackedWidget *mainw;
 
-    QSignalMapper switchForm, goToWeb;
+    QSignalMapper switchForm, goToWeb, changeAutomataColor;
 
     //ako zatreba, a ako ne bude trebalo izbrisati
     UvodFrame *_uvod;

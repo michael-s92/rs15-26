@@ -26,6 +26,9 @@ public:
     explicit AutomatFrame(QWidget *parent = 0);
     ~AutomatFrame();
 
+public Q_SLOTS:
+    void colorChanged(const QString cl);
+
 private Q_SLOTS:
     void displaySimulator(bool display);
     void drawAutomata(int ind = 0, bool chk = false);
