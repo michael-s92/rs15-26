@@ -19,7 +19,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    this->setWindowIcon(QIcon(":/images/icon/prog.jpg"));
+    this->setWindowIcon(QIcon(":/images/icon/progIcon.png"));
     this->setWindowTitle("T-Rex");
     this->setMinimumSize(QSize(600, 450));
 
@@ -153,6 +153,7 @@ void MainWindow::napustiProgram(){
 
     if(GuiBuilder::leaveProgramDialog())
         QApplication::exit();
+
 }
 
 void MainWindow::createMainView(){

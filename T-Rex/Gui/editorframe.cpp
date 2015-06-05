@@ -34,7 +34,12 @@ EditorFrame::EditorFrame(QWidget *parent) :
 void EditorFrame::setElements(){
 
     textArea = ui->plainTextEdit;
-    textArea->setPlaceholderText("Unesite text koji pretrazujete ili ga ucitajte iz proizvoljnog fajla...");
+    //textArea->setPlaceholderText("Unesite text koji pretrazujete ili ga ucitajte iz proizvoljnog fajla...");
+
+    QString content("Ovde unosite tekst koji hocete da pretrazujete.\n"
+                    "Naravno taj tekst moze biti bilo sta! Razni datumi, brojevi, slova i oznake.\n"
+                    "Isto tako tekst mozete ucitati i iz proizvoljnog file pritiskom na odgovarajuce dugme.");
+    textArea->setPlainText(content);
 
     makeEditCover();
 

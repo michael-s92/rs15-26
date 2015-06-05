@@ -3,8 +3,7 @@
 #include <QApplication>
 #include <QSplashScreen>
 
-// samo pokusavam jer i dalje se mucim
-
+#include <unistd.h>
 
 int main(int argc, char *argv[])
 {
@@ -14,16 +13,19 @@ int main(int argc, char *argv[])
    a.setApplicationName("T-Rex");
 
    QSplashScreen *splash = new QSplashScreen;
-   splash->setPixmap(QPixmap(":/my_files.qrc")); //staciti neku sliku koju cu ubaciti u Resources
+   QPixmap pick(":/images/icon/cover.jpg");
+   splash->setPixmap(pick); //staciti neku sliku koju cu ubaciti u Resources
+
    splash->show();
+
+
    /*
     * napraviti welcome screen i tu ga prikazivati
     * kako se uopste ubacuju slike u projekat i koriste?!
     */
 
-
    Qt::Alignment topRight = Qt::AlignRight | Qt::AlignTop;
-   splash->showMessage(QObject::tr("Setting up the main window..."), topRight, Qt::red);
+   //splash->showMessage(QObject::tr("Setting up the main window..."), topRight, Qt::red);
    MainWindow w;
 
    /*
@@ -31,6 +33,9 @@ int main(int argc, char *argv[])
    splash->showMessage(QObject::tr("Loading modules..."), topRight, Qt::white);
    loadModules();
    */
+
+   a.processEvents();
+   sleep(5);
 
    w.show();
    splash->finish(&w);

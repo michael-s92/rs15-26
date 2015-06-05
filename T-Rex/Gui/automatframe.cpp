@@ -384,7 +384,8 @@ QWidget* AutomatFrame::makeAutomatWidget(){
     platno = new QGraphicsView();
     //podesiti je minimalnu duzinu mozda, ali tek kad se vidi koliko ispis zaista zauzima
     opisArea = new QPlainTextEdit();
-    opisArea->setEnabled(false);
+    //zbog scroll-a
+    //opisArea->setEnabled(false);
 
     lay->addWidget(option_automat, 0, Qt::AlignCenter);
     lay->addWidget(platno, 1);

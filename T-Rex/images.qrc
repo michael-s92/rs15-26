@@ -21,6 +21,8 @@
         <file>images/simulator/play.ico</file>
         <file>images/simulator/stop.ico</file>
         <file>images/infodino.png</file>
+        <file>images/icon/progIcon.png</file>
+        <file>images/icon/cover.jpg</file>
     </qresource>
     <qresource prefix="/msn">
         <file>images/exitdino.jpg</file>
