@@ -33,7 +33,7 @@ void MailDialog::sendMail(){
      * mailto:user@foo.com?subject=Test&body=Just a test
      */
 
-    QString ourMail = "m.stefanovic992@gmail.com";
+    QString ourMail = "something@work.com";
     QString contest = "mailto:" + ourMail + "?subject=" + ui->lineNaslov->text()
             + "&body=" + ui->textMsg->toPlainText() + "\nreplyto:" + ui->lineReply->text();
 
