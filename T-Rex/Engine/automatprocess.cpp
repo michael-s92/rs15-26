@@ -26,6 +26,19 @@ AutomatProcess::AutomatProcess(QGraphicsView* p, QPlainTextEdit* o, QLineEdit *r
 
 }
 
+void AutomatProcess::setSendColor(const QString &cl){
+    if(!cl.compare("crvena")){
+        //crvena je
+    }
+    else if(!cl.compare("zelena")){
+        //zelena je
+    }
+    else if(!cl.compare("zuta")){
+        //zuta je
+    }
+
+}
+
 AutomatProcess::~AutomatProcess()
 {
     delete scene;
