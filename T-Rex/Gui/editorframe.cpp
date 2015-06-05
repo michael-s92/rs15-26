@@ -34,6 +34,7 @@ EditorFrame::EditorFrame(QWidget *parent) :
 void EditorFrame::setElements(){
 
     textArea = ui->plainTextEdit;
+    _eproc = new EditorProcess(textArea);
     //textArea->setPlaceholderText("Unesite text koji pretrazujete ili ga ucitajte iz proizvoljnog fajla...");
 
     QString content("Ovde unosite tekst koji hocete da pretrazujete.\n"
@@ -156,7 +157,7 @@ void EditorFrame::LoadFile(){
     QString file = QFileDialog::getOpenFileName(this, "Izaberite fajl");
 
     if (!file.isEmpty())
-        textArea->setPlainText(_eproc.readFile(file));
+        _eproc->readFile(file);
 
 }
 
@@ -165,7 +166,7 @@ void EditorFrame::SearchText(){
 
         QString rez("Pronadjeno: ");
 
-        int num = _eproc.doMatch(inputReg->text(), textArea, _icFlag, _gFlag, _mFlag);
+        int num = _eproc->doMatch(inputReg->text(), _icFlag, _gFlag, _mFlag);
 
         if(num == -1)
             //ako hvatamo poruku o gresci, onda ovde je uhvatiti i prikazati u ovoj poruci dole

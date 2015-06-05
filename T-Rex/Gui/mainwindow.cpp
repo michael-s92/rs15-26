@@ -79,6 +79,8 @@ void MainWindow::setUpMenuActions(){
     connect(ui->actionNapusti_program, SIGNAL(triggered()), this, SLOT(napustiProgram()));
     connect(ui->actionAbout_T_Rex, SIGNAL(triggered()), this, SLOT(about_app()));
     connect(ui->actionCeline, SIGNAL(triggered(bool)), this, SLOT(prikazCeline(bool)));
+    connect(ui->actionAbout_Qt, SIGNAL(triggered()), this, SLOT(menuAboutQt()));
+
     connect(content,SIGNAL(visibilityChanged(bool)), this, SLOT(azurirajMeniContent(bool)));
 
     //konekcije za prikazi menu bar
@@ -111,6 +113,9 @@ void MainWindow::setUpMenuActions(){
 
     connect(ui->actionPodrska, SIGNAL(triggered()), this, SLOT(sendMail()));
     //----------------
+
+
+    //konekcije za boje
 
 }
 
@@ -154,6 +159,10 @@ void MainWindow::napustiProgram(){
     if(GuiBuilder::leaveProgramDialog())
         QApplication::exit();
 
+}
+
+void MainWindow::menuAboutQt(){
+    QMessageBox::aboutQt(this, "T-Rex");
 }
 
 void MainWindow::createMainView(){

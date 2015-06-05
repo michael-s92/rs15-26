@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
     * kako se uopste ubacuju slike u projekat i koriste?!
     */
 
-   Qt::Alignment topRight = Qt::AlignRight | Qt::AlignTop;
+   //Qt::Alignment topRight = Qt::AlignRight | Qt::AlignTop;
    //splash->showMessage(QObject::tr("Setting up the main window..."), topRight, Qt::red);
    MainWindow w;
 

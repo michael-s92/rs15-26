@@ -7,14 +7,14 @@
 class EditorProcess
 {
 public:
-    EditorProcess();
+    EditorProcess(QPlainTextEdit *textArea);
     ~EditorProcess();
 
-    QString& readFile(const QString &file);
-    int doMatch(QString what, QPlainTextEdit* area, bool _ignorecaseFlag, bool _globalFlag, bool _multilineFlag);
+    void readFile(const QString &file);
+    int doMatch(QString what, bool _ignorecaseFlag, bool _globalFlag, bool _multilineFlag);
 
 private:
-    QString buffer;
+    QPlainTextEdit* tArea;
 
     bool _ignorecaseFlag, _globalFlag, _multilineFlag;
 };
