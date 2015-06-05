@@ -44,6 +44,7 @@ private:
     QLineEdit *word;
     QLabel *procitano, *na_ulazu;
 
+    QColor color;
 };
 
 

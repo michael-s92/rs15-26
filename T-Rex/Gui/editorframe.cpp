@@ -128,7 +128,7 @@ void EditorFrame::makeEditCover(){
     QVBoxLayout *tmp = new QVBoxLayout();
 
     tmp->addWidget(inputReg);
-    tmp->addWidget(chkNum);
+    //tmp->addWidget(chkNum);
 
     lay->addLayout(tmp, 1);
 
