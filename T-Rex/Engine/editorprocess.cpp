@@ -4,8 +4,10 @@
 #include <QTextStream>
 #include <QRegularExpression>
 #include <QDebug>
+#include <QStringList>
 
-EditorProcess::EditorProcess()
+EditorProcess::EditorProcess(QPlainTextEdit *textArea)
+    :tArea(textArea)
 {
 
 }
@@ -15,9 +17,9 @@ EditorProcess::~EditorProcess()
 
 }
 
-QString& EditorProcess::readFile(const QString &file){
+void EditorProcess::readFile(const QString &file){
 
-    buffer = "";
+    tArea->setPlainText("");
 
     QFile data(file);
     if (data.open(QFile::ReadOnly)) {
@@ -27,7 +29,7 @@ QString& EditorProcess::readFile(const QString &file){
         for(;;) {
             value = in.readLine();
             if (!value.isNull()) {
-                buffer += value + "\n";
+                tArea->appendPlainText(value + "\n");
             } else
                 break;
             }
@@ -36,10 +38,9 @@ QString& EditorProcess::readFile(const QString &file){
 
     data.close();
 
-    return buffer;
 }
 
-int EditorProcess::doMatch(QString what, QPlainTextEdit* area, bool _ignorecaseFlag, bool _globalFlag, bool _multilineFlag){
+int EditorProcess::doMatch(QString what, bool _ignorecaseFlag, bool _globalFlag, bool _multilineFlag){
 
     //iskoristiti flagove:
     //bool _ignorecaseFlag, bool _globalFlag, bool _multilineFlag
@@ -64,8 +65,6 @@ int EditorProcess::doMatch(QString what, QPlainTextEdit* area, bool _ignorecaseF
      * koliko je to dobro, ako neko u regularnom izrazu ih i sam koristi?
      */
 
-
-
     QRegularExpression mark("(" + what + ")");
 
     /*
@@ -73,22 +72,54 @@ int EditorProcess::doMatch(QString what, QPlainTextEdit* area, bool _ignorecaseF
      * povratna vrednost je broj prepoznatih reci
      * ili -1 u slucaju da je regularni izraz neispravan
      */
+    qint32 found = 0;
+
     if(mark.isValid()){
 
         if(_ignorecaseFlag)
             mark.setPatternOptions(QRegularExpression::CaseInsensitiveOption);
 
-        buffer = area->toPlainText();
-        buffer.replace(mark, "<span style=\"color:#660033; font: italic bold\">\\1</span>");
-        area->setPlainText("");
-        area->appendHtml("<pre>" + buffer + "</pre>");
+        QString buffer;
+        QStringList bufferArray = tArea->toPlainText().split("\n");
 
+        if(_multilineFlag){
+            //obradjujemo sve linije
+            if(_globalFlag){
+                //obradjujemo sva pojavljivanja
+                bufferArray = bufferArray.replaceInStrings(mark, "<span style=\"color:#660033; font: italic bold\">\\1</span>");
+            }
+            else{
+                //obradjujemo samo prvo pojavljivanje
+
+            }
+        }
+        else{
+            //samo prvu liniju obradjujemo
+            if(_globalFlag){
+                //obradjujemo sva pojavljivanja
+
+            }
+            else{
+                //obradjujemo samo prvo pojavljivanje
+
+            }
+        }
+
+        //kad se popune if-ovi gore ovo izbrisati
+        //buffer.replace(mark, "<span style=\"color:#660033; font: italic bold\">\\1</span>");
+
+        //da bi radilo
+
+        tArea->setPlainText("");
+        tArea->appendHtml("<pre>" + bufferArray.join("\n") + "</pre>");
+
+        found = 0;
     }
     else{
         //mozda ovu poruku vratiti nekako EditorFrame-u da je on izbaci u GuiBuilder::throwErrorMessage???
         qDebug() << "EditorProcess::doMatch() ->   " << mark.errorString();
-        return -1;
+        found = -1;
     }
 
-    return 0;
+    return found;
 }

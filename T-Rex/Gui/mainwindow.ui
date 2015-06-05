@@ -44,7 +44,22 @@
     <property name="title">
      <string>Pogledi</string>
     </property>
+    <widget class="QMenu" name="menuAutomati">
+     <property name="title">
+      <string>Automati</string>
+     </property>
+     <widget class="QMenu" name="menuBoja_grafa">
+      <property name="title">
+       <string>Boja grafa</string>
+      </property>
+      <addaction name="actionCrvena"/>
+      <addaction name="actionZuta"/>
+      <addaction name="actionZelena"/>
+     </widget>
+     <addaction name="menuBoja_grafa"/>
+    </widget>
     <addaction name="actionCeline"/>
+    <addaction name="menuAutomati"/>
    </widget>
    <widget class="QMenu" name="menuSkoci_na">
     <property name="title">
@@ -61,8 +76,7 @@
     </property>
     <addaction name="actionPodrska"/>
     <addaction name="separator"/>
-    <addaction name="actionAutorska_prava"/>
-    <addaction name="actionPravila_koriscenja"/>
+    <addaction name="actionAbout_Qt"/>
     <addaction name="separator"/>
     <addaction name="actionT_Rex_Fb"/>
     <addaction name="actionT_Rex_Twitter"/>
@@ -184,9 +198,9 @@
     <string>Podrska</string>
    </property>
   </action>
-  <action name="actionPravila_koriscenja">
+  <action name="actionAbout_Qt">
    <property name="text">
-    <string>Pravila koriscenja</string>
+    <string>About Qt</string>
    </property>
   </action>
   <action name="actionAutorska_prava">
@@ -252,6 +266,21 @@
   <action name="actionPodesavanja_2">
    <property name="text">
     <string>Podesavanja</string>
+   </property>
+  </action>
+  <action name="actionCrvena">
+   <property name="text">
+    <string>Crvena</string>
+   </property>
+  </action>
+  <action name="actionZuta">
+   <property name="text">
+    <string>Zuta</string>
+   </property>
+  </action>
+  <action name="actionZelena">
+   <property name="text">
+    <string>Zelena</string>
    </property>
   </action>
  </widget>

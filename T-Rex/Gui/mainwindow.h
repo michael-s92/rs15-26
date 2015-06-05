@@ -37,6 +37,7 @@ private Q_SLOTS:
     void azurirajMeniContent(bool tmp);
     void loadWebPage(QString id);
     void sendMail();
+    void menuAboutQt();
 
 private:
 
