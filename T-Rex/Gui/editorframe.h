@@ -45,7 +45,7 @@ private:
     QPushButton *loadFile;
     QCheckBox *chkNum;
 
-    EditorProcess _eproc;
+    EditorProcess* _eproc;
 
     void setElements();
     void makeEditCover();
