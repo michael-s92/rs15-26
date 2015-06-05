@@ -26,6 +26,8 @@ public:
     void ispisi_podatke(Automata & a);
     void save_picture(QGraphicsView * panel, QString filename);
 
+    void setSendColor(const QString &cl);
+
     int kreciSe(int k);
 
 private:
