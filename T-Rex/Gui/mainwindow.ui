@@ -27,16 +27,6 @@
     <property name="title">
      <string>Program</string>
     </property>
-    <widget class="QMenu" name="menuIstorija">
-     <property name="title">
-      <string>Istorija</string>
-     </property>
-     <addaction name="actionIzlistaj"/>
-     <addaction name="actionOcisti"/>
-     <addaction name="actionUcitaj_novu"/>
-    </widget>
-    <addaction name="actionPodesavanja_2"/>
-    <addaction name="menuIstorija"/>
     <addaction name="separator"/>
     <addaction name="actionNapusti_program"/>
    </widget>
