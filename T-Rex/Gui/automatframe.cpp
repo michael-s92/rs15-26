@@ -227,6 +227,18 @@ void AutomatFrame::drawAutomata(int ind, bool chk){
         GuiBuilder::throwErrorMessage("Unesite regularni izraz u polje predvidjeno za njega.");
 }
 
+void AutomatFrame::colorChanged(const QString cl){
+    if(cl.compare("crvena")){
+        _aproc->setSendColor(Qt::red);
+    }
+    else if(cl.compare("zuta")){
+        _aproc->setSendColor(Qt::yellow);
+    }
+    else if(cl.compare("zelena")){
+        _aproc->setSendColor(Qt::green);
+    }
+}
+
 void AutomatFrame::displaySimulator(bool display){
     if(display)
         sim->show();

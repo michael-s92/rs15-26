@@ -116,7 +116,16 @@ void MainWindow::setUpMenuActions(){
 
 
     //konekcije za boje
+    connect(&changeAutomataColor, SIGNAL(mapped(QString)), _automat, SLOT(colorChanged(QString)));
 
+    connect(ui->actionCrvena, SIGNAL(triggered()), &changeAutomataColor, SLOT(map()));
+    changeAutomataColor.setMapping(ui->actionCrvena, "crvena");
+
+    connect(ui->actionZelena, SIGNAL(triggered()), &changeAutomataColor, SLOT(map()));
+    changeAutomataColor.setMapping(ui->actionZelena, "zelena");
+
+    connect(ui->actionZuta, SIGNAL(triggered()), &changeAutomataColor, SLOT(map()));
+    changeAutomataColor.setMapping(ui->actionZuta, "zuta");
 }
 
 void MainWindow::sendMail(){
