@@ -19,19 +19,21 @@ AutomatProcess::AutomatProcess(QGraphicsView* p, QPlainTextEdit* o, QLineEdit *r
     procitano->setStyleSheet("QLabel {color: red;}");
     scene = new GraphView();
     ind_kretanje = false;
-
+    color = Qt::green;
 }
 
 void AutomatProcess::setSendColor(const QString &cl){
-    if(!cl.compare("crvena")){
-        //crvena je
-    }
-    else if(!cl.compare("zelena")){
-        //zelena je
-    }
-    else if(!cl.compare("zuta")){
-        //zuta je
-    }
+
+     if(!cl.compare("crvena")){
+         color = Qt::red;
+         scene->setNodeColor(Qt::red);
+     } else if(!cl.compare("zelena")){
+         color = Qt::green;
+         scene->setNodeColor(Qt::green);
+     } else if(!cl.compare("zuta")){
+         color = Qt::yellow;
+         scene->setNodeColor(Qt::yellow);
+     }
 
 }
 
@@ -113,6 +115,7 @@ bool AutomatProcess::tomson_draw(const QString &regular){
              scene = 0;
 
              scene = new GraphView("thompson.dot");
+             scene->setNodeColor(color);
              scene->setNodeColor(Qt::red);
              panel->setScene(scene);
              ispisi_podatke(t);
@@ -164,6 +167,7 @@ bool AutomatProcess::glusko_draw(const QString& regular){
      //scene->clearGraph();
      delete scene;
      scene = new GraphView("gluskov.dot");
+    scene->setNodeColor(color);
      panel->setScene(scene);
 
      ind_kretanje = 0;
@@ -206,6 +210,7 @@ bool AutomatProcess::determi_draw(const QString& regular)
      //scene->clearGraph();
      delete scene;
      scene = new GraphView("deterministicki.dot");
+     scene->setNodeColor(color);
      panel->setScene(scene);
 
      QList<QGraphicsItem*> items = scene->items();
@@ -252,6 +257,7 @@ bool AutomatProcess::minimal_draw(const QString &regular){
      // scene->clear();
      delete scene;
      scene = new GraphView("minimalni.dot");
+     scene->setNodeColor(color);
      panel->setScene(scene);
 
      QList<QGraphicsItem*> items = scene->items();
