@@ -10,6 +10,8 @@
 #include "AutomatParser/visitor_nodes.h"
 #include "AutomatParser/kretanje.h"
 
+//nesto
+
 class AutomatProcess
 {
 public:
