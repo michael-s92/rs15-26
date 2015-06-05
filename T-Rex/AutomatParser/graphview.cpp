@@ -5,6 +5,8 @@
 #include <iostream>
 using namespace std;
 
+//nesto sam ubacio
+
 GraphView::GraphView()
  :QGraphicsScene()
 {
@@ -15,6 +17,7 @@ GraphView::GraphView(const QString& filename, QWidget* parent)
     : QGraphicsScene(parent)
 {
     setItemIndexMethod(QGraphicsScene::BspTreeIndex);
+    nodeColor = Qt::green;
     renderGraph(filename);
 }
 
@@ -23,6 +26,7 @@ GraphView::GraphView(graph_t* graph, QWidget* parent)
     : QGraphicsScene(parent)
 {
     setItemIndexMethod(QGraphicsScene::BspTreeIndex);
+    nodeColor = Qt::green;
     renderGraph(graph);
 }
 
@@ -210,7 +214,8 @@ GraphView::renderGraph(graph_t* graph)
         pen.setWidthF(1.0);
         item->setPen(pen);
 
-        QBrush brush(Qt::green);
+        cout << nodeColor.name().toStdString() << endl;
+        QBrush brush(nodeColor);
         item->setBrush(brush);
 
         addItem(item);
@@ -269,8 +274,25 @@ GraphView::renderGraph(graph_t* graph)
             addItem(item);
             }
         }
-        }
     }
+}
+
+void GraphView::setNodeColor(QColor color)
+{
+   nodeColor = color;
+   QListIterator<QGraphicsItem *> i(items());
+   while (i.hasNext())
+   {
+       QGraphicsItem* item = i.next();
+       GraphItem * j = (GraphItem*)(item);
+       if (j->ind()==0)
+       {
+          j->setBrush(QBrush(nodeColor));
+       }
+   }
+}
+
+
 
 GraphItem::GraphItem(const QPainterPath& path, const QPicture& picture)
     : QGraphicsPathItem(path),
@@ -322,5 +344,4 @@ int GraphEdge::ind()
 {
     return 1;
 }
-
 

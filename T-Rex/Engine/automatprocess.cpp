@@ -4,11 +4,7 @@
 #include <QGraphicsPixmapItem>
 #include "AutomatParser/graphview.h"
 
-
-// bagovi
-// kada se pojavi dialog box obezbediti blokadu ostalog
-// kada ispisuje formalne podatke o grafu - ne radi scroll
-
+// nesto
 
 using namespace std;
 
@@ -104,7 +100,7 @@ bool AutomatProcess::tomson_draw(const QString &regular){
              scene = 0;
 
              scene = new GraphView("thompson.dot");
-
+             scene->setNodeColor(Qt::red);
              panel->setScene(scene);
              ispisi_podatke(t);
              ind_kretanje = 0;

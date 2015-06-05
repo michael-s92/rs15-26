@@ -4,6 +4,9 @@
 #include <QtWidgets>
 #include <graphviz/gvc.h>
 
+
+//nesto
+
 class GraphNode;
 class GraphEdge;
 
@@ -21,6 +24,8 @@ public:
     virtual void renderGraph(const QString& filename);
     virtual void renderGraph(graph_t* graph);
 
+    void setNodeColor(QColor color);
+
     void clearGraph();
 
 private:
@@ -30,6 +35,8 @@ private:
     QRectF graphRect;
     QVector<GraphNode *> nodes;
     QVector<GraphEdge *> edges;
+
+    QColor nodeColor;
 
     QPointF transliraj(const point& p, bool up_down) const;
     QPointF transliraj(const pointf& p, bool up_down = true) const;
