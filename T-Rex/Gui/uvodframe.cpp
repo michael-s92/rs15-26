@@ -6,6 +6,12 @@ UvodFrame::UvodFrame(QWidget *parent) :
     ui(new Ui::UvodFrame)
 {
     ui->setupUi(this);
+
+    ui->areaOsnovno->setPlainText("");
+    ui->areaOsnovno->appendHtml("osnovno");
+
+    ui->areaTabela->setPlainText("");
+    ui->areaTabela->appendHtml("tabela");
 }
 
 UvodFrame::~UvodFrame()
