@@ -46,15 +46,18 @@ int EditorProcess::doMatch(QString what, bool _ignorecaseFlag, bool _globalFlag,
     //bool _ignorecaseFlag, bool _globalFlag, bool _multilineFlag
 
     /*
-     * ima greska! kad radi replace, on gubi deo onoga sto je ucitano, skracuje sadrzaj (mozda buffer ne moze sve da prihvati?!)
+     * ima greska! kad radi replace, on gubi deo onoga sto je ucitano,
+     * skracuje sadrzaj (mozda buffer ne moze sve da prihvati?!)
      * (predlog: niz stringova, svaka linija jedan clan niza)
      * druga stvar je sto ne treba da izbacuje matched kad nesto pronadje, nego da izbaci bas to sto je pronasao
-     * ne radi pravilno cak ni prepoznavanje, mozda bolje ici liniju po liniju, ali to treba videti kako citati iz plain texta
+     * ne radi pravilno cak ni prepoznavanje, mozda bolje ici liniju po liniju,
+     * ali to treba videti kako citati iz plain texta
      * i gde cuvati. Pogledati:
      * QRegExp::cap(int n = 0)
      * QRegExp::capturedTexts()
      * Ubaciti i flagove sa strane da korisnik bira: IgnoreCase, Multiline, Global
-     * markira se pomocu html taga. ceo kod nece imati smisla ako se ucitava html tekst, tagovi ce izgubiti vrednost
+     * markira se pomocu html taga. ceo kod nece imati smisla ako se ucitava html tekst,
+     * tagovi ce izgubiti vrednost
      */
 
 
@@ -97,7 +100,7 @@ int EditorProcess::doMatch(QString what, bool _ignorecaseFlag, bool _globalFlag,
             //samo prvu liniju obradjujemo
             if(_globalFlag){
                 //obradjujemo sva pojavljivanja
-
+                bufferArray.first().replace(mark, "<span style=\"color:#660033; font: italic bold\">\\1</span>");
             }
             else{
                 //obradjujemo samo prvo pojavljivanje

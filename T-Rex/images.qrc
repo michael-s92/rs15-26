@@ -47,4 +47,9 @@
         <file>images/diag9.ico</file>
         <file>images/diag10.ico</file>
     </qresource>
+    <qresource prefix="/uvod">
+        <file>images/uvod/u1.png</file>
+        <file>images/uvod/u2.png</file>
+        <file>images/uvod/u3.png</file>
+    </qresource>
 </RCC>
