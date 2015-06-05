@@ -85,6 +85,9 @@ int EditorProcess::doMatch(QString what, bool _ignorecaseFlag, bool _globalFlag,
         QString buffer;
         QStringList bufferArray = tArea->toPlainText().split("\n");
 
+        //sigurica
+        _globalFlag = true;
+
         if(_multilineFlag){
             //obradjujemo sve linije
             if(_globalFlag){
